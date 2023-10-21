@@ -8,7 +8,9 @@ public class BookHubDBContext : DbContext
 {
     public DbSet<Book> Books { get; set; }
     public DbSet<Author> Authors { get; set; }
+    public DbSet<Genre> Genres { get; set; }
     public DbSet<Publisher> Publishers { get; set; }
+    public DbSet<Customer> Customers { get; set; }
 
 
     public BookHubDBContext()
@@ -38,6 +40,12 @@ public class BookHubDBContext : DbContext
             .HasOne(b => b.Author)
             .WithMany(a => a.Books)
             .HasForeignKey(b => b.AuthorId);
+
+        modelBuilder.Entity<Book>()
+            .HasOne(b => b.Genre)
+            .WithMany(g => g.Books)
+            .HasForeignKey(b => b.GenreId);
+
 
         modelBuilder.Entity<Book>()
             .HasOne(b => b.Publisher)

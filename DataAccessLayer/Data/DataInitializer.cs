@@ -10,13 +10,16 @@ namespace DataAccessLayer.Data
         public static void Seed(this ModelBuilder modelBuilder)
         {
             var authors = PrepareAuthors();
-
+            var genres = PrepareGenres();
             var publishers = PreparePublishers();
             var books = PrepareBooks();
+            var customers = PrepareCustomers();
 
             modelBuilder.Entity<Author>().HasData(authors);
+            modelBuilder.Entity<Genre>().HasData(genres);
             modelBuilder.Entity<Publisher>().HasData(publishers);
             modelBuilder.Entity<Book>().HasData(books);
+            modelBuilder.Entity<Customer>().HasData(customers);
         }
 
         private static List<Author> PrepareAuthors()
@@ -28,6 +31,17 @@ namespace DataAccessLayer.Data
                 new Author { Id = 3, Name = "J.R.R. Tolkien" }
             };
         }
+
+        private static List<Genre> PrepareGenres()
+        {
+            return new List<Genre>()
+            {
+                new Genre { Id = 1, Name = "Fiction" },
+                new Genre { Id = 2, Name = "Fantasy" },
+                new Genre { Id = 3, Name = "Adventure" }
+            };
+        }
+
 
         private static List<Publisher> PreparePublishers()
         {
@@ -48,5 +62,14 @@ namespace DataAccessLayer.Data
                 new Book { Id = 3, Title = "The Hobbit", AuthorId = 3, GenreId = 3, PublisherId = 3, Price = 25.99M }
             };
         }
+
+        private static List<Customer> PrepareCustomers()
+        {
+            return new List<Customer>()
+            {
+                new Customer { Id = 1, Username = "Janko", Password = "password123" }
+            };
+        }
+
     }
 }
