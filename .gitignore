@@ -1,0 +1,39 @@
+## ASP.NET Core
+bin/
+obj/
+appsettings.*.json
+*.runtimeconfig.json
+*.config
+*.pubxml
+*.launchSettings.json
+
+## User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.dbmdl
+*.dbproj.schemaview
+*.jfm
+
+## Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+## Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+## Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+## Windows shortcuts
+*.lnk
+
+## Visual Studio for Windows directory
+.vs/
+
+## ASP.NET Scaffolding
+ScaffoldingReadMe.txt
