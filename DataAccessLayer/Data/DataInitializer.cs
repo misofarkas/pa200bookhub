@@ -1,7 +1,5 @@
 ﻿using DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 
 namespace DataAccessLayer.Data
 {
@@ -14,12 +12,18 @@ namespace DataAccessLayer.Data
             var publishers = PreparePublishers();
             var books = PrepareBooks();
             var customers = PrepareCustomers();
+            var purchaseHistory = PreparePurchaseHistory();
+            var review = PrepareReviews();
+            var wishlist = PrepareWishlist();
 
             modelBuilder.Entity<Author>().HasData(authors);
             modelBuilder.Entity<Genre>().HasData(genres);
             modelBuilder.Entity<Publisher>().HasData(publishers);
             modelBuilder.Entity<Book>().HasData(books);
             modelBuilder.Entity<Customer>().HasData(customers);
+            modelBuilder.Entity<PurchaseHistory>().HasData(purchaseHistory);
+            modelBuilder.Entity<Review>().HasData(review);
+            modelBuilder.Entity<Wishlist>().HasData(wishlist);
         }
 
         private static List<Author> PrepareAuthors()
@@ -68,6 +72,33 @@ namespace DataAccessLayer.Data
             return new List<Customer>()
             {
                 new Customer { Id = 1, Username = "Janko", Password = "password123" }
+            };
+        }
+
+        private static List<PurchaseHistory> PreparePurchaseHistory()
+        {
+            return new List<PurchaseHistory> 
+            { 
+                new PurchaseHistory { Id = 1, BookId = 1, CustomerId = 1, PurchaseDate = new DateTime(2023, 10, 10) },
+                new PurchaseHistory { Id = 2, BookId = 3, CustomerId = 1, PurchaseDate = new DateTime(2023, 8, 15) }
+            };
+        }
+
+        private static List<Review> PrepareReviews() 
+        {
+            return new List<Review>()
+            {
+                new Review { Id = 1, BookId = 1, CustomerId = 1, Rating = 5, Comment = "Very nice book!"},
+                new Review { Id = 2, BookId = 3, CustomerId = 1, Rating = 1, Comment = "Worst book!"},
+            };
+        
+        }
+
+        private static List<Wishlist> PrepareWishlist()
+        {
+            return new List<Wishlist>()
+            {
+                new Wishlist { Id = 1, BookId = 2, CustomerId = 1}
             };
         }
 

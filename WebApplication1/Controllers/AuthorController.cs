@@ -7,75 +7,25 @@ namespace WebApplication1.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BookController : ControllerBase
+    public class AuthorController : ControllerBase
     {
         private readonly BookHubDBContext _dbContext;
 
-        public BookController(BookHubDBContext dbContext)
+        public AuthorController(BookHubDBContext dbContext)
         {
             _dbContext = dbContext;
         }
 
         [HttpGet]
         [Route("list")]
-        public async Task<IActionResult> GetBookList()
+        public async Task<IActionResult> GetAuthorList()
         {
-            var books = await _dbContext.Books
-                .Include(b => b.Author)
-                .Include(b => b.Publisher)
-                .Include(b => b.Reviews)
-                .Include(b => b.Wishlists)
-                .Include(b => b.PurchaseHistories)
-                .Select(b => new BookModel
-                {
-                    Id = b.Id,
-                    Title = b.Title,
-                    AuthorName = b.Author.Name,
-                    GenreName = b.Genre.Name,
-                    PublisherName = b.Publisher.Name,
-                    Price = b.Price,
-                    Reviews = b.Reviews.Select(w => new ReviewModel
-                    {
-                        Id = w.Id,
-                        CustomerUsername = w.Customer.Username,
-                        BookTitle = w.Book.Title,
-                        Rating = w.Rating,
-                        Comment = w.Comment
 
-                    }).ToList(),
-                    PurchaseHistories = b.PurchaseHistories.Select(w => new PurchaseHistoryModel
-                    {
-                        Id = w.Id,
-                        BookTitle = w.Book.Title,
-                        CustomerUsername = w.Customer.Username,
-                        PurchaseDate = w.PurchaseDate
-
-                    }).ToList(),
-                    Wishlists = b.Wishlists.Select(w => new WishListModel 
-                    {
-                        Id = w.Id,
-                        CustomerName = w.Customer.Username
-                    }).ToList()
-                })
-                .ToListAsync();
-
-            if (books == null || !books.Any())
+            var authors = await _dbContext.Authors.Include(b => b.Books).Select(b => new AuthorModel
             {
-                return BadRequest("No books were found.");
-            }
-
-            return Ok(books);
-        }
-
-        [HttpGet]
-        [Route("{id}")]
-        public async Task<IActionResult> GetBook(int id)
-        {
-            var book = await _dbContext.Books
-                .Include(b => b.Author)
-                .Include(b => b.Publisher)
-                .Where(b => b.Id == id)
-                .Select(b => new BookModel
+                Id = b.Id,
+                Name = b.Name,
+                Books = b.Books.Select(b => new BookModel
                 {
                     Id = b.Id,
                     Title = b.Title,
@@ -105,85 +55,131 @@ namespace WebApplication1.Controllers
                         Id = w.Id,
                         CustomerName = w.Customer.Username
                     }).ToList()
+                }).ToList()
 
-                })
-                .FirstOrDefaultAsync();
+            })
+            .ToListAsync();
 
-            if (book == null)
+            if (authors == null || !authors.Any())
             {
-                return BadRequest($"No book with ID {id} was found.");
+                return BadRequest("No authors were found.");
             }
 
-            return Ok(book);
+            return Ok(authors);
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> GetAuthor(int id)
+        {
+            var author = await _dbContext.Authors.Include(b => b.Books).Where(b => b.Id == id).Select(b => new AuthorModel
+            {
+                Id = b.Id,
+                Name = b.Name,
+                Books = b.Books.Select(b => new BookModel
+                {
+                    Id = b.Id,
+                    Title = b.Title,
+                    AuthorName = b.Author.Name,
+                    GenreName = b.Genre.Name,
+                    PublisherName = b.Publisher.Name,
+                    Price = b.Price,
+                    Reviews = b.Reviews.Select(w => new ReviewModel
+                    {
+                        Id = w.Id,
+                        CustomerUsername = w.Customer.Username,
+                        BookTitle = w.Book.Title,
+                        Rating = w.Rating,
+                        Comment = w.Comment
+
+                    }).ToList(),
+                    PurchaseHistories = b.PurchaseHistories.Select(w => new PurchaseHistoryModel
+                    {
+                        Id = w.Id,
+                        BookTitle = w.Book.Title,
+                        CustomerUsername = w.Customer.Username,
+                        PurchaseDate = w.PurchaseDate
+
+                    }).ToList(),
+                    Wishlists = b.Wishlists.Select(w => new WishListModel
+                    {
+                        Id = w.Id,
+                        CustomerName = w.Customer.Username
+                    }).ToList()
+                }).ToList()
+
+            })
+            .ToListAsync();
+
+            if (author == null)
+            {
+                return BadRequest($"No author with ID {id} was found.");
+            }
+
+            return Ok(author);
         }
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> CreateBook(BookModel model)
+        public async Task<IActionResult> CreateAuthor(AuthorModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var book = new Book
+            var author = new Author
             {
-                Title = model.Title,
-                AuthorId = model.AuthorId,
-                GenreId = model.GenreId,
-                PublisherId = model.PublisherId,
-                Price = model.Price
+                Name = model.Name
             };
 
-            _dbContext.Books.Add(book);
+            _dbContext.Authors.Add(author);
             await _dbContext.SaveChangesAsync();
 
-            return Ok(book);
+            return Ok(author);
         }
 
         [HttpPut]
         [Route("{id}/update")]
-        public async Task<IActionResult> UpdateBook(int id, BookModel model)
+        public async Task<IActionResult> UpdateAuthor(int id, AuthorModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var book = await _dbContext.Books.FindAsync(id);
+            var author = await _dbContext.Authors.FindAsync(id);
 
-            if (book == null)
+            if (author == null)
             {
-                return BadRequest($"No book with ID {id} was found.");
+                return BadRequest($"No author with ID {id} was found.");
             }
 
-            book.Title = model.Title;
-            book.AuthorId = model.AuthorId;
-            book.GenreId = model.GenreId;
-            book.PublisherId = model.PublisherId;
-            book.Price = model.Price;
+            author.Name = model.Name;
 
-            _dbContext.Books.Update(book);
+            _dbContext.Authors.Update(author);
             await _dbContext.SaveChangesAsync();
 
-            return Ok(book);
+            return Ok(author);
         }
 
         [HttpDelete]
         [Route("{id}/delete")]
-        public async Task<IActionResult> DeleteBook(int id)
+        public async Task<IActionResult> DeleteAuthor(int id)
         {
-            var book = await _dbContext.Books.FindAsync(id);
+            var author = await _dbContext.Authors.FindAsync(id);
 
-            if (book == null)
+            if (author == null)
             {
-                return BadRequest($"No book with ID {id} was found.");
+                return BadRequest($"No author with ID {id} was found.");
             }
 
-            _dbContext.Books.Remove(book);
+            _dbContext.Authors.Remove(author);
             await _dbContext.SaveChangesAsync();
 
             return Ok();
         }
     }
 }
+
+

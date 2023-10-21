@@ -27,8 +27,31 @@ namespace WebApplication1.Controllers
 				.Select(c => new CustomerModel
 				{
 					Id = c.Id,
-					Username = c.Username
-				})
+					Username = c.Username,
+                    Reviews = c.Reviews.Select(w => new ReviewModel
+                    {
+                        Id = w.Id,
+                        CustomerUsername = w.Customer.Username,
+                        BookTitle = w.Book.Title,
+                        Rating = w.Rating,
+                        Comment = w.Comment
+
+                    }).ToList(),
+                    PurchaseHistories = c.PurchaseHistories.Select(w => new PurchaseHistoryModel
+                    {
+                        Id = w.Id,
+                        BookTitle = w.Book.Title,
+                        CustomerUsername = w.Customer.Username,
+                        PurchaseDate = w.PurchaseDate
+
+                    }).ToList(),
+                    Wishlists = c.Wishlists.Select(w => new WishListModel
+                    {
+                        Id = w.Id,
+                        CustomerName = w.Customer.Username
+                    }).ToList()
+
+                })
 				.ToListAsync();
 
 			if (customers == null || !customers.Any())
@@ -48,8 +71,30 @@ namespace WebApplication1.Controllers
 				.Select(c => new CustomerModel
 				{
 					Id = c.Id,
-					Username = c.Username
-				})
+					Username = c.Username,
+                    Reviews = c.Reviews.Select(w => new ReviewModel
+                    {
+                        Id = w.Id,
+                        CustomerUsername = w.Customer.Username,
+                        BookTitle = w.Book.Title,
+                        Rating = w.Rating,
+                        Comment = w.Comment
+
+                    }).ToList(),
+                    PurchaseHistories = c.PurchaseHistories.Select(w => new PurchaseHistoryModel
+                    {
+                        Id = w.Id,
+                        BookTitle = w.Book.Title,
+                        CustomerUsername = w.Customer.Username,
+                        PurchaseDate = w.PurchaseDate
+
+                    }).ToList(),
+                    Wishlists = c.Wishlists.Select(w => new WishListModel
+                    {
+                        Id = w.Id,
+                        CustomerName = w.Customer.Username
+                    }).ToList()
+                })
 				.FirstOrDefaultAsync();
 
 			if (customer == null)
