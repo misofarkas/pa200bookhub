@@ -16,55 +16,54 @@ namespace WebApplication1.Controllers
             _dbContext = dbContext;
         }
 
-        private BookModel _generateBookModel(Book b)
+        private async Task<List<AuthorModel>> GetAuthorCommonQuery(IQueryable<Author> query)
         {
-            return new BookModel
+            return await query.Include(b => b.Books).Select(b => new AuthorModel
             {
                 Id = b.Id,
-                Title = b.Title,
-                AuthorName = b.Author.Name,
-                GenreName = b.Genre.Name,
-                PublisherName = b.Publisher.Name,
-                Price = b.Price,
-                Description = b.Description,
-                Reviews = b.Reviews.Select(w => new ReviewModel
+                Name = b.Name,
+                Books = b.Books.Select(b => new BookModel
                 {
-                    Id = w.Id,
-                    CustomerUsername = w.Customer.Username,
-                    BookTitle = w.Book.Title,
-                    Rating = w.Rating,
-                    Comment = w.Comment
+                    Id = b.Id,
+                    Title = b.Title,
+                    AuthorName = b.Author.Name,
+                    GenreName = b.Genre.Name,
+                    PublisherName = b.Publisher.Name,
+                    Price = b.Price,
+                    Description = b.Description,
+                    Reviews = b.Reviews.Select(w => new ReviewModel
+                    {
+                        Id = w.Id,
+                        CustomerUsername = w.Customer.Username,
+                        BookTitle = w.Book.Title,
+                        Rating = w.Rating,
+                        Comment = w.Comment
 
-                }).ToList(),
-                PurchaseHistories = b.PurchaseHistories.Select(w => new PurchaseHistoryModel
-                {
-                    Id = w.Id,
-                    BookTitle = w.Book.Title,
-                    CustomerUsername = w.Customer.Username,
-                    PurchaseDate = w.PurchaseDate
+                    }).ToList(),
+                    PurchaseHistories = b.PurchaseHistories.Select(w => new PurchaseHistoryModel
+                    {
+                        Id = w.Id,
+                        BookTitle = w.Book.Title,
+                        CustomerUsername = w.Customer.Username,
+                        PurchaseDate = w.PurchaseDate
 
+                    }).ToList(),
+                    Wishlists = b.Wishlists.Select(w => new WishListModel
+                    {
+                        Id = w.Id,
+                        CustomerName = w.Customer.Username
+                    }).ToList()
                 }).ToList(),
-                Wishlists = b.Wishlists.Select(w => new WishListModel
-                {
-                    Id = w.Id,
-                    CustomerName = w.Customer.Username
-                }).ToList()
-            };
+            })
+            .ToListAsync();
         }
-
+    
         [HttpGet]
         [Route("list")]
         public async Task<IActionResult> GetAuthorList()
         {
 
-            var authors = await _dbContext.Authors.Include(b => b.Books).Select(b => new AuthorModel
-            {
-                Id = b.Id,
-                Name = b.Name,
-                Books = b.Books.Select(b => _generateBookModel(b)).ToList(),
-
-            })
-            .ToListAsync();
+            var authors = await GetAuthorCommonQuery(_dbContext.Authors);
 
             if (authors == null || !authors.Any())
             {
@@ -78,16 +77,9 @@ namespace WebApplication1.Controllers
         [Route("{id}")]
         public async Task<IActionResult> GetAuthor(int id)
         {
-            var author = await _dbContext.Authors.Include(b => b.Books).Where(b => b.Id == id).Select(b => new AuthorModel
-            {
-                Id = b.Id,
-                Name = b.Name,
-                Books = b.Books.Select(b => _generateBookModel(b)).ToList(),
+            var author = await GetAuthorCommonQuery(_dbContext.Authors.Where(b => b.Id == id));
 
-            })
-            .ToListAsync();
-
-            if (author == null)
+            if (author == null || !author.Any())
             {
                 return BadRequest($"No author with ID {id} was found.");
             }
