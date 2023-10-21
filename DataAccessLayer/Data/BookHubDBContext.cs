@@ -18,7 +18,7 @@ public class BookHubDBContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var folder = Environment.SpecialFolder.LocalApplicationData;
-        var dbPath = Path.Join(Environment.GetFolderPath(folder), "bookhubproject.db");
+        var dbPath = Path.Join(Environment.GetFolderPath(folder), "bookhubproject1.db");
 
         optionsBuilder
             .UseSqlite($"Data Source={dbPath}")
