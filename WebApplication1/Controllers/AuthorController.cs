@@ -16,6 +16,42 @@ namespace WebApplication1.Controllers
             _dbContext = dbContext;
         }
 
+        private BookModel _generateBookModel(Book b)
+        {
+            return new BookModel
+            {
+                Id = b.Id,
+                Title = b.Title,
+                AuthorName = b.Author.Name,
+                GenreName = b.Genre.Name,
+                PublisherName = b.Publisher.Name,
+                Price = b.Price,
+                Description = b.Description,
+                Reviews = b.Reviews.Select(w => new ReviewModel
+                {
+                    Id = w.Id,
+                    CustomerUsername = w.Customer.Username,
+                    BookTitle = w.Book.Title,
+                    Rating = w.Rating,
+                    Comment = w.Comment
+
+                }).ToList(),
+                PurchaseHistories = b.PurchaseHistories.Select(w => new PurchaseHistoryModel
+                {
+                    Id = w.Id,
+                    BookTitle = w.Book.Title,
+                    CustomerUsername = w.Customer.Username,
+                    PurchaseDate = w.PurchaseDate
+
+                }).ToList(),
+                Wishlists = b.Wishlists.Select(w => new WishListModel
+                {
+                    Id = w.Id,
+                    CustomerName = w.Customer.Username
+                }).ToList()
+            };
+        }
+
         [HttpGet]
         [Route("list")]
         public async Task<IActionResult> GetAuthorList()
@@ -25,37 +61,7 @@ namespace WebApplication1.Controllers
             {
                 Id = b.Id,
                 Name = b.Name,
-                Books = b.Books.Select(b => new BookModel
-                {
-                    Id = b.Id,
-                    Title = b.Title,
-                    AuthorName = b.Author.Name,
-                    GenreName = b.Genre.Name,
-                    PublisherName = b.Publisher.Name,
-                    Price = b.Price,
-                    Reviews = b.Reviews.Select(w => new ReviewModel
-                    {
-                        Id = w.Id,
-                        CustomerUsername = w.Customer.Username,
-                        BookTitle = w.Book.Title,
-                        Rating = w.Rating,
-                        Comment = w.Comment
-
-                    }).ToList(),
-                    PurchaseHistories = b.PurchaseHistories.Select(w => new PurchaseHistoryModel
-                    {
-                        Id = w.Id,
-                        BookTitle = w.Book.Title,
-                        CustomerUsername = w.Customer.Username,
-                        PurchaseDate = w.PurchaseDate
-
-                    }).ToList(),
-                    Wishlists = b.Wishlists.Select(w => new WishListModel
-                    {
-                        Id = w.Id,
-                        CustomerName = w.Customer.Username
-                    }).ToList()
-                }).ToList()
+                Books = b.Books.Select(b => _generateBookModel(b)).ToList(),
 
             })
             .ToListAsync();
@@ -76,37 +82,7 @@ namespace WebApplication1.Controllers
             {
                 Id = b.Id,
                 Name = b.Name,
-                Books = b.Books.Select(b => new BookModel
-                {
-                    Id = b.Id,
-                    Title = b.Title,
-                    AuthorName = b.Author.Name,
-                    GenreName = b.Genre.Name,
-                    PublisherName = b.Publisher.Name,
-                    Price = b.Price,
-                    Reviews = b.Reviews.Select(w => new ReviewModel
-                    {
-                        Id = w.Id,
-                        CustomerUsername = w.Customer.Username,
-                        BookTitle = w.Book.Title,
-                        Rating = w.Rating,
-                        Comment = w.Comment
-
-                    }).ToList(),
-                    PurchaseHistories = b.PurchaseHistories.Select(w => new PurchaseHistoryModel
-                    {
-                        Id = w.Id,
-                        BookTitle = w.Book.Title,
-                        CustomerUsername = w.Customer.Username,
-                        PurchaseDate = w.PurchaseDate
-
-                    }).ToList(),
-                    Wishlists = b.Wishlists.Select(w => new WishListModel
-                    {
-                        Id = w.Id,
-                        CustomerName = w.Customer.Username
-                    }).ToList()
-                }).ToList()
+                Books = b.Books.Select(b => _generateBookModel(b)).ToList(),
 
             })
             .ToListAsync();
