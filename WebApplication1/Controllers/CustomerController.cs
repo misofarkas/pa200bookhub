@@ -19,39 +19,45 @@ namespace WebApplication1.Controllers
 			_dbContext = dbContext;
 		}
 
+		private CustomerModel _generateCustomerModel(Customer c) 
+		{
+			return new CustomerModel
+			{
+				Id = c.Id,
+				Username = c.Username,
+				Reviews = c.Reviews.Select(w => new ReviewModel
+				{
+					Id = w.Id,
+					CustomerUsername = w.Customer.Username,
+					BookTitle = w.Book.Title,
+					Rating = w.Rating,
+					Comment = w.Comment
+
+				}).ToList(),
+				PurchaseHistories = c.PurchaseHistories.Select(w => new PurchaseHistoryModel
+				{
+					Id = w.Id,
+					BookTitle = w.Book.Title,
+					CustomerUsername = w.Customer.Username,
+					PurchaseDate = w.PurchaseDate
+
+				}).ToList(),
+				Wishlists = c.Wishlists.Select(w => new WishListModel
+				{
+					Id = w.Id,
+					CustomerName = w.Customer.Username
+				}).ToList()
+
+			};
+
+        }
+
 		[HttpGet]
 		[Route("list")]
 		public async Task<IActionResult> GetCustomerList()
 		{
 			var customers = await _dbContext.Customers
-				.Select(c => new CustomerModel
-				{
-					Id = c.Id,
-					Username = c.Username,
-                    Reviews = c.Reviews.Select(w => new ReviewModel
-                    {
-                        Id = w.Id,
-                        CustomerUsername = w.Customer.Username,
-                        BookTitle = w.Book.Title,
-                        Rating = w.Rating,
-                        Comment = w.Comment
-
-                    }).ToList(),
-                    PurchaseHistories = c.PurchaseHistories.Select(w => new PurchaseHistoryModel
-                    {
-                        Id = w.Id,
-                        BookTitle = w.Book.Title,
-                        CustomerUsername = w.Customer.Username,
-                        PurchaseDate = w.PurchaseDate
-
-                    }).ToList(),
-                    Wishlists = c.Wishlists.Select(w => new WishListModel
-                    {
-                        Id = w.Id,
-                        CustomerName = w.Customer.Username
-                    }).ToList()
-
-                })
+				.Select(c => _generateCustomerModel(c))
 				.ToListAsync();
 
 			if (customers == null || !customers.Any())
@@ -68,33 +74,7 @@ namespace WebApplication1.Controllers
 		{
 			var customer = await _dbContext.Customers
 				.Where(c => c.Id == id)
-				.Select(c => new CustomerModel
-				{
-					Id = c.Id,
-					Username = c.Username,
-                    Reviews = c.Reviews.Select(w => new ReviewModel
-                    {
-                        Id = w.Id,
-                        CustomerUsername = w.Customer.Username,
-                        BookTitle = w.Book.Title,
-                        Rating = w.Rating,
-                        Comment = w.Comment
-
-                    }).ToList(),
-                    PurchaseHistories = c.PurchaseHistories.Select(w => new PurchaseHistoryModel
-                    {
-                        Id = w.Id,
-                        BookTitle = w.Book.Title,
-                        CustomerUsername = w.Customer.Username,
-                        PurchaseDate = w.PurchaseDate
-
-                    }).ToList(),
-                    Wishlists = c.Wishlists.Select(w => new WishListModel
-                    {
-                        Id = w.Id,
-                        CustomerName = w.Customer.Username
-                    }).ToList()
-                })
+                .Select(c => _generateCustomerModel(c))
 				.FirstOrDefaultAsync();
 
 			if (customer == null)

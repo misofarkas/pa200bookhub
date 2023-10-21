@@ -33,6 +33,7 @@ namespace WebApplication1.Controllers
                     GenreName = b.Genre.Name,
                     PublisherName = b.Publisher.Name,
                     Price = b.Price,
+                    Description = b.Description,
                     Reviews = b.Reviews.Select(w => new ReviewModel
                     {
                         Id = w.Id,
@@ -84,6 +85,7 @@ namespace WebApplication1.Controllers
                     GenreName = b.Genre.Name,
                     PublisherName = b.Publisher.Name,
                     Price = b.Price,
+                    Description = b.Description,
                     Reviews = b.Reviews.Select(w => new ReviewModel
                     {
                         Id = w.Id,

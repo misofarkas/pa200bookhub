@@ -17,6 +17,7 @@ namespace WebApplication1.Models
         public int PublisherId { get; set; }
         public string PublisherName { get; set; }
         public decimal Price { get; set; }
+        public string Description { get; set; }
         public virtual ICollection<ReviewModel> Reviews { get; set; } = new List<ReviewModel>();
         public virtual ICollection<WishListModel> Wishlists { get; set; } = new List<WishListModel>();
         public virtual ICollection<PurchaseHistoryModel> PurchaseHistories { get; set; } = new List<PurchaseHistoryModel>();
