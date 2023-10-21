@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Reflection.Emit;
-using DataAccessLayer.Data;
+﻿using DataAccessLayer.Data;
 using DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +9,11 @@ public class BookHubDBContext : DbContext
     public DbSet<Genre> Genres { get; set; }
     public DbSet<Publisher> Publishers { get; set; }
     public DbSet<Customer> Customers { get; set; }
+    public DbSet<Review> Reviews { get; set; }
+    public DbSet<Wishlist> Wishlists { get; set; }
+    public DbSet<PurchaseHistory> PurchaseHistories { get; set; }
+
+
 
 
     public BookHubDBContext()
@@ -36,6 +39,7 @@ public class BookHubDBContext : DbContext
             relationship.DeleteBehavior = DeleteBehavior.SetNull;
         }
 
+
         modelBuilder.Entity<Book>()
             .HasOne(b => b.Author)
             .WithMany(a => a.Books)
@@ -51,6 +55,36 @@ public class BookHubDBContext : DbContext
             .HasOne(b => b.Publisher)
             .WithMany(p => p.Books)
             .HasForeignKey(b => b.PublisherId);
+
+        modelBuilder.Entity<Review>()
+            .HasOne(r => r.Book)
+            .WithMany(b => b.Reviews)
+            .HasForeignKey(r => r.BookId);
+
+        modelBuilder.Entity<Review>()
+            .HasOne(r => r.Customer)
+            .WithMany(c => c.Reviews)
+            .HasForeignKey(r => r.CustomerId);
+
+        modelBuilder.Entity<Wishlist>()
+            .HasOne(w => w.Book)
+            .WithMany(b => b.Wishlists)
+            .HasForeignKey(w => w.BookId);
+
+        modelBuilder.Entity<Wishlist>()
+            .HasOne(w => w.Customer)
+            .WithMany(c => c.Wishlists)
+            .HasForeignKey(w => w.CustomerId);
+
+        modelBuilder.Entity<PurchaseHistory>()
+            .HasOne(p => p.Book)
+            .WithMany(b => b.PurchaseHistories)
+            .HasForeignKey(p => p.BookId);
+
+        modelBuilder.Entity<PurchaseHistory>()
+            .HasOne(p => p.Customer)
+            .WithMany(c => c.PurchaseHistories)
+            .HasForeignKey(p => p.CustomerId);
 
         /* run the DB seeding */
         modelBuilder.Seed();
