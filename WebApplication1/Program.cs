@@ -51,7 +51,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // be careful about the order of the following middleware configuration.
-app.UseMiddleware<RequestLoggerMiddleware>();
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 app.UseMiddleware<StaticTokenAuthenticationMiddleware>();
 

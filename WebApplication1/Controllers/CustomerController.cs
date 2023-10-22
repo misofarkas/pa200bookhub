@@ -19,7 +19,43 @@ namespace WebApplication1.Controllers
 			_dbContext = dbContext;
 		}
 
-		private CustomerModel _generateCustomerModel(Customer c) 
+        private async Task<List<CustomerModel>> GetCustomersCommonQuery(IQueryable<Customer> query)
+        {
+            return await query
+                .Include(c => c.Reviews)
+                .Include(c => c.Wishlists)
+                .Include(c => c.PurchaseHistories)
+                .Select(c => new CustomerModel
+                {
+                    Id = c.Id,
+                    Username = c.Username,
+                    Reviews = c.Reviews.Select(w => new ReviewModel
+                    {
+                        Id = w.Id,
+                        CustomerUsername = w.Customer.Username,
+                        BookTitle = w.Book.Title,
+                        Rating = w.Rating,
+                        Comment = w.Comment
+
+                    }).ToList(),
+                    PurchaseHistories = c.PurchaseHistories.Select(w => new PurchaseHistoryModel
+                    {
+                        Id = w.Id,
+                        BookTitle = w.Book.Title,
+                        CustomerUsername = w.Customer.Username,
+                        PurchaseDate = w.PurchaseDate
+
+                    }).ToList(),
+                    Wishlists = c.Wishlists.Select(w => new WishListModel
+                    {
+                        Id = w.Id,
+                        CustomerName = w.Customer.Username
+                    }).ToList()
+                })
+                .ToListAsync();
+        }
+
+        private CustomerModel _generateCustomerModel(Customer c) 
 		{
 			return new CustomerModel
 			{
@@ -56,9 +92,7 @@ namespace WebApplication1.Controllers
 		[Route("list")]
 		public async Task<IActionResult> GetCustomerList()
 		{
-			var customers = await _dbContext.Customers
-				.Select(c => _generateCustomerModel(c))
-				.ToListAsync();
+			var customers = await GetCustomersCommonQuery(_dbContext.Customers);
 
 			if (customers == null || !customers.Any())
 			{
@@ -72,12 +106,9 @@ namespace WebApplication1.Controllers
 		[Route("{id}")]
 		public async Task<IActionResult> GetCustomer(int id)
 		{
-			var customer = await _dbContext.Customers
-				.Where(c => c.Id == id)
-                .Select(c => _generateCustomerModel(c))
-				.FirstOrDefaultAsync();
+			var customer = await GetCustomersCommonQuery(_dbContext.Customers.Where(c => c.Id == id));
 
-			if (customer == null)
+			if (customer == null || !customer.Any())
 			{
 				return BadRequest($"No customer with ID {id} was found.");
 			}
