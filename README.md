@@ -76,10 +76,38 @@ The resulting log entry is structured as follows:
 ` Received request: <Request Method> <Request Path> `
 
 ## Use case diagram
+**User(customer) Actions**  
+- Create Account: The customer can create an account to access the application.
+- Login: After creating an account, the customer can log in to the application.
+- Browse and Filter Books: Once logged in, the customer can search for books and apply filters to refine their search.
+- Purchase Books: The customer can buy books from the available selection.
+- Rate Books: After purchasing a book, the customer can provide a rating and feedback.
+- Access Purchase History: The customer can view their purchase history to see the books they've bought.
+- Add Books to Wishlist: Customers can add books they are interested in to their wishlist.  
+
+**Administrator Actions**
+- Update Book Details: The administrator has the ability to modify book information.
+- Regulate Book Prices: Administrators can manage the pricing of books.
+- Manage User Accounts: Administrators can make changes to user accounts, including creating, updating, or deactivating them.
 ![Use case diagram](https://gitlab.fi.muni.cz/xzovak/pv179-bookhub/-/raw/2-milestone-1/UseCase.png?ref_type=heads)
 
 ## Entity relationship diagram
+**Entities in ERD:**
+- Book: Represents individual books available in the system. Contains attributes `book ID`, `Title`, `AuthorId`, `GenreId`, `PublisherId` and `Price`. Each book may be associated with one authors, belong to one genre, be published by a specific publisher, and have multiple reviews.
 
+- Customer: Represents users of the system. Contains attributes `CustomerID`, `Username`, and `Password`.
+
+- Author: Represents authors who write books. Contains attributes `AuthorID` and `Name`. An author can be associated with one or more books they've authored.
+
+- Genre: Represents book categories or genres. Contains attributes like `GenreID` and `Name`. Multiple books can belong to the same genre.
+
+- Publisher: Represents book publishers. Contains attributes like `PublisherID` and `Name`. A publisher can publish multiple books.
+
+- WishlistItem: Represents items that a customer adds to their wishlist. Contains attributes like `WishlistItemID`, `BookID` and `CustomerID`. Each item is associated with a customer and a specific book.
+
+- PurchaseHistory: Represents the purchase history of customers. Contains attributes like `PurchaseHistoryID`, `BookID`, `CustomerID` and `PurchaseDate`. Each entry is associated with a customer and a book they've purchased.
+
+- Review: Represents reviews left by customers for books. Contains attributes like `ReviewID`, `CustomerID`, `BookID`, `Rating`, and `Comments`. Each review is associated with a customer and the book they reviewed.
 ![Entity relation diagram](https://gitlab.fi.muni.cz/xzovak/pv179-bookhub/-/raw/2-milestone-1/DataModel.png?ref_type=heads)
 
 ## Notes
