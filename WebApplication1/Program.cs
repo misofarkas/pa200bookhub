@@ -1,5 +1,6 @@
 using Microsoft.OpenApi.Models;
 using WebApplication1.Middleware;
+using BusinessLayer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,9 @@ builder.Services.AddSwaggerGen(c =>
 
 // register DBContext:
 builder.Services.AddDbContext<BookHubDBContext>();
+
+/* Register Services */
+builder.Services.AddScoped<IBookService, BookService>();
 
 var app = builder.Build();
 
