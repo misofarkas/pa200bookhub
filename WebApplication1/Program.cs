@@ -1,3 +1,5 @@
+using DataAccessLayer.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using WebApplication1.Middleware;
 
@@ -39,7 +41,20 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // register DBContext:
-builder.Services.AddDbContext<BookHubDBContext>();
+var sqliteDbName = "bookhubproject1.db";
+
+var folder = Environment.SpecialFolder.LocalApplicationData;
+var dbPath = Path.Join(Environment.GetFolderPath(folder), sqliteDbName);
+
+var sqliteConnectionString = $"Data Source={dbPath}";
+
+builder.Services.AddDbContextFactory<BookHubDBContext>(options =>
+{
+    options
+       .UseSqlite(sqliteConnectionString)
+       ;
+    
+});
 
 var app = builder.Build();
 

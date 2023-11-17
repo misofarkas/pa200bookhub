@@ -41,12 +41,12 @@ The solution consists of two projects:
 
 ## API Endpoints
 
-- `GET /api/book/list`: Fetches a list of all books.
-- `GET /api/book/{id}`: Fetch a book by id.
-- `GET /api/book/search`: Fetch a book by its attributes.
-- `POST /api/book/create`: Post a new book object.
-- `POST /api/book/{id}/update`: Update a book by id.
-- `POST /api/book/{id}/delete`: Delete a book by id.
+- `GET /api/Books`: Fetches a list of all books.
+- `GET /api/Books/{id}`: Fetch a book by id.
+- `GET /api/Books/search`: Fetch a book by its attributes.
+- `POST /api/Books`: Post a new book object.
+- `POST /api/Books/{id}`: Update a book by id.
+- `POST /api/Books/{id}`: Delete a book by id.
 
 Similar endpoints are available for authors and customer.
 
@@ -74,6 +74,7 @@ A logging middleware is used to intercept incoming requests. The request is then
 
 The resulting log entry is structured as follows:  
 ` Received request: <Request Method> <Request Path> `
+` Response status code: <Response status code> `
 
 ## Use case diagram
 **User(customer) Actions**  
