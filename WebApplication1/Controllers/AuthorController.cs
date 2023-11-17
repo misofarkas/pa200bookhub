@@ -6,7 +6,7 @@ using WebApplication1.Models;
 namespace WebApplication1.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/Authors")]
     public class AuthorController : ControllerBase
     {
         private readonly BookHubDBContext _dbContext;
@@ -59,7 +59,6 @@ namespace WebApplication1.Controllers
         }
     
         [HttpGet]
-        [Route("list")]
         public async Task<IActionResult> GetAuthorList()
         {
 
@@ -88,7 +87,6 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        [Route("create")]
         public async Task<IActionResult> CreateAuthor(AuthorModel model)
         {
             if (!ModelState.IsValid)
@@ -108,7 +106,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPut]
-        [Route("{id}/update")]
+        [Route("{id}")]
         public async Task<IActionResult> UpdateAuthor(int id, AuthorModel model)
         {
             if (!ModelState.IsValid)
@@ -132,7 +130,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpDelete]
-        [Route("{id}/delete")]
+        [Route("{id}")]
         public async Task<IActionResult> DeleteAuthor(int id)
         {
             var author = await _dbContext.Authors.FindAsync(id);

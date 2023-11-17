@@ -7,7 +7,7 @@ using static System.Reflection.Metadata.BlobBuilder;
 namespace WebApplication1.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/Books")]
     public class BookController : ControllerBase
     {
         private readonly BookHubDBContext _dbContext;
@@ -59,7 +59,6 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        [Route("list")]
         public async Task<IActionResult> GetBookList()
         {
             var books = await GetBooksCommonQuery(_dbContext.Books);
@@ -134,7 +133,6 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        [Route("create")]
         public async Task<IActionResult> CreateBook(BookModel model)
         {
             if (!ModelState.IsValid)
@@ -158,7 +156,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPut]
-        [Route("{id}/update")]
+        [Route("{id}")]
         public async Task<IActionResult> UpdateBook(int id, BookModel model)
         {
             if (!ModelState.IsValid)
@@ -186,7 +184,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpDelete]
-        [Route("{id}/delete")]
+        [Route("{id}")]
         public async Task<IActionResult> DeleteBook(int id)
         {
             var book = await _dbContext.Books.FindAsync(id);
