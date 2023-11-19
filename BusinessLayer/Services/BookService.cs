@@ -28,7 +28,7 @@ namespace BusinessLayer.Services
         private async Task<List<BookDTO>> GetBooksCommonQuery(IQueryable<Book> query)
         {
             var books = await query
-                .Include(b => b.Author)
+                .Include(b => b.AuthorBooks)
                 .Include(b => b.Publisher)
                 .ToListAsync();
 
@@ -64,11 +64,11 @@ namespace BusinessLayer.Services
             }
             if (!string.IsNullOrWhiteSpace(genre))
             {
-                query = query.Where(b => b.Genre.Name.Contains(genre));
+                query = query.Where(b => b.GenreBooks.Any(bg => bg.Genre.Name == genre));
             }
             if (!string.IsNullOrWhiteSpace(author))
             {
-                query = query.Where(b => b.Author.Name.Contains(author));
+                query = query.Where(b => b.AuthorBooks.Any(ab => ab.Author.Name == author));
             }
 
             return await GetBooksCommonQuery(query);
