@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.DTOs;
 using DataAccessLayer.Models;
+using Mapster;
 using System.Linq;
 
 namespace BusinessLayer.Mapper
@@ -8,44 +9,27 @@ namespace BusinessLayer.Mapper
     {
         public static Author MapToAuthor(this AuthorDTO authorDTO)
         {
-            return new Author
-            {
-                Name = authorDTO.Name
-            };
+            return authorDTO.Adapt<Author>();
         }
 
         public static Book MapToBook(this BookDTO bookDTO)
         {
-            return new Book
-            {
-                Title = bookDTO.Title,
-                Price = bookDTO.Price,
-                Description = bookDTO.Description
-            };
+            return bookDTO.Adapt<Book>();
         }
 
         public static Customer MapToCustomer(this CustomerDTO customerDTO)
         {
-            return new Customer
-            {
-                Username = customerDTO.Username
-            };
+            return customerDTO.Adapt<Customer>();
         }
 
         public static Genre MapToGenre(this GenreDTO genreDTO)
         {
-            return new Genre
-            {
-                Name = genreDTO.Name
-            };
+            return genreDTO.Adapt<Genre>();
         }
 
         public static Publisher MapToPublisher(this PublisherDTO publisherDTO)
         {
-            return new Publisher
-            {
-                Name = publisherDTO.Name
-            };
+            return publisherDTO.Adapt<Publisher>();
         }
     }
 }
