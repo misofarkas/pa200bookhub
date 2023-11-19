@@ -42,7 +42,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // register DBContext:
-var sqliteDbName = "bookhubproject1.db";
+var sqliteDbName = "bookhubproject2.db";
 
 var folder = Environment.SpecialFolder.LocalApplicationData;
 var dbPath = Path.Join(Environment.GetFolderPath(folder), sqliteDbName);

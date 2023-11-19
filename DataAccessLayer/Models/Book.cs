@@ -5,10 +5,8 @@ namespace DataAccessLayer.Models
     public class Book : BaseEntity
     {
         public string Title { get; set; }
-        public int AuthorId { get; set; }
-        public virtual Author Author { get; set; }
-        public int GenreId { get; set; }
-        public virtual Genre Genre { get; set; }
+        public virtual ICollection<AuthorBook> AuthorBooks { get; set; } = new List<AuthorBook>();
+        public virtual ICollection<GenreBook> GenreBooks { get; set; } = new List<GenreBook>();
         public int PublisherId { get; set; }
         public virtual Publisher Publisher { get; set; }
         public decimal Price { get; set; }

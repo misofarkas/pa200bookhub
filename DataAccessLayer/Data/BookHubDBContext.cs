@@ -9,7 +9,8 @@ namespace DataAccessLayer.Data
     {
     public DbSet<Book> Books { get; set; }
     public DbSet<Author> Authors { get; set; }
-    public DbSet<Genre> Genres { get; set; }
+    public DbSet<AuthorBook> AuthorBooks { get; set; }
+    public DbSet<GenreBook> GenreBooks { get; set; }
     public DbSet<Publisher> Publishers { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Review> Reviews { get; set; }
@@ -29,18 +30,29 @@ namespace DataAccessLayer.Data
             relationship.DeleteBehavior = DeleteBehavior.SetNull;
         }
 
-        modelBuilder.Entity<Book>()
-            .HasOne(b => b.Author)
-            .WithMany(a => a.Books)
-            .HasForeignKey(b => b.AuthorId);
+        // Define the many-to-many relationship.
+        modelBuilder.Entity<AuthorBook>()
+            .HasOne(ab => ab.Author)
+            .WithMany(a => a.AuthorBooks)
+            .HasForeignKey(ab => ab.AuthorId);
 
-        modelBuilder.Entity<Book>()
-            .HasOne(b => b.Genre)
-            .WithMany(g => g.Books)
-            .HasForeignKey(b => b.GenreId);
+        modelBuilder.Entity<AuthorBook>()
+            .HasOne(ab => ab.Book)
+            .WithMany(b => b.AuthorBooks)
+            .HasForeignKey(ab => ab.BookId);
 
+        // Define the many-to-many relationship.
+        modelBuilder.Entity<GenreBook>()
+            .HasOne(bg => bg.Book)
+            .WithMany(b => b.GenreBooks)
+            .HasForeignKey(bg => bg.BookId);
 
-        modelBuilder.Entity<Book>()
+        modelBuilder.Entity<GenreBook>()
+            .HasOne(bg => bg.Genre)
+            .WithMany(g => g.GenreBooks)
+            .HasForeignKey(bg => bg.GenreId);
+
+            modelBuilder.Entity<Book>()
             .HasOne(b => b.Publisher)
             .WithMany(p => p.Books)
             .HasForeignKey(b => b.PublisherId);
