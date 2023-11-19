@@ -12,7 +12,7 @@ namespace BusinessLayer.Services
 
         Task<List<BookDTO>> GetBooksAsync();
 
-        Task<BookDTO> GetBookAsync(int id);
+        Task<BookDTO?> GetBookAsync(int id);
 
         Task<List<BookDTO>> SearchBooksAsync(string title, string description, decimal? price, string genre, string author);
 

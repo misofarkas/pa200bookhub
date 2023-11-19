@@ -40,7 +40,7 @@ namespace BusinessLayer.Services
             return await GetBooksCommonQuery(GetAllBooksQuery());
         }
 
-        public async Task<BookDTO> GetBookAsync(int id)
+        public async Task<BookDTO?> GetBookAsync(int id)
         {
             var books = await GetBooksCommonQuery(GetAllBooksQuery().Where(b => b.Id == id));
             return books.FirstOrDefault();

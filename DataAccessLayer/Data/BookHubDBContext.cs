@@ -13,7 +13,9 @@ public class BookHubDBContext : DbContext
     public DbSet<Wishlist> Wishlists { get; set; }
     public DbSet<PurchaseHistory> PurchaseHistories { get; set; }
 
-
+    public BookHubDBContext(DbContextOptions options) : base(options)
+    {
+    }
 
 
     public BookHubDBContext()
@@ -22,12 +24,13 @@ public class BookHubDBContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var folder = Environment.SpecialFolder.LocalApplicationData;
-        var dbPath = Path.Join(Environment.GetFolderPath(folder), "bookhubproject1.db");
+        if (!optionsBuilder.IsConfigured)
+        {
+            var folder = Environment.SpecialFolder.LocalApplicationData;
+            var dbPath = Path.Join(Environment.GetFolderPath(folder), "bookhubproject1.db");
 
-        optionsBuilder
-            .UseSqlite($"Data Source={dbPath}")
-            ;
+            optionsBuilder.UseSqlite($"Data Source={dbPath}");
+        }
     }
 
     // https://docs.microsoft.com/en-us/ef/core/modeling/
