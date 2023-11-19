@@ -517,13 +517,13 @@ namespace DataAccessLayer.Migrations
             modelBuilder.Entity("DataAccessLayer.Models.AuthorBook", b =>
                 {
                     b.HasOne("DataAccessLayer.Models.Author", "Author")
-                        .WithMany("AuthorBooks")
+                        .WithMany()
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.HasOne("DataAccessLayer.Models.Book", "Book")
-                        .WithMany("AuthorBooks")
+                        .WithMany()
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
@@ -547,13 +547,13 @@ namespace DataAccessLayer.Migrations
             modelBuilder.Entity("DataAccessLayer.Models.GenreBook", b =>
                 {
                     b.HasOne("DataAccessLayer.Models.Book", "Book")
-                        .WithMany("GenreBooks")
+                        .WithMany()
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.HasOne("DataAccessLayer.Models.Genre", "Genre")
-                        .WithMany("GenreBooks")
+                        .WithMany()
                         .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
@@ -620,17 +620,8 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("DataAccessLayer.Models.Author", b =>
-                {
-                    b.Navigation("AuthorBooks");
-                });
-
             modelBuilder.Entity("DataAccessLayer.Models.Book", b =>
                 {
-                    b.Navigation("AuthorBooks");
-
-                    b.Navigation("GenreBooks");
-
                     b.Navigation("PurchaseHistories");
 
                     b.Navigation("Reviews");
@@ -645,11 +636,6 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Reviews");
 
                     b.Navigation("Wishlists");
-                });
-
-            modelBuilder.Entity("DataAccessLayer.Models.Genre", b =>
-                {
-                    b.Navigation("GenreBooks");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Models.Publisher", b =>

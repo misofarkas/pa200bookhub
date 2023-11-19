@@ -30,27 +30,17 @@ namespace DataAccessLayer.Data
             relationship.DeleteBehavior = DeleteBehavior.SetNull;
         }
 
-        // Define the many-to-many relationship.
-        modelBuilder.Entity<AuthorBook>()
-            .HasOne(ab => ab.Author)
-            .WithMany(a => a.AuthorBooks)
-            .HasForeignKey(ab => ab.AuthorId);
+            // Define the many-to-many relationship.
+            modelBuilder.Entity<Book>()
+            .HasMany(e => e.Authors)
+            .WithMany(e => e.Books)
+            .UsingEntity<AuthorBook>();
 
-        modelBuilder.Entity<AuthorBook>()
-            .HasOne(ab => ab.Book)
-            .WithMany(b => b.AuthorBooks)
-            .HasForeignKey(ab => ab.BookId);
-
-        // Define the many-to-many relationship.
-        modelBuilder.Entity<GenreBook>()
-            .HasOne(bg => bg.Book)
-            .WithMany(b => b.GenreBooks)
-            .HasForeignKey(bg => bg.BookId);
-
-        modelBuilder.Entity<GenreBook>()
-            .HasOne(bg => bg.Genre)
-            .WithMany(g => g.GenreBooks)
-            .HasForeignKey(bg => bg.GenreId);
+            // Define the many-to-many relationship.
+            modelBuilder.Entity<Book>()
+            .HasMany(e => e.Genres)
+            .WithMany(e => e.Books)
+            .UsingEntity<GenreBook>();
 
             modelBuilder.Entity<Book>()
             .HasOne(b => b.Publisher)
