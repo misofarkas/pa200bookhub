@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataAccessLayer.Migrations
 {
     /// <inheritdoc />
-    public partial class NewMigration123 : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,7 +41,7 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Genres",
+                name: "Genre",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -50,7 +50,7 @@ namespace DataAccessLayer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Genres", x => x.Id);
+                    table.PrimaryKey("PK_Genre", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -73,8 +73,6 @@ namespace DataAccessLayer.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Title = table.Column<string>(type: "TEXT", nullable: false),
-                    AuthorId = table.Column<int>(type: "INTEGER", nullable: false),
-                    GenreId = table.Column<int>(type: "INTEGER", nullable: false),
                     PublisherId = table.Column<int>(type: "INTEGER", nullable: false),
                     Price = table.Column<decimal>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false)
@@ -83,21 +81,61 @@ namespace DataAccessLayer.Migrations
                 {
                     table.PrimaryKey("PK_Books", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Books_Authors_AuthorId",
+                        name: "FK_Books_Publishers_PublisherId",
+                        column: x => x.PublisherId,
+                        principalTable: "Publishers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AuthorBooks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    AuthorId = table.Column<int>(type: "INTEGER", nullable: false),
+                    BookId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AuthorBooks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AuthorBooks_Authors_AuthorId",
                         column: x => x.AuthorId,
                         principalTable: "Authors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK_Books_Genres_GenreId",
-                        column: x => x.GenreId,
-                        principalTable: "Genres",
+                        name: "FK_AuthorBooks_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GenreBooks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    GenreId = table.Column<int>(type: "INTEGER", nullable: false),
+                    BookId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GenreBooks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GenreBooks_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
-                        name: "FK_Books_Publishers_PublisherId",
-                        column: x => x.PublisherId,
-                        principalTable: "Publishers",
+                        name: "FK_GenreBooks_Genre_GenreId",
+                        column: x => x.GenreId,
+                        principalTable: "Genre",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
                 });
@@ -206,7 +244,7 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Genres",
+                table: "Genre",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
@@ -231,14 +269,38 @@ namespace DataAccessLayer.Migrations
 
             migrationBuilder.InsertData(
                 table: "Books",
-                columns: new[] { "Id", "AuthorId", "Description", "GenreId", "Price", "PublisherId", "Title" },
+                columns: new[] { "Id", "Description", "Price", "PublisherId", "Title" },
                 values: new object[,]
                 {
-                    { 1, 1, "Nineteen Eighty-Four (also published as 1984) is a dystopian novel and cautionary tale by English writer George Orwell. It was published on 8 June 1949", 1, 15.99m, 1, "1984" },
-                    { 2, 2, "Harry Potter and the Philosopher's Stone is a fantasy novel written by British author J. K. Rowling.", 2, 20.99m, 2, "Harry Potter and the Philosopher's Stone" },
-                    { 3, 3, "The Hobbit, or There and Back Again is a children's fantasy novel by English author J. R. R. Tolkien.", 3, 25.99m, 3, "The Hobbit" },
-                    { 4, 4, "Murder on the Orient Express is a detective novel by English writer Agatha Christie.", 4, 18.99m, 4, "Murder on the Orient Express" },
-                    { 5, 5, "The Shining is a horror novel by American author Stephen King.", 5, 22.99m, 5, "The Shining" }
+                    { 1, "Nineteen Eighty-Four (also published as 1984) is a dystopian novel and cautionary tale by English writer George Orwell. It was published on 8 June 1949", 15.99m, 1, "1984" },
+                    { 2, "Harry Potter and the Philosopher's Stone is a fantasy novel written by British author J. K. Rowling.", 20.99m, 2, "Harry Potter and the Philosopher's Stone" },
+                    { 3, "The Hobbit, or There and Back Again is a children's fantasy novel by English author J. R. R. Tolkien.", 25.99m, 3, "The Hobbit" },
+                    { 4, "Murder on the Orient Express is a detective novel by English writer Agatha Christie.", 18.99m, 4, "Murder on the Orient Express" },
+                    { 5, "The Shining is a horror novel by American author Stephen King.", 22.99m, 5, "The Shining" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AuthorBooks",
+                columns: new[] { "Id", "AuthorId", "BookId" },
+                values: new object[,]
+                {
+                    { 1, 1, 1 },
+                    { 2, 2, 2 },
+                    { 3, 3, 3 },
+                    { 4, 4, 4 },
+                    { 5, 5, 5 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "GenreBooks",
+                columns: new[] { "Id", "BookId", "GenreId" },
+                values: new object[,]
+                {
+                    { 1, 1, 1 },
+                    { 2, 2, 2 },
+                    { 3, 3, 3 },
+                    { 4, 4, 4 },
+                    { 5, 5, 5 }
                 });
 
             migrationBuilder.InsertData(
@@ -274,19 +336,29 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_AuthorId",
-                table: "Books",
+                name: "IX_AuthorBooks_AuthorId",
+                table: "AuthorBooks",
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_GenreId",
-                table: "Books",
-                column: "GenreId");
+                name: "IX_AuthorBooks_BookId",
+                table: "AuthorBooks",
+                column: "BookId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Books_PublisherId",
                 table: "Books",
                 column: "PublisherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GenreBooks_BookId",
+                table: "GenreBooks",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GenreBooks_GenreId",
+                table: "GenreBooks",
+                column: "GenreId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PurchaseHistories_BookId",
@@ -323,6 +395,12 @@ namespace DataAccessLayer.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AuthorBooks");
+
+            migrationBuilder.DropTable(
+                name: "GenreBooks");
+
+            migrationBuilder.DropTable(
                 name: "PurchaseHistories");
 
             migrationBuilder.DropTable(
@@ -332,16 +410,16 @@ namespace DataAccessLayer.Migrations
                 name: "Wishlists");
 
             migrationBuilder.DropTable(
+                name: "Authors");
+
+            migrationBuilder.DropTable(
+                name: "Genre");
+
+            migrationBuilder.DropTable(
                 name: "Books");
 
             migrationBuilder.DropTable(
                 name: "Customers");
-
-            migrationBuilder.DropTable(
-                name: "Authors");
-
-            migrationBuilder.DropTable(
-                name: "Genres");
 
             migrationBuilder.DropTable(
                 name: "Publishers");

@@ -19,8 +19,14 @@ namespace BusinessLayer.Mapper
             return new BookDTO
             {
                 Title = book.Title,
-                AuthorName = book.Author?.Name,
-                GenreName = book.Genre?.Name,
+                Authors = book.Authors.Select(ab => new AuthorDTO
+                {
+                    Name = ab.Name
+                }).ToList(),
+                Genres = book.Genres.Select(gb => new GenreDTO
+                {
+                    Name = gb.Name
+                }).ToList(),
                 PublisherName = book.Publisher?.Name,
                 Price = book.Price,
                 Description = book.Description

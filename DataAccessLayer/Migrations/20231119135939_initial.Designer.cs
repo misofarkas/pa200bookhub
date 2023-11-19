@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(BookHubDBContext))]
-    [Migration("20231117183336_NewMigration123")]
-    partial class NewMigration123
+    [Migration("20231119135939_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,7 +62,7 @@ namespace DataAccessLayer.Migrations
                         });
                 });
 
-            modelBuilder.Entity("DataAccessLayer.Models.Book", b =>
+            modelBuilder.Entity("DataAccessLayer.Models.AuthorBook", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -71,12 +71,59 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("AuthorId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("BookId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("AuthorBooks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AuthorId = 1,
+                            BookId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AuthorId = 2,
+                            BookId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AuthorId = 3,
+                            BookId = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AuthorId = 4,
+                            BookId = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AuthorId = 5,
+                            BookId = 5
+                        });
+                });
+
+            modelBuilder.Entity("DataAccessLayer.Models.Book", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("GenreId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
@@ -90,10 +137,6 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId");
-
-                    b.HasIndex("GenreId");
-
                     b.HasIndex("PublisherId");
 
                     b.ToTable("Books");
@@ -102,9 +145,7 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 1,
-                            AuthorId = 1,
                             Description = "Nineteen Eighty-Four (also published as 1984) is a dystopian novel and cautionary tale by English writer George Orwell. It was published on 8 June 1949",
-                            GenreId = 1,
                             Price = 15.99m,
                             PublisherId = 1,
                             Title = "1984"
@@ -112,9 +153,7 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 2,
-                            AuthorId = 2,
                             Description = "Harry Potter and the Philosopher's Stone is a fantasy novel written by British author J. K. Rowling.",
-                            GenreId = 2,
                             Price = 20.99m,
                             PublisherId = 2,
                             Title = "Harry Potter and the Philosopher's Stone"
@@ -122,9 +161,7 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 3,
-                            AuthorId = 3,
                             Description = "The Hobbit, or There and Back Again is a children's fantasy novel by English author J. R. R. Tolkien.",
-                            GenreId = 3,
                             Price = 25.99m,
                             PublisherId = 3,
                             Title = "The Hobbit"
@@ -132,9 +169,7 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 4,
-                            AuthorId = 4,
                             Description = "Murder on the Orient Express is a detective novel by English writer Agatha Christie.",
-                            GenreId = 4,
                             Price = 18.99m,
                             PublisherId = 4,
                             Title = "Murder on the Orient Express"
@@ -142,9 +177,7 @@ namespace DataAccessLayer.Migrations
                         new
                         {
                             Id = 5,
-                            AuthorId = 5,
                             Description = "The Shining is a horror novel by American author Stephen King.",
-                            GenreId = 5,
                             Price = 22.99m,
                             PublisherId = 5,
                             Title = "The Shining"
@@ -202,7 +235,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres");
+                    b.ToTable("Genre");
 
                     b.HasData(
                         new
@@ -229,6 +262,59 @@ namespace DataAccessLayer.Migrations
                         {
                             Id = 5,
                             Name = "Horror"
+                        });
+                });
+
+            modelBuilder.Entity("DataAccessLayer.Models.GenreBook", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("GenreId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("GenreId");
+
+                    b.ToTable("GenreBooks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BookId = 1,
+                            GenreId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BookId = 2,
+                            GenreId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            BookId = 3,
+                            GenreId = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            BookId = 4,
+                            GenreId = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            BookId = 5,
+                            GenreId = 5
                         });
                 });
 
@@ -431,31 +517,53 @@ namespace DataAccessLayer.Migrations
                         });
                 });
 
-            modelBuilder.Entity("DataAccessLayer.Models.Book", b =>
+            modelBuilder.Entity("DataAccessLayer.Models.AuthorBook", b =>
                 {
                     b.HasOne("DataAccessLayer.Models.Author", "Author")
-                        .WithMany("Books")
+                        .WithMany("AuthorBooks")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
-                    b.HasOne("DataAccessLayer.Models.Genre", "Genre")
-                        .WithMany("Books")
-                        .HasForeignKey("GenreId")
+                    b.HasOne("DataAccessLayer.Models.Book", "Book")
+                        .WithMany("AuthorBooks")
+                        .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
+                    b.Navigation("Author");
+
+                    b.Navigation("Book");
+                });
+
+            modelBuilder.Entity("DataAccessLayer.Models.Book", b =>
+                {
                     b.HasOne("DataAccessLayer.Models.Publisher", "Publisher")
                         .WithMany("Books")
                         .HasForeignKey("PublisherId")
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
-                    b.Navigation("Author");
+                    b.Navigation("Publisher");
+                });
+
+            modelBuilder.Entity("DataAccessLayer.Models.GenreBook", b =>
+                {
+                    b.HasOne("DataAccessLayer.Models.Book", "Book")
+                        .WithMany("GenreBooks")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.HasOne("DataAccessLayer.Models.Genre", "Genre")
+                        .WithMany("GenreBooks")
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.Navigation("Book");
 
                     b.Navigation("Genre");
-
-                    b.Navigation("Publisher");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Models.PurchaseHistory", b =>
@@ -517,11 +625,15 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataAccessLayer.Models.Author", b =>
                 {
-                    b.Navigation("Books");
+                    b.Navigation("AuthorBooks");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Models.Book", b =>
                 {
+                    b.Navigation("AuthorBooks");
+
+                    b.Navigation("GenreBooks");
+
                     b.Navigation("PurchaseHistories");
 
                     b.Navigation("Reviews");
@@ -540,7 +652,7 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataAccessLayer.Models.Genre", b =>
                 {
-                    b.Navigation("Books");
+                    b.Navigation("GenreBooks");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Models.Publisher", b =>
