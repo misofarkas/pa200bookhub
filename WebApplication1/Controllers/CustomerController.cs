@@ -9,7 +9,7 @@ using WebApplication1.Models;
 namespace WebApplication1.Controllers
 {
 	[ApiController]
-	[Route("api/[controller]")]
+	[Route("api/Customers")]
 	public class CustomerController : ControllerBase
 	{
 		private readonly BookHubDBContext _dbContext;
@@ -55,41 +55,7 @@ namespace WebApplication1.Controllers
                 .ToListAsync();
         }
 
-        private CustomerModel _generateCustomerModel(Customer c) 
-		{
-			return new CustomerModel
-			{
-				Id = c.Id,
-				Username = c.Username,
-				Reviews = c.Reviews.Select(w => new ReviewModel
-				{
-					Id = w.Id,
-					CustomerUsername = w.Customer.Username,
-					BookTitle = w.Book.Title,
-					Rating = w.Rating,
-					Comment = w.Comment
-
-				}).ToList(),
-				PurchaseHistories = c.PurchaseHistories.Select(w => new PurchaseHistoryModel
-				{
-					Id = w.Id,
-					BookTitle = w.Book.Title,
-					CustomerUsername = w.Customer.Username,
-					PurchaseDate = w.PurchaseDate
-
-				}).ToList(),
-				Wishlists = c.Wishlists.Select(w => new WishListModel
-				{
-					Id = w.Id,
-					CustomerName = w.Customer.Username
-				}).ToList()
-
-			};
-
-        }
-
 		[HttpGet]
-		[Route("list")]
 		public async Task<IActionResult> GetCustomerList()
 		{
 			var customers = await GetCustomersCommonQuery(_dbContext.Customers);
@@ -117,7 +83,6 @@ namespace WebApplication1.Controllers
 		}
 
 		[HttpPost]
-		[Route("create")]
 		public async Task<IActionResult> CreateCustomer(CustomerModel model)
 		{
 			if (!ModelState.IsValid)
@@ -138,7 +103,7 @@ namespace WebApplication1.Controllers
 		}
 
 		[HttpPut]
-		[Route("{id}/update")]
+		[Route("{id}")]
 		public async Task<IActionResult> UpdateCustomer(int id, CustomerModel model)
 		{
 			if (!ModelState.IsValid)
@@ -164,7 +129,7 @@ namespace WebApplication1.Controllers
 		}
 
 		[HttpDelete]
-		[Route("{id}/delete")]
+		[Route("{id}")]
 		public async Task<IActionResult> DeleteCustomer(int id)
 		{
 			var customer = await _dbContext.Customers.FindAsync(id);

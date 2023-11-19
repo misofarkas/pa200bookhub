@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DataAccessLayer.Models;
+using DataAccessLayer.Data;
+using Microsoft.AspNetCore.Mvc;
 using BusinessLayer.Services;
 using WebApplication1.Models;
 using System.Threading.Tasks;
@@ -6,7 +8,7 @@ using System.Threading.Tasks;
 namespace WebApplication1.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/Books")]
     public class BookController : ControllerBase
     {
         private readonly IBookService _bookService;
@@ -17,7 +19,6 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        [Route("list")]
         public async Task<IActionResult> GetBookList()
         {
             var books = await _bookService.GetBooksAsync();
@@ -56,38 +57,58 @@ namespace WebApplication1.Controllers
         }
 
         //[HttpPost]
-        //[Route("create")]
-        //public async Task<IActionResult> CreateBook([FromBody] BookModel model)
+        //public async Task<IActionResult> CreateBook(BookModel model)
         //{
         //    if (!ModelState.IsValid)
         //    {
         //        return BadRequest(ModelState);
         //    }
 
-        //    var book = await _bookService.CreateBookAsync(model);
-        //    return CreatedAtAction(nameof(GetBook), new { id = book.Id }, book);
+        //    var book = new Book
+        //    {
+        //        Title = model.Title,
+        //        AuthorId = model.AuthorId,
+        //        GenreId = model.GenreId,
+        //        PublisherId = model.PublisherId,
+        //        Price = model.Price
+        //    };
+
+        //    _dbContext.Books.Add(book);
+        //    await _dbContext.SaveChangesAsync();
+
+        //    return Ok(book);
         //}
 
         //[HttpPut]
-        //[Route("{id}/update")]
-        //public async Task<IActionResult> UpdateBook(int id, [FromBody] BookModel model)
+        //[Route("{id}")]
+        //public async Task<IActionResult> UpdateBook(int id, BookModel model)
         //{
         //    if (!ModelState.IsValid)
         //    {
         //        return BadRequest(ModelState);
         //    }
 
-        //    var updatedBook = await _bookService.UpdateBookAsync(id, model);
-        //    if (updatedBook == null)
+        //    var book = await _dbContext.Books.FindAsync(id);
+
+        //    if (book == null)
         //    {
-        //        return NotFound($"No book with ID {id} was found.");
+        //        return BadRequest($"No book with ID {id} was found.");
         //    }
 
-        //    return Ok(updatedBook);
+        //    book.Title = model.Title;
+        //    book.AuthorId = model.AuthorId;
+        //    book.GenreId = model.GenreId;
+        //    book.PublisherId = model.PublisherId;
+        //    book.Price = model.Price;
+
+        //    _dbContext.Books.Update(book);
+        //    await _dbContext.SaveChangesAsync();
+
+        //    return Ok(book);
         //}
 
         [HttpDelete]
-        [Route("{id}/delete")]
+        [Route("{id}")]
         public async Task<IActionResult> DeleteBook(int id)
         {
             var result = await _bookService.DeleteBookAsync(id);

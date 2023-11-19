@@ -2,8 +2,11 @@
 using DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 
-public class BookHubDBContext : DbContext
+
+namespace DataAccessLayer.Data
 {
+    public class BookHubDBContext : DbContext
+    {
     public DbSet<Book> Books { get; set; }
     public DbSet<Author> Authors { get; set; }
     public DbSet<Genre> Genres { get; set; }
@@ -17,22 +20,6 @@ public class BookHubDBContext : DbContext
     {
     }
 
-
-    public BookHubDBContext()
-    {
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var dbPath = Path.Join(Environment.GetFolderPath(folder), "bookhubproject1.db");
-
-            optionsBuilder.UseSqlite($"Data Source={dbPath}");
-        }
-    }
-
     // https://docs.microsoft.com/en-us/ef/core/modeling/
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -41,7 +28,6 @@ public class BookHubDBContext : DbContext
         {
             relationship.DeleteBehavior = DeleteBehavior.SetNull;
         }
-
 
         modelBuilder.Entity<Book>()
             .HasOne(b => b.Author)
@@ -93,6 +79,7 @@ public class BookHubDBContext : DbContext
         modelBuilder.Seed();
 
         base.OnModelCreating(modelBuilder);
+    }
     }
 }
 
