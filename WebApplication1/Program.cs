@@ -59,6 +59,7 @@ builder.Services.AddDbContextFactory<BookHubDBContext>(options =>
 
 /* Register Services */
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 
 var app = builder.Build();
 
