@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using WebApplication1.Middleware;
 using BusinessLayer.Services;
+using BusinessLayer.Services.Author;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +60,7 @@ builder.Services.AddDbContextFactory<BookHubDBContext>(options =>
 
 /* Register Services */
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IAuthorService,  AuthorService>();
 
 var app = builder.Build();
 

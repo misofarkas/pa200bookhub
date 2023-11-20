@@ -1,4 +1,4 @@
-﻿using BusinessLayer.DTOs;
+﻿using BusinessLayer.DTOs.Book;
 using BusinessLayer.Mapper;
 using DataAccessLayer.Data;
 using DataAccessLayer.Models;
