@@ -18,7 +18,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetBookList()
+        public async Task<IActionResult> GetBookList(string? format)
         {
             var books = await _bookService.GetBooksAsync();
             if (books == null || books.Count == 0)
@@ -30,7 +30,7 @@ namespace WebApplication1.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<IActionResult> GetBook(int id)
+        public async Task<IActionResult> GetBook(int id, string? format)
         {
             var book = await _bookService.GetBookAsync(id);
 
@@ -44,7 +44,7 @@ namespace WebApplication1.Controllers
 
         [HttpGet]
         [Route("search")]
-        public async Task<IActionResult> SearchBooks(string? title, string? description, decimal? price, string? genre, string? author)
+        public async Task<IActionResult> SearchBooks(string? title, string? description, decimal? price, string? genre, string? author, string format = "json")
         {
             var books = await _bookService.SearchBooksAsync(title, description, price, genre, author);
             if (books == null || books.Count == 0)

@@ -74,6 +74,8 @@ app.UseMiddleware<RequestLoggingMiddleware>();
 
 app.UseMiddleware<StaticTokenAuthenticationMiddleware>();
 
+app.UseMiddleware<FormatTransformMiddleware>();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
