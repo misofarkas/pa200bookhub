@@ -22,7 +22,7 @@ namespace BusinessLayer.Services
 
         private IQueryable<Customer> GetAllCustomersQuery()
         {
-            return _dbContext.Customers;
+            return _dbContext.Customers.Where(a => a.isDeleted == false);
         }
 
         private async Task<List<CustomerDTO>> GetCustomerCommonQuery(IQueryable<Customer> query)
@@ -45,24 +45,18 @@ namespace BusinessLayer.Services
         
         public async Task<bool> DeleteCustomerAsync(int id)
         {
-            /*
-            * TODO cascading delete or other method for associated entities
-            var customer = await _dbContext.Customers
-                .Include(c => c.Reviews)
-                .Include(c => c.Wishlists)
-                .SingleOrDefaultAsync(c => c.Id == id);
+            
+            var customer = await _dbContext.Customers.FindAsync(id);
 
-            if (customer == null)
+            if (customer == null || customer.isDeleted)
             {
                 return false;
             }
 
-            _dbContext.Customers.Remove(customer);
-            await SaveAsync(true);
+            customer.isDeleted = true;
+            await _dbContext.SaveChangesAsync();
             return true;
-            */
-
-            throw new NotImplementedException();
+            
         }
 
 
@@ -81,7 +75,7 @@ namespace BusinessLayer.Services
         public async Task<CustomerDTO> CreateCustomerAsync(CustomerDTO customerDTO)
         {
             /*
-            * TODO password
+            * TODO CreateCustomer needs a password
             var customer = customerDTO.MapToCustomer();
             _dbContext.Customers.Add(customer);
             await _dbContext.SaveChangesAsync();
@@ -91,12 +85,12 @@ namespace BusinessLayer.Services
             throw new NotImplementedException();
         }
 
-        public async Task<CustomerDTO> UpdateCustomerAsync(int id, CustomerDTO customerDTO)
+        public async Task<CustomerDTO?> UpdateCustomerAsync(int id, CustomerDTO customerDTO)
         {
             var customer = await _dbContext.Customers.FindAsync(id);
-            if (customer == null)
+            if (customer == null || customer.isDeleted)
             {
-                throw new KeyNotFoundException("Customer not found");
+                return null;
             }
             customer.Username = customerDTO.Username;
 

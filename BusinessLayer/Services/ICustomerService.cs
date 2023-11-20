@@ -17,7 +17,7 @@ namespace BusinessLayer.Services
 
         Task<CustomerDTO> CreateCustomerAsync(CustomerDTO customer);
 
-        Task<CustomerDTO> UpdateCustomerAsync(int id, CustomerDTO customer);
+        Task<CustomerDTO?> UpdateCustomerAsync(int id, CustomerDTO customer);
 
         Task<bool> DeleteCustomerAsync(int id);
     }
