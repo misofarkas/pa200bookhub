@@ -96,9 +96,9 @@ namespace WebApplication1.Controllers
             var result = await _authorService.DeleteAuthor(id);
             if (result)
             {
-                return Ok("Author Deleted");
+                return NoContent();
             }
-            return NotFound("No Author with this ID has been found");
+            return BadRequest("No Author with this ID has been found or the author has still linked books.");
         }
     }
 }

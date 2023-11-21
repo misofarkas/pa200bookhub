@@ -28,9 +28,13 @@ namespace BusinessLayer.Services
         private async Task<List<BookDTO>> GetBooksCommonQuery(IQueryable<Book> query)
         {
             var books = await query
-                .Include(b => b.Authors)
-                .Include(b => b.Genres)
+                .Include(b => b.AuthorBooks)
+                .ThenInclude(b => b.Author)
+                .Include(b => b.GenreBooks)
+                .ThenInclude(gb => gb.Genre)
                 .Include(b => b.Publisher)
+                .Include(b => b.Reviews)
+                .ThenInclude(r => r.Customer)
                 .ToListAsync();
 
             return books.Select(b => b.MapToBookDTO()).ToList();
@@ -65,11 +69,11 @@ namespace BusinessLayer.Services
             }
             if (!string.IsNullOrWhiteSpace(genre))
             {
-                query = query.Where(b => b.Genres.Any(bg => bg.Name == genre));
+                query = query.Where(b => b.GenreBooks.Any(bg => bg.Genre.Name == genre));
             }
             if (!string.IsNullOrWhiteSpace(author))
             {
-                query = query.Where(b => b.Authors.Any(ab => ab.Name == author));
+                query = query.Where(b => b.AuthorBooks.Any(ab => ab.Author.Name == author));
             }
 
             return await GetBooksCommonQuery(query);

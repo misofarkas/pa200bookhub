@@ -30,19 +30,40 @@ namespace DataAccessLayer.Data
             relationship.DeleteBehavior = DeleteBehavior.SetNull;
         }
 
-            // Define the many-to-many relationship.
-            modelBuilder.Entity<Book>()
-            .HasMany(e => e.Authors)
-            .WithMany(e => e.Books)
-            .UsingEntity<AuthorBook>();
+        // Define the many-to-many relationship.
+        // Configure Author-Book many-to-many relationship
+        modelBuilder.Entity<AuthorBook>()
+            .HasKey(ab => new { ab.AuthorId, ab.BookId });
 
-            // Define the many-to-many relationship.
-            modelBuilder.Entity<Book>()
-            .HasMany(e => e.Genres)
-            .WithMany(e => e.Books)
-            .UsingEntity<GenreBook>();
+        modelBuilder.Entity<AuthorBook>()
+            .HasOne(ab => ab.Author)
+            .WithMany(a => a.AuthorBooks)
+            .HasForeignKey(ab => ab.AuthorId)
+            .OnDelete(DeleteBehavior.Cascade); // Cascade delete for AuthorBook
 
-            modelBuilder.Entity<Book>()
+        modelBuilder.Entity<AuthorBook>()
+            .HasOne(ab => ab.Book)
+            .WithMany(b => b.AuthorBooks)
+            .HasForeignKey(ab => ab.BookId)
+            .OnDelete(DeleteBehavior.Cascade); // Cascade delete for AuthorBook
+
+            // Configure Book-Genre many-to-many relationship
+        modelBuilder.Entity<GenreBook>()
+            .HasKey(bg => new { bg.BookId, bg.GenreId });
+
+        modelBuilder.Entity<GenreBook>()
+            .HasOne(bg => bg.Book)
+            .WithMany(b => b.GenreBooks)
+            .HasForeignKey(bg => bg.BookId)
+            .OnDelete(DeleteBehavior.Cascade); // Cascade delete for BookGenre
+
+        modelBuilder.Entity<GenreBook>()
+            .HasOne(bg => bg.Genre)
+            .WithMany(g => g.GenreBooks)
+            .HasForeignKey(bg => bg.GenreId)
+            .OnDelete(DeleteBehavior.Restrict); // Prevents cascade delete
+
+        modelBuilder.Entity<Book>()
             .HasOne(b => b.Publisher)
             .WithMany(p => p.Books)
             .HasForeignKey(b => b.PublisherId);
@@ -50,32 +71,28 @@ namespace DataAccessLayer.Data
         modelBuilder.Entity<Review>()
             .HasOne(r => r.Book)
             .WithMany(b => b.Reviews)
-            .HasForeignKey(r => r.BookId);
+            .HasForeignKey(r => r.BookId)
+            .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<Review>()
+            modelBuilder.Entity<Review>()
             .HasOne(r => r.Customer)
             .WithMany(c => c.Reviews)
-            .HasForeignKey(r => r.CustomerId);
+            .HasForeignKey(r => r.CustomerId)
+            .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<Wishlist>()
-            .HasOne(w => w.Book)
-            .WithMany(b => b.Wishlists)
-            .HasForeignKey(w => w.BookId);
 
         modelBuilder.Entity<Wishlist>()
             .HasOne(w => w.Customer)
             .WithMany(c => c.Wishlists)
-            .HasForeignKey(w => w.CustomerId);
+            .HasForeignKey(w => w.CustomerId)
+            .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<PurchaseHistory>()
-            .HasOne(p => p.Book)
-            .WithMany(b => b.PurchaseHistories)
-            .HasForeignKey(p => p.BookId);
 
         modelBuilder.Entity<PurchaseHistory>()
             .HasOne(p => p.Customer)
             .WithMany(c => c.PurchaseHistories)
-            .HasForeignKey(p => p.CustomerId);
+            .HasForeignKey(p => p.CustomerId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         /* run the DB seeding */
         modelBuilder.Seed();

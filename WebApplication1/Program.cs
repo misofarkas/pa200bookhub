@@ -4,6 +4,12 @@ using Microsoft.OpenApi.Models;
 using WebApplication1.Middleware;
 using BusinessLayer.Services;
 using BusinessLayer.Services.Author;
+using Mapster;
+using DataAccessLayer.Models;
+using BusinessLayer.DTOs.Author;
+using BusinessLayer.DTOs.Book;
+using Microsoft.EntityFrameworkCore.Sqlite.Storage.Internal;
+using BusinessLayer.DTOs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,6 +67,11 @@ builder.Services.AddDbContextFactory<BookHubDBContext>(options =>
 /* Register Services */
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IAuthorService,  AuthorService>();
+
+TypeAdapterConfig<Author, AuthorDTO>.NewConfig().Map(dest => dest.Books, src => src.AuthorBooks.Select(ab => ab.Book.Adapt<BookDTO>()));
+TypeAdapterConfig<Book, BookDTO>.NewConfig().Map(dest => dest.Authors, src => src.AuthorBooks.Select(ab => ab.Author.Adapt<AuthorWithoutBooksDTO>()))
+                                            .Map(dest => dest.Genres, src => src.GenreBooks.Select(gb => gb.Genre.Adapt<GenreDTO>()));
+
 
 var app = builder.Build();
 

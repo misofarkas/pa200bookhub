@@ -31,6 +31,14 @@ namespace BusinessLayer.Services.Author
             {
                 return false;
             }
+            var isAuthorOfAnyBook = await _dbContext.AuthorBooks.AnyAsync(ab => ab.AuthorId == authorId);
+
+            if (isAuthorOfAnyBook)
+            {
+                // Prevent deletion as the author still has books
+                return false;
+            }
+
             _dbContext.Authors.Remove(author);
             await SaveAsync(true);
             return true;
@@ -45,9 +53,12 @@ namespace BusinessLayer.Services.Author
         public async Task<AuthorDTO?> GetByAuthorId(int authorId)
         {
             var author = await _dbContext.Authors
-                .Include(b => b.Books)
-                .ThenInclude(book => book.Genres)
-                .Include(b => b.Books)
+                .Include(b => b.AuthorBooks)
+                .ThenInclude(ab => ab.Book)
+                .ThenInclude(book => book.GenreBooks)
+                .ThenInclude(gb => gb.Genre)
+                .Include(b => b.AuthorBooks)
+                .ThenInclude(ab => ab.Book)
                 .ThenInclude(b => b.Publisher)
                 .FirstOrDefaultAsync(a => a.Id == authorId);
             if (author == null)
@@ -60,9 +71,12 @@ namespace BusinessLayer.Services.Author
         public async Task<AuthorDTO?> GetByAuthorName(string authorName)
         {
             var author = await _dbContext.Authors
-                .Include(b => b.Books)
-                .ThenInclude(book => book.Genres)
-                .Include(b => b.Books)
+                .Include(b => b.AuthorBooks)
+                .ThenInclude(ab => ab.Book)
+                .ThenInclude(book => book.GenreBooks)
+                .ThenInclude(gb => gb.Genre)
+                .Include(b => b.AuthorBooks)
+                .ThenInclude(ab => ab.Book)
                 .ThenInclude(b => b.Publisher)
                 .FirstOrDefaultAsync(a => a.Name == authorName);
             if (author == null)
