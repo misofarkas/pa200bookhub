@@ -39,13 +39,13 @@ namespace DataAccessLayer.Data
             .HasOne(ab => ab.Author)
             .WithMany(a => a.AuthorBooks)
             .HasForeignKey(ab => ab.AuthorId)
-            .OnDelete(DeleteBehavior.Cascade); // Cascade delete for AuthorBook
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<AuthorBook>()
             .HasOne(ab => ab.Book)
             .WithMany(b => b.AuthorBooks)
             .HasForeignKey(ab => ab.BookId)
-            .OnDelete(DeleteBehavior.Cascade); // Cascade delete for AuthorBook
+            .OnDelete(DeleteBehavior.Cascade);
 
             // Configure Book-Genre many-to-many relationship
         modelBuilder.Entity<GenreBook>()
@@ -55,18 +55,19 @@ namespace DataAccessLayer.Data
             .HasOne(bg => bg.Book)
             .WithMany(b => b.GenreBooks)
             .HasForeignKey(bg => bg.BookId)
-            .OnDelete(DeleteBehavior.Cascade); // Cascade delete for BookGenre
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<GenreBook>()
             .HasOne(bg => bg.Genre)
             .WithMany(g => g.GenreBooks)
             .HasForeignKey(bg => bg.GenreId)
-            .OnDelete(DeleteBehavior.Restrict); // Prevents cascade delete
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Book>()
             .HasOne(b => b.Publisher)
             .WithMany(p => p.Books)
-            .HasForeignKey(b => b.PublisherId);
+            .HasForeignKey(b => b.PublisherId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Review>()
             .HasOne(r => r.Book)
