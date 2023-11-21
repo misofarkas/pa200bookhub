@@ -126,7 +126,7 @@ namespace DataAccessLayer.Migrations
                         column: x => x.PublisherId,
                         principalTable: "Publishers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -145,7 +145,7 @@ namespace DataAccessLayer.Migrations
                         column: x => x.AuthorId,
                         principalTable: "Authors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AuthorBooks_Books_BookId",
                         column: x => x.BookId,

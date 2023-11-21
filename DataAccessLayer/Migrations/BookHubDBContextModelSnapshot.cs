@@ -511,7 +511,7 @@ namespace DataAccessLayer.Migrations
                     b.HasOne("DataAccessLayer.Models.Author", "Author")
                         .WithMany("AuthorBooks")
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DataAccessLayer.Models.Book", "Book")
@@ -530,7 +530,7 @@ namespace DataAccessLayer.Migrations
                     b.HasOne("DataAccessLayer.Models.Publisher", "Publisher")
                         .WithMany("Books")
                         .HasForeignKey("PublisherId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Publisher");
