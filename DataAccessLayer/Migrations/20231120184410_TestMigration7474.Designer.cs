@@ -3,6 +3,7 @@ using System;
 using DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(BookHubDBContext))]
-    partial class BookHubDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231120184410_TestMigration7474")]
+    partial class TestMigration7474
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.12");
@@ -61,17 +64,19 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataAccessLayer.Models.AuthorBook", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("AuthorId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("BookId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.HasKey("Id");
 
-                    b.HasKey("AuthorId", "BookId");
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("BookId");
 
@@ -80,33 +85,33 @@ namespace DataAccessLayer.Migrations
                     b.HasData(
                         new
                         {
+                            Id = 1,
                             AuthorId = 1,
-                            BookId = 1,
-                            Id = 1
+                            BookId = 1
                         },
                         new
                         {
+                            Id = 2,
                             AuthorId = 2,
-                            BookId = 2,
-                            Id = 2
+                            BookId = 2
                         },
                         new
                         {
+                            Id = 3,
                             AuthorId = 3,
-                            BookId = 3,
-                            Id = 3
+                            BookId = 3
                         },
                         new
                         {
+                            Id = 4,
                             AuthorId = 4,
-                            BookId = 4,
-                            Id = 4
+                            BookId = 4
                         },
                         new
                         {
+                            Id = 5,
                             AuthorId = 5,
-                            BookId = 5,
-                            Id = 5
+                            BookId = 5
                         });
                 });
 
@@ -268,17 +273,19 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataAccessLayer.Models.GenreBook", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("BookId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("GenreId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.HasKey("Id");
 
-                    b.HasKey("BookId", "GenreId");
+                    b.HasIndex("BookId");
 
                     b.HasIndex("GenreId");
 
@@ -287,33 +294,33 @@ namespace DataAccessLayer.Migrations
                     b.HasData(
                         new
                         {
+                            Id = 1,
                             BookId = 1,
-                            GenreId = 1,
-                            Id = 1
+                            GenreId = 1
                         },
                         new
                         {
+                            Id = 2,
                             BookId = 2,
-                            GenreId = 2,
-                            Id = 2
+                            GenreId = 2
                         },
                         new
                         {
+                            Id = 3,
                             BookId = 3,
-                            GenreId = 3,
-                            Id = 3
+                            GenreId = 3
                         },
                         new
                         {
+                            Id = 4,
                             BookId = 4,
-                            GenreId = 4,
-                            Id = 4
+                            GenreId = 4
                         },
                         new
                         {
+                            Id = 5,
                             BookId = 5,
-                            GenreId = 5,
-                            Id = 5
+                            GenreId = 5
                         });
                 });
 
@@ -375,6 +382,8 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BookId");
 
                     b.HasIndex("CustomerId");
 
@@ -487,6 +496,8 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BookId");
+
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Wishlists");
@@ -515,15 +526,15 @@ namespace DataAccessLayer.Migrations
             modelBuilder.Entity("DataAccessLayer.Models.AuthorBook", b =>
                 {
                     b.HasOne("DataAccessLayer.Models.Author", "Author")
-                        .WithMany("AuthorBooks")
+                        .WithMany()
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.HasOne("DataAccessLayer.Models.Book", "Book")
-                        .WithMany("AuthorBooks")
+                        .WithMany()
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.Navigation("Author");
@@ -536,7 +547,7 @@ namespace DataAccessLayer.Migrations
                     b.HasOne("DataAccessLayer.Models.Publisher", "Publisher")
                         .WithMany("Books")
                         .HasForeignKey("PublisherId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.Navigation("Publisher");
@@ -545,15 +556,15 @@ namespace DataAccessLayer.Migrations
             modelBuilder.Entity("DataAccessLayer.Models.GenreBook", b =>
                 {
                     b.HasOne("DataAccessLayer.Models.Book", "Book")
-                        .WithMany("GenreBooks")
+                        .WithMany()
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.HasOne("DataAccessLayer.Models.Genre", "Genre")
-                        .WithMany("GenreBooks")
+                        .WithMany()
                         .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.Navigation("Book");
@@ -563,11 +574,19 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataAccessLayer.Models.PurchaseHistory", b =>
                 {
+                    b.HasOne("DataAccessLayer.Models.Book", "Book")
+                        .WithMany("PurchaseHistories")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
                     b.HasOne("DataAccessLayer.Models.Customer", "Customer")
                         .WithMany("PurchaseHistories")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
+
+                    b.Navigation("Book");
 
                     b.Navigation("Customer");
                 });
@@ -577,13 +596,13 @@ namespace DataAccessLayer.Migrations
                     b.HasOne("DataAccessLayer.Models.Book", "Book")
                         .WithMany("Reviews")
                         .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.HasOne("DataAccessLayer.Models.Customer", "Customer")
                         .WithMany("Reviews")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
                     b.Navigation("Book");
@@ -593,27 +612,30 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataAccessLayer.Models.Wishlist", b =>
                 {
+                    b.HasOne("DataAccessLayer.Models.Book", "Book")
+                        .WithMany("Wishlists")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
                     b.HasOne("DataAccessLayer.Models.Customer", "Customer")
                         .WithMany("Wishlists")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
+
+                    b.Navigation("Book");
 
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("DataAccessLayer.Models.Author", b =>
-                {
-                    b.Navigation("AuthorBooks");
-                });
-
             modelBuilder.Entity("DataAccessLayer.Models.Book", b =>
                 {
-                    b.Navigation("AuthorBooks");
-
-                    b.Navigation("GenreBooks");
+                    b.Navigation("PurchaseHistories");
 
                     b.Navigation("Reviews");
+
+                    b.Navigation("Wishlists");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Models.Customer", b =>
@@ -623,11 +645,6 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("Reviews");
 
                     b.Navigation("Wishlists");
-                });
-
-            modelBuilder.Entity("DataAccessLayer.Models.Genre", b =>
-                {
-                    b.Navigation("GenreBooks");
                 });
 
             modelBuilder.Entity("DataAccessLayer.Models.Publisher", b =>

@@ -95,8 +95,8 @@ namespace DataAccessLayer.Data
             .HasForeignKey(p => p.CustomerId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        /* run the DB seeding */
-        modelBuilder.Seed();
+            /* run the DB seeding */
+            modelBuilder.Seed();
 
         base.OnModelCreating(modelBuilder);
     }
