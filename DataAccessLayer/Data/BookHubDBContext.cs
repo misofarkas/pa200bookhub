@@ -47,38 +47,38 @@ namespace DataAccessLayer.Data
             .WithMany(p => p.Books)
             .HasForeignKey(b => b.PublisherId);
 
-        modelBuilder.Entity<Review>()
-            .HasOne(r => r.Book)
-            .WithMany(b => b.Reviews)
-            .HasForeignKey(r => r.BookId);
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.Book)
+                .WithMany(b => b.Reviews)
+                .HasForeignKey(r => r.BookId);
 
-        modelBuilder.Entity<Review>()
-            .HasOne(r => r.Customer)
-            .WithMany(c => c.Reviews)
-            .HasForeignKey(r => r.CustomerId);
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.Customer)
+                .WithMany(c => c.Reviews)
+                .HasForeignKey(r => r.CustomerId);
 
-        modelBuilder.Entity<Wishlist>()
-            .HasOne(w => w.Book)
-            .WithMany(b => b.Wishlists)
-            .HasForeignKey(w => w.BookId);
+            modelBuilder.Entity<Wishlist>()
+                .HasOne(w => w.Book)
+                .WithMany(b => b.Wishlists)
+                .HasForeignKey(w => w.BookId);
 
-        modelBuilder.Entity<Wishlist>()
-            .HasOne(w => w.Customer)
-            .WithMany(c => c.Wishlists)
-            .HasForeignKey(w => w.CustomerId);
+            modelBuilder.Entity<Wishlist>()
+                .HasOne(w => w.Customer)
+                .WithMany(c => c.Wishlists)
+                .HasForeignKey(w => w.CustomerId);
 
-        modelBuilder.Entity<PurchaseHistory>()
-            .HasOne(p => p.Book)
-            .WithMany(b => b.PurchaseHistories)
-            .HasForeignKey(p => p.BookId);
+            modelBuilder.Entity<PurchaseHistory>()
+                .HasOne(p => p.Book)
+                .WithMany(b => b.PurchaseHistories)
+                .HasForeignKey(p => p.BookId);
 
-        modelBuilder.Entity<PurchaseHistory>()
-            .HasOne(p => p.Customer)
-            .WithMany(c => c.PurchaseHistories)
-            .HasForeignKey(p => p.CustomerId);
+             modelBuilder.Entity<PurchaseHistory>()
+                .HasOne(p => p.Customer)
+                .WithMany(c => c.PurchaseHistories)
+                .HasForeignKey(p => p.CustomerId);
 
-        /* run the DB seeding */
-        modelBuilder.Seed();
+            /* run the DB seeding */
+            modelBuilder.Seed();
 
         base.OnModelCreating(modelBuilder);
     }

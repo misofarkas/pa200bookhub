@@ -3,6 +3,7 @@ using System;
 using DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(BookHubDBContext))]
-    partial class BookHubDBContextModelSnapshot : ModelSnapshot
+    [Migration("20231120170607_TestMigration4514")]
+    partial class TestMigration4514
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.12");
@@ -195,9 +198,6 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("isDeleted")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
@@ -207,22 +207,19 @@ namespace DataAccessLayer.Migrations
                         {
                             Id = 1,
                             Password = "password123",
-                            Username = "Janko",
-                            isDeleted = false
+                            Username = "Janko"
                         },
                         new
                         {
                             Id = 2,
                             Password = "annaBsecure456",
-                            Username = "AnnaB",
-                            isDeleted = false
+                            Username = "AnnaB"
                         },
                         new
                         {
                             Id = 3,
                             Password = "mikeWpassword789",
-                            Username = "MikeW",
-                            isDeleted = false
+                            Username = "MikeW"
                         });
                 });
 
