@@ -1,4 +1,6 @@
 ﻿using BusinessLayer.DTOs;
+using BusinessLayer.DTOs.Author;
+using BusinessLayer.DTOs.Book;
 using DataAccessLayer.Models;
 using Mapster;
 using System.Linq;
@@ -12,9 +14,18 @@ namespace BusinessLayer.Mapper
             return author.Adapt<AuthorDTO>();
         }
 
+        public static AuthorWithoutBooksDTO MapToAuthorDTOList(this Author author)
+        {
+            return author.Adapt<AuthorWithoutBooksDTO>();
+        }
+
         public static BookDTO MapToBookDTO(this Book book)
         {
             return book.Adapt<BookDTO>();
+        }
+        public static BookWithoutAuthorDTO MapToBookWithoutAuthorDTO(this Book book)
+        {
+            return book.Adapt<BookWithoutAuthorDTO>();
         }
 
         public static CustomerDTO MapToCustomerDTO(this Customer customer)
