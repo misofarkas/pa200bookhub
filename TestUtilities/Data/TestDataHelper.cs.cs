@@ -24,5 +24,32 @@ namespace TestUtilities.Data
                     Description = "Harry Potter and the Philosopher's Stone is a fantasy novel written by British author J. K. Rowling." },
             };
         }
+
+        public static List<Customer> GetFakeCustomers()
+        {
+            return new List<Customer>()
+            {
+                new Customer
+                {
+                    Id = 1,
+                    Username = "Test",
+                    Password = "password",
+                    isDeleted = false,
+                    Reviews = new List<Review>(),
+                    Wishlists = new List<Wishlist>(),
+                    PurchaseHistories = new List<PurchaseHistory>(),
+                },
+                new Customer
+                {
+                    Id = 2,
+                    Username = "Test2",
+                    Password = "password2",
+                    isDeleted = false,
+                    Reviews = new List<Review>(),
+                    Wishlists = new List<Wishlist>(),
+                    PurchaseHistories = new List<PurchaseHistory>(),
+                }
+            };
+        }
     }
 }
