@@ -108,9 +108,9 @@ namespace DataAccessLayer.Data
         {
             return new List<Customer>()
             {
-                new Customer { Id = 1, Username = "Janko", Password = "password123" },
-                new Customer { Id = 2, Username = "AnnaB", Password = "annaBsecure456" },
-                new Customer { Id = 3, Username = "MikeW", Password = "mikeWpassword789" }
+                new Customer { Id = 1, Username = "Janko"},
+                new Customer { Id = 2, Username = "AnnaB" },
+                new Customer { Id = 3, Username = "MikeW" }
             };
         }
 

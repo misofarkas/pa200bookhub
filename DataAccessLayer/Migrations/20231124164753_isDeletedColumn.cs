@@ -5,7 +5,7 @@
 namespace DataAccessLayer.Migrations
 {
     /// <inheritdoc />
-    public partial class TestMigration7474 : Migration
+    public partial class isDeletedColumn : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -46,5 +46,6 @@ namespace DataAccessLayer.Migrations
                 name: "isDeleted",
                 table: "Customers");
         }
+
     }
 }
