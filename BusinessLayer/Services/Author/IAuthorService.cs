@@ -10,9 +10,9 @@ namespace BusinessLayer.Services.Author
 
         Task<AuthorDTO?> GetByAuthorName(string authorName);
 
-        Task<bool> CreateAuthor(AuthorWithoutBooksDTO authorDTO);
+        Task<bool> CreateAuthor(AuthorCreateUpdateDTO authorDTO);
 
-        Task<bool> UpdateAuthor(AuthorWithoutBooksDTO authorDTO);
+        Task<bool> UpdateAuthor(int id, AuthorCreateUpdateDTO authorDTO);
 
         Task<bool> DeleteAuthor(int authorId);
 
