@@ -40,6 +40,8 @@ namespace TestUtilities.MockedObjects
         {
             _serviceCollection = _serviceCollection
                 .AddScoped<IBookService, BookService>();
+            _serviceCollection = _serviceCollection
+                .AddScoped<ICustomerService, CustomerService>();
 
             return this;
         }

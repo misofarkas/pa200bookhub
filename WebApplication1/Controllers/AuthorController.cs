@@ -56,7 +56,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAuthor (AuthorWithoutBooksDTO author)
+        public async Task<IActionResult> CreateAuthor (AuthorCreateUpdateDTO author)
         {
             if (!ModelState.IsValid)
             {
@@ -74,13 +74,13 @@ namespace WebApplication1.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateAuthor(int id, AuthorWithoutBooksDTO model)
+        public async Task<IActionResult> UpdateAuthor(int id, AuthorCreateUpdateDTO model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var success = await _authorService.UpdateAuthor(model);
+            var success = await _authorService.UpdateAuthor(id, model);
             if (success)
             {
                 return Ok("Author updated");

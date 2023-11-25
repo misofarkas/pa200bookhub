@@ -35,13 +35,15 @@ namespace TestUtilities.MockedObjects
         public static void PrepareData(BookHubDBContext dbContext)
         {
             dbContext.Books.AddRange(TestDataHelper.GetFakeBooks());
+            dbContext.Customers.AddRange(TestDataHelper.GetFakeCustomers());
 
             dbContext.SaveChanges();
         }
 
         public static async Task PrepareDataAsync(BookHubDBContext dbContext)
         {
-            dbContext.Books.AddRange(TestDataHelper.GetFakeBooks());
+            await dbContext.Books.AddRangeAsync(TestDataHelper.GetFakeBooks());
+            await dbContext.Customers.AddRangeAsync(TestDataHelper.GetFakeCustomers());
 
             await dbContext.SaveChangesAsync();
         }

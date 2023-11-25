@@ -13,7 +13,7 @@ namespace BusinessLayer.Services.Author
             _dbContext = dBContext;
         }
 
-        public async Task<bool> CreateAuthor(AuthorWithoutBooksDTO authorDTO)
+        public async Task<bool> CreateAuthor(AuthorCreateUpdateDTO authorDTO)
         {
             var author = EntityMapper.MapToAuthor(authorDTO);
             if (author == null) {
@@ -86,9 +86,9 @@ namespace BusinessLayer.Services.Author
             return DTOMapper.MapToAuthorDTO(author);
         }
 
-        public async Task<bool> UpdateAuthor(AuthorWithoutBooksDTO authorDTO)
+        public async Task<bool> UpdateAuthor(int id, AuthorCreateUpdateDTO authorDTO)
         {
-            var author = await _dbContext.Authors.FindAsync(authorDTO.Id);
+            var author = await _dbContext.Authors.FindAsync(id);
             if (author == null)
             {
                 return false;
