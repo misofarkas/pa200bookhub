@@ -36,6 +36,7 @@ namespace TestUtilities.MockedObjects
         {
             dbContext.Books.AddRange(TestDataHelper.GetFakeBooks());
             dbContext.Customers.AddRange(TestDataHelper.GetFakeCustomers());
+            dbContext.Authors.AddRange(TestDataHelper.GetFakeAuthors());
 
             dbContext.SaveChanges();
         }
@@ -44,6 +45,7 @@ namespace TestUtilities.MockedObjects
         {
             await dbContext.Books.AddRangeAsync(TestDataHelper.GetFakeBooks());
             await dbContext.Customers.AddRangeAsync(TestDataHelper.GetFakeCustomers());
+            await dbContext.Authors.AddRangeAsync(TestDataHelper.GetFakeAuthors());
 
             await dbContext.SaveChangesAsync();
         }

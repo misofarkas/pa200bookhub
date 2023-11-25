@@ -49,5 +49,13 @@ namespace TestUtilities.Data
                 }
             };
         }
+        public static List<Author> GetFakeAuthors()
+        {
+            return new List<Author>()
+            {
+                new Author { Id = 1, Name = "Author One" },
+                new Author { Id = 2, Name = "Author Two" }
+            };
+        }
     }
 }

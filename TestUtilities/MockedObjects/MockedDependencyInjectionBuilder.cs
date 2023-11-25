@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Services;
+using BusinessLayer.Services.Author;
 using DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,6 +43,8 @@ namespace TestUtilities.MockedObjects
                 .AddScoped<IBookService, BookService>();
             _serviceCollection = _serviceCollection
                 .AddScoped<ICustomerService, CustomerService>();
+            _serviceCollection = _serviceCollection
+                .AddScoped<IAuthorService, AuthorService>();
 
             return this;
         }
