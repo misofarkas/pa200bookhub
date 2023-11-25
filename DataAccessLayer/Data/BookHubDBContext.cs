@@ -1,11 +1,12 @@
 ﻿using DataAccessLayer.Data;
 using DataAccessLayer.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 
 namespace DataAccessLayer.Data
 {
-    public class BookHubDBContext : DbContext
+    public class BookHubDBContext : IdentityDbContext
     {
     public DbSet<Book> Books { get; set; }
     public DbSet<Author> Authors { get; set; }
@@ -16,6 +17,8 @@ namespace DataAccessLayer.Data
     public DbSet<Review> Reviews { get; set; }
     public DbSet<Wishlist> Wishlists { get; set; }
     public DbSet<PurchaseHistory> PurchaseHistories { get; set; }
+
+    public DbSet<LocalIdentityUser> IdentityCustomers { get; set; }
 
     public BookHubDBContext(DbContextOptions options) : base(options)
     {

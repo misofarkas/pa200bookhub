@@ -33,7 +33,6 @@ namespace TestUtilities.Data
                 {
                     Id = 1,
                     Username = "Test",
-                    Password = "password",
                     isDeleted = false,
                     Reviews = new List<Review>(),
                     Wishlists = new List<Wishlist>(),
@@ -43,7 +42,6 @@ namespace TestUtilities.Data
                 {
                     Id = 2,
                     Username = "Test2",
-                    Password = "password2",
                     isDeleted = false,
                     Reviews = new List<Review>(),
                     Wishlists = new List<Wishlist>(),

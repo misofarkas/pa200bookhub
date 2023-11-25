@@ -9,6 +9,7 @@
   <ItemGroup>
 	<PackageReference Include="EntityFrameworkCore.Testing.NSubstitute" Version="5.0.0" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.10" />
+	<PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
     <ProjectReference Include="..\BusinessLayer\BusinessLayer.csproj" />
     <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj" />
   </ItemGroup>

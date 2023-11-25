@@ -74,15 +74,12 @@ namespace BusinessLayer.Services
         
         public async Task<CustomerDTO> CreateCustomerAsync(CustomerDTO customerDTO)
         {
-            /*
-            * TODO CreateCustomer needs a password
+
             var customer = customerDTO.MapToCustomer();
             _dbContext.Customers.Add(customer);
             await _dbContext.SaveChangesAsync();
             return customer.MapToCustomerDTO();
-            */
 
-            throw new NotImplementedException();
         }
 
         public async Task<CustomerDTO?> UpdateCustomerAsync(int id, CustomerDTO customerDTO)

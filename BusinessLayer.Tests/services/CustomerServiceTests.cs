@@ -93,19 +93,31 @@ namespace BusinessLayer.Tests.services
         }
 
         [Fact]
-        public async Task CreateCustomerAsync_ThrowsNotImplementedException()
+        public async Task CreateCustomerAsync_ValidData_CreatesNewCustomer()
         {
-            //TODO Update this test when CreateCustomerAsync is implemented
             // Arrange
             var serviceProvider = _serviceProviderBuilder.Create();
             using (var scope = serviceProvider.CreateScope())
             {
+                var dbContext = scope.ServiceProvider.GetRequiredService<BookHubDBContext>();
+                await MockedDBContext.PrepareDataAsync(dbContext);
                 var customerService = scope.ServiceProvider.GetRequiredService<ICustomerService>();
-                var newCustomerDTO = new CustomerDTO(); // Prepare a new CustomerDTO
 
-                // Act & Assert
-                await Assert.ThrowsAsync<NotImplementedException>(async () =>
-                    await customerService.CreateCustomerAsync(newCustomerDTO));
+                var newCustomerDTO = new CustomerDTO
+                {
+                    Username = "NewUser",
+                };
+
+                // Act
+                var result = await customerService.CreateCustomerAsync(newCustomerDTO);
+
+                // Assert
+                Assert.NotNull(result);
+                Assert.Equal(newCustomerDTO.Username, result.Username);
+
+                var customerInDb = dbContext.Customers.FirstOrDefault(c => c.Username == newCustomerDTO.Username);
+                Assert.NotNull(customerInDb);
+                Assert.Equal(newCustomerDTO.Username, customerInDb.Username);
             }
         }
 
