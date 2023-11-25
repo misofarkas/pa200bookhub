@@ -33,7 +33,8 @@ namespace DataAccessLayer.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Username = table.Column<string>(type: "TEXT", nullable: false),
-                    Password = table.Column<string>(type: "TEXT", nullable: false)
+                    Password = table.Column<string>(type: "TEXT", nullable: false),
+                    isDeleted = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -221,12 +222,12 @@ namespace DataAccessLayer.Migrations
 
             migrationBuilder.InsertData(
                 table: "Customers",
-                columns: new[] { "Id", "Password", "Username" },
+                columns: new[] { "Id", "Password", "Username", "isDeleted" },
                 values: new object[,]
                 {
-                    { 1, "password123", "Janko" },
-                    { 2, "annaBsecure456", "AnnaB" },
-                    { 3, "mikeWpassword789", "MikeW" }
+                    { 1, "password123", "Janko", false },
+                    { 2, "annaBsecure456", "AnnaB", false },
+                    { 3, "mikeWpassword789", "MikeW", false }
                 });
 
             migrationBuilder.InsertData(

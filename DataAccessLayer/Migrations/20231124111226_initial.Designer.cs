@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(BookHubDBContext))]
-    [Migration("20231121150243_initial")]
+    [Migration("20231124111226_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -196,6 +196,9 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("isDeleted")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
@@ -205,19 +208,22 @@ namespace DataAccessLayer.Migrations
                         {
                             Id = 1,
                             Password = "password123",
-                            Username = "Janko"
+                            Username = "Janko",
+                            isDeleted = false
                         },
                         new
                         {
                             Id = 2,
                             Password = "annaBsecure456",
-                            Username = "AnnaB"
+                            Username = "AnnaB",
+                            isDeleted = false
                         },
                         new
                         {
                             Id = 3,
                             Password = "mikeWpassword789",
-                            Username = "MikeW"
+                            Username = "MikeW",
+                            isDeleted = false
                         });
                 });
 

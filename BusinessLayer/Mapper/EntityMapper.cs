@@ -19,6 +19,11 @@ namespace BusinessLayer.Mapper
             return authorDTOList.Adapt<Author>();
         }
 
+        public static Author MapToAuthor(this AuthorCreateUpdateDTO authorDTOList)
+        {
+            return authorDTOList.Adapt<Author>();
+        }
+
 
         public static Book MapToBook(this BookDTO bookDTO)
         {
