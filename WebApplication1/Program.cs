@@ -59,9 +59,10 @@ var sqliteConnectionString = $"Data Source={dbPath}";
 builder.Services.AddDbContextFactory<BookHubDBContext>(options =>
 {
     options
-       .UseSqlite(sqliteConnectionString)
-       ;
-    
+        .UseSqlite(
+            sqliteConnectionString,
+            x => x.MigrationsAssembly("DAL.SQLite.Migrations")
+        );
 });
 
 /* Register Services */

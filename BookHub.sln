@@ -15,6 +15,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLayer.Tests", "Busi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebMVC", "WebMVC\WebMVC.csproj", "{EE3E74EC-9E29-4AAC-9DED-FC34D1DA7614}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL.SQLite.Migrations", "DAL.SQLite.Migrations\DAL.SQLite.Migrations.csproj", "{1CC72C5C-94A2-44A8-A562-54FEC228A502}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL.MSSQL.Migrations", "DAL.MSSQL.Migrations\DAL.MSSQL.Migrations.csproj", "{101A0133-5A28-4655-BED5-DE245EC986A8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{EE3E74EC-9E29-4AAC-9DED-FC34D1DA7614}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE3E74EC-9E29-4AAC-9DED-FC34D1DA7614}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE3E74EC-9E29-4AAC-9DED-FC34D1DA7614}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CC72C5C-94A2-44A8-A562-54FEC228A502}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CC72C5C-94A2-44A8-A562-54FEC228A502}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CC72C5C-94A2-44A8-A562-54FEC228A502}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CC72C5C-94A2-44A8-A562-54FEC228A502}.Release|Any CPU.Build.0 = Release|Any CPU
+		{101A0133-5A28-4655-BED5-DE245EC986A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{101A0133-5A28-4655-BED5-DE245EC986A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{101A0133-5A28-4655-BED5-DE245EC986A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{101A0133-5A28-4655-BED5-DE245EC986A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

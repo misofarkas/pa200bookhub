@@ -20,7 +20,7 @@ namespace DataAccessLayer.Data
 
     public DbSet<LocalIdentityUser> IdentityCustomers { get; set; }
 
-    public BookHubDBContext(DbContextOptions options) : base(options)
+    public BookHubDBContext(DbContextOptions<BookHubDBContext> options) : base(options)
     {
     }
 
