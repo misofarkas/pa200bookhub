@@ -81,7 +81,7 @@ namespace TestUtilities.Data
         {
             return new List<AuthorBook>()
             {
-                new AuthorBook {Id = 1, AuthorId = 1, BookId = 1},
+                new AuthorBook {Id = 1, AuthorId = 2, BookId = 1},
                 new AuthorBook {Id = 2, AuthorId = 2, BookId = 2},
             };
         }
