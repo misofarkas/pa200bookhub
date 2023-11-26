@@ -183,11 +183,12 @@ The WebMVC project provides several views that make up the user interface of the
 - PurchaseHistory: Represents the purchase history of customers. Contains attributes like `PurchaseHistoryID`, `BookID`, `CustomerID` and `PurchaseDate`. Each entry is associated with a customer and a book they've purchased.
 
 - Review: Represents reviews left by customers for books. Contains attributes like `ReviewID`, `CustomerID`, `BookID`, `Rating`, and `Comments`. Each review is associated with a customer and the book they reviewed.
-![Entity relation diagram](https://gitlab.fi.muni.cz/xzovak/pv179-bookhub/-/raw/2-milestone-1/DataModel.png?ref_type=heads)
 
 - AuthorBook: This is a junction table that encapsulates the many-to-many relationship between the Author and Book entities
 
 - GenreBook: This is a junction table that encapsulates the many-to-many relationship between the Genre and Book entities
+
+![Entity relation diagram](https://gitlab.fi.muni.cz/xzovak/pv179-bookhub/-/raw/14-milestone-2/DataModel.png?ref_type=heads)
 
 ## Notes
 
