@@ -37,6 +37,9 @@ namespace TestUtilities.MockedObjects
             dbContext.Books.AddRange(TestDataHelper.GetFakeBooks());
             dbContext.Customers.AddRange(TestDataHelper.GetFakeCustomers());
             dbContext.Authors.AddRange(TestDataHelper.GetFakeAuthors());
+            dbContext.Publishers.AddRange(TestDataHelper.GetFakePublishers());
+            dbContext.AuthorBooks.AddRange(TestDataHelper.GetFakeAuthorBooks());
+            dbContext.GenreBooks.AddRange(TestDataHelper.GetFakeGenreBooks());
 
             dbContext.SaveChanges();
         }
@@ -46,6 +49,9 @@ namespace TestUtilities.MockedObjects
             await dbContext.Books.AddRangeAsync(TestDataHelper.GetFakeBooks());
             await dbContext.Customers.AddRangeAsync(TestDataHelper.GetFakeCustomers());
             await dbContext.Authors.AddRangeAsync(TestDataHelper.GetFakeAuthors());
+            await dbContext.Publishers.AddRangeAsync(TestDataHelper.GetFakePublishers());
+            await dbContext.AuthorBooks.AddRangeAsync(TestDataHelper.GetFakeAuthorBooks());
+            await dbContext.GenreBooks.AddRangeAsync(TestDataHelper.GetFakeGenreBooks());
 
             await dbContext.SaveChangesAsync();
         }

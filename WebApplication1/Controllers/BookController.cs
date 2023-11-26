@@ -3,6 +3,8 @@ using DataAccessLayer.Data;
 using Microsoft.AspNetCore.Mvc;
 using BusinessLayer.Services;
 using System.Threading.Tasks;
+using BusinessLayer.DTOs;
+using BusinessLayer.DTOs.Book;
 
 namespace WebApplication1.Controllers
 {
@@ -26,6 +28,19 @@ namespace WebApplication1.Controllers
                 return NotFound("No books were found.");
             }
             return Ok(books);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateBook(BookDTO model)
+        {
+            var result = await _bookService.CreateBookAsync(model);
+
+            if (result == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(result);
         }
 
         [HttpGet]
@@ -66,6 +81,20 @@ namespace WebApplication1.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> UpdateBook(int id, BookUpdateDTO model)
+        {
+            var result = await _bookService.UpdateBookAsync(id, model);
+
+            if (result == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(result);
         }
     }
 }

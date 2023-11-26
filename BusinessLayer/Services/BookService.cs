@@ -79,41 +79,37 @@ namespace BusinessLayer.Services
             return await GetBooksCommonQuery(query);
         }
 
-        //public async Task<BookDTO> CreateBookAsync(BookCreateDTO model)
-        //{
-        //    var book = new Book
-        //    {
-        //        Title = model.Title,
-        //        AuthorId = model.AuthorId,
-        //        GenreId = model.GenreId,
-        //        PublisherId = model.PublisherId,
-        //        Price = model.Price
-        //        // Other properties if necessary
-        //    };
+        public async Task<BookDTO> CreateBookAsync(BookDTO model)
+        {
+            var book = new Book
+            {
+                Title = model.Title,
+                Price = model.Price,
+                Description = model.Description,
+            };
 
-        //    _dbContext.Books.Add(book);
-        //    await SaveAsync(true);
-        //    return book.MapToBookDTO();
-        //}
+            var book2 = EntityMapper.MapToBook(model);
 
-        //public async Task<BookDTO> UpdateBookAsync(int id, BookUpdateDTO model)
-        //{
-        //    var book = await _dbContext.Books.FindAsync(id);
-        //    if (book == null)
-        //    {
-        //        return null;
-        //    }
+            _dbContext.Books.Add(book2);
+            await SaveAsync(true);
+            return book.MapToBookDTO();
+        }
 
-        //    book.Title = model.Title;
-        //    book.AuthorId = model.AuthorId;
-        //    book.GenreId = model.GenreId;
-        //    book.PublisherId = model.PublisherId;
-        //    book.Price = model.Price;
+        public async Task<BookDTO> UpdateBookAsync(int id, BookUpdateDTO model)
+        {
+            var book = await _dbContext.Books.FindAsync(id);
+            if (book == null)
+            {
+                return null;
+            }
 
-        //    _dbContext.Books.Update(book);
-        //    await SaveAsync(true);
-        //    return book.MapToBookDTO();
-        //}
+            book.Title = model.Title;
+            book.Price = model.Price;
+            book.Description = model.Description;
+
+            await _dbContext.SaveChangesAsync();
+            return book.MapToBookDTO();
+        }
 
         public async Task<bool> DeleteBookAsync(int id)
         {

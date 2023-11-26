@@ -41,8 +41,6 @@ namespace BusinessLayer.Services
             return await GetCustomerCommonQuery(GetAllCustomersQuery());
         }
 
-        
-        
         public async Task<bool> DeleteCustomerAsync(int id)
         {
             
