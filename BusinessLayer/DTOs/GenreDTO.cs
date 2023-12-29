@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.DTOs
 {
-    public class GenreDTO
+    public class GenreDTO: BaseDTO
     {
         public string Name { get; set; }
     }
-
 }

@@ -1,0 +1,30 @@
+﻿@model BusinessLayer.DTOs.Book.BookDTO
+
+@{
+    ViewData["Title"] = "Edit Book";
+}
+
+<h2>Edit Book</h2>
+
+<form asp-action="EditBook" asp-controller="Admin" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div>
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+    </div>
+
+    <div>
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <div>
+        <label asp-for="Price"></label>
+        <input asp-for="Price" class="form-control" />
+    </div>
+
+    <!-- Add other fields as necessary -->
+
+    <button type="submit" class="btn btn-primary">Update Book</button>
+</form>

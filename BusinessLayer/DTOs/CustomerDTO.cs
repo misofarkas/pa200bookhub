@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.DTOs
 {
-    public class CustomerDTO
+    public class CustomerDTO: BaseDTO
     {
         public string Username { get; set; }
     }
