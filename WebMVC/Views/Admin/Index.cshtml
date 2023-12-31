@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<h1>Admin Dashboard</h1>
+
+<label for="editId">ID to Edit:</label>
+<input type="number" id="editId" name="editId" placeholder="Enter ID" />
+
+<ul>
+    <li><a href="/admin/edit-book/" class="edit-link">Edit Books</a></li>
+    <li><a href="/admin/edit-customer/" class="edit-link">Edit Customers</a></li>
+    <li><a href="/admin/edit-genre/" class="edit-link">Edit Genres</a></li>
+    <li><a href="/admin/edit-publisher/" class="edit-link">Edit Publishers</a></li>
+    <li><a href="/admin/edit-purchase-history/" class="edit-link">Edit Purchase Histories</a></li>
+    <!-- Add other admin functions as needed -->
+</ul>
+
+<script>
+    document.getElementById('editId').addEventListener('input', function(e) {
+        var id = e.target.value;
+        var links = document.querySelectorAll('.edit-link');
+        links.forEach(function(link) {
+            var baseHref = link.getAttribute('href').split('/')[1] + '/' + link.getAttribute('href').split('/')[2] + '/'; // This will get 'admin/edit-xyz/'
+            link.setAttribute('href', '/' + baseHref + id); // Update the href with the new ID
+        });
+    });
+</script>

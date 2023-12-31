@@ -19,13 +19,13 @@ namespace BusinessLayer.Services
 
         public async Task<List<GenreDTO>> GetAllGenresAsync()
         {
-            var genres = await _dbContext.Genres.ToListAsync();
+            var genres = await _dbContext.Genre.ToListAsync();
             return genres.Select(g => new GenreDTO { Id = g.Id, Name = g.Name }).ToList();
         }
 
         public async Task<GenreDTO> GetGenreAsync(int id)
         {
-            var genre = await _dbContext.Genres.FindAsync(id);
+            var genre = await _dbContext.Genre.FindAsync(id);
             if (genre != null)
             {
                 return new GenreDTO { Id = genre.Id, Name = genre.Name };
@@ -35,7 +35,7 @@ namespace BusinessLayer.Services
 
         public async Task<GenreDTO> UpdateGenreAsync(int id, GenreDTO genreDTO)
         {
-            var genre = await _dbContext.Genres.FindAsync(id);
+            var genre = await _dbContext.Genre.FindAsync(id);
             if (genre != null)
             {
                 genre.Name = genreDTO.Name;
