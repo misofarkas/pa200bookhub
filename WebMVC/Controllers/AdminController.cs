@@ -1,7 +1,5 @@
-﻿// File: WebMVC/Controllers/AdminController.cs
-using Microsoft.AspNetCore.Mvc;
-using WebMVC.Models; // Adjust namespace based on your setup
-using BusinessLayer.Services; // Ensure BusinessLayer is referenced
+﻿using Microsoft.AspNetCore.Mvc;
+using BusinessLayer.Services;
 using BusinessLayer.DTOs.Book;
 using BusinessLayer.DTOs;
 
