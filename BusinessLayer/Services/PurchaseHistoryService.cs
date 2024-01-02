@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.DTOs;
+using BusinessLayer.Mapper;
 using DataAccessLayer.Data;
 using DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
@@ -20,17 +21,7 @@ namespace BusinessLayer.Services
         public async Task<PurchaseHistoryDTO> GetPurchaseHistoryAsync(int id)
         {
             var purchaseHistory = await _dbContext.PurchaseHistories.FindAsync(id);
-            if (purchaseHistory != null)
-            {
-                return new PurchaseHistoryDTO
-                {
-                    Id = purchaseHistory.Id,
-                    CustomerId = purchaseHistory.CustomerId,
-                    BookId = purchaseHistory.BookId,
-                    PurchaseDate = purchaseHistory.PurchaseDate
-                };
-            }
-            return null;
+            return DTOMapper.MapToPurchaseHistoryDTO(purchaseHistory);
         }
 
         public async Task<PurchaseHistoryDTO> UpdatePurchaseDateAsync(int id, DateTime newPurchaseDate)
@@ -40,13 +31,7 @@ namespace BusinessLayer.Services
             {
                 purchaseHistory.PurchaseDate = newPurchaseDate;
                 await SaveAsync(true);
-                return new PurchaseHistoryDTO
-                {
-                    Id = purchaseHistory.Id,
-                    CustomerId = purchaseHistory.CustomerId,
-                    BookId = purchaseHistory.BookId,
-                    PurchaseDate = purchaseHistory.PurchaseDate
-                };
+                return DTOMapper.MapToPurchaseHistoryDTO(purchaseHistory);
             }
             return null;
         }

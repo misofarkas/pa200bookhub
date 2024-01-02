@@ -1,6 +1,8 @@
 ﻿using BusinessLayer.DTOs;
+using BusinessLayer.Mapper;
 using DataAccessLayer.Data;
 using DataAccessLayer.Models;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,17 +22,13 @@ namespace BusinessLayer.Services
         public async Task<List<PublisherDTO>> GetAllPublishersAsync()
         {
             var publishers = await _dbContext.Publishers.ToListAsync();
-            return publishers.Select(p => new PublisherDTO { Id = p.Id, Name = p.Name }).ToList();
+            return publishers.Select(DTOMapper.MapToPublisherDTO).ToList();
         }
 
         public async Task<PublisherDTO> GetPublisherAsync(int id)
         {
             var publisher = await _dbContext.Publishers.FindAsync(id);
-            if (publisher != null)
-            {
-                return new PublisherDTO { Id = publisher.Id, Name = publisher.Name };
-            }
-            return null;
+            return DTOMapper.MapToPublisherDTO(publisher);
         }
 
         public async Task<PublisherDTO> UpdatePublisherAsync(int id, PublisherDTO publisherDTO)
@@ -40,7 +38,7 @@ namespace BusinessLayer.Services
             {
                 publisher.Name = publisherDTO.Name;
                 await SaveAsync(true);
-                return new PublisherDTO { Id = publisher.Id, Name = publisher.Name };
+                return DTOMapper.MapToPublisherDTO(publisher);
             }
             return null;
         }

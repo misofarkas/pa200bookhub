@@ -1,6 +1,8 @@
 ﻿using BusinessLayer.DTOs;
+using BusinessLayer.Mapper;
 using DataAccessLayer.Data;
 using DataAccessLayer.Models;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,17 +22,13 @@ namespace BusinessLayer.Services
         public async Task<List<GenreDTO>> GetAllGenresAsync()
         {
             var genres = await _dbContext.Genre.ToListAsync();
-            return genres.Select(g => new GenreDTO { Id = g.Id, Name = g.Name }).ToList();
+            return genres.Select(DTOMapper.MapToGenreDTO).ToList();
         }
 
         public async Task<GenreDTO> GetGenreAsync(int id)
         {
             var genre = await _dbContext.Genre.FindAsync(id);
-            if (genre != null)
-            {
-                return new GenreDTO { Id = genre.Id, Name = genre.Name };
-            }
-            return null;
+            return DTOMapper.MapToGenreDTO(genre);
         }
 
         public async Task<GenreDTO> UpdateGenreAsync(int id, GenreDTO genreDTO)
@@ -40,7 +38,7 @@ namespace BusinessLayer.Services
             {
                 genre.Name = genreDTO.Name;
                 await SaveAsync(true);
-                return new GenreDTO { Id = genre.Id, Name = genre.Name };
+                return DTOMapper.MapToGenreDTO(genre);
             }
             return null;
         }
