@@ -15,22 +15,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // register DBContext:
-var mssqlDbName = "Bookhubproject-2-DB-2";
+var sqliteDbName = "bookhubproject2.db";
 
 var folder = Environment.SpecialFolder.LocalApplicationData;
-var dbPath = Path.Join(Environment.GetFolderPath(folder), mssqlDbName);
+var dbPath = Path.Join(Environment.GetFolderPath(folder), sqliteDbName);
 
-var mssqlConnectionString = $"Server=(localdb)\\mssqllocaldb;Integrated Security=True;MultipleActiveResultSets=True;Database={mssqlDbName};Trusted_Connection=True;";
+var sqliteConnectionString = $"Data Source={dbPath}";
 
 builder.Services.AddDbContextFactory<BookHubDBContext>(options =>
 {
     options
-        .UseSqlServer(
-            mssqlConnectionString,
-            x => x.MigrationsAssembly("DAL.MSSQL.Migrations")
-        )
-        ;
-
+        .UseSqlite(
+            sqliteConnectionString,
+            x => x.MigrationsAssembly("DAL.SQLite.Migrations")
+        );
 });
 
 /* Register Services */
