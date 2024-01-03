@@ -82,5 +82,46 @@ namespace WebMVC.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult ResetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return RedirectToAction("ResetPasswordConfirmation");
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("ResetPasswordConfirmation");
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return View(model);
+        }
+
+        public IActionResult ResetPasswordConfirmation()
+        {
+            return View();
+        }
+
     }
 }

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.DTOs
 {
-    public class PurchaseHistoryDTO
+    public class PurchaseHistoryDTO: BaseDTO
     {
-        public string BookTitle { get; set; }
-        public string CustomerUsername { get; set; }
+        public int BookId { get; set; }
+        public int CustomerId { get; set; }
         public DateTime PurchaseDate { get; set; }
     }
 

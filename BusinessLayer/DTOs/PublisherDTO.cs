@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.DTOs
 {
-    public class PublisherDTO
+    public class PublisherDTO: BaseDTO
     {
         public string Name { get; set; }
     }

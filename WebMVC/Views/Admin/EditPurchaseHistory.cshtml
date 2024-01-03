@@ -1,0 +1,27 @@
+﻿@model BusinessLayer.DTOs.PurchaseHistoryDTO
+
+@{
+    ViewData["Title"] = "Edit Purchase History";
+}
+
+<h2>Edit Purchase History</h2>
+
+<form asp-action="EditPurchaseHistory" asp-controller="Admin" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div>
+        <label asp-for="CustomerId"></label>
+        <input asp-for="CustomerId" class="form-control" disabled />
+    </div>    
+    
+    <div>
+        <label asp-for="BookId"></label>
+        <input asp-for="BookId" class="form-control" disabled />
+    </div>
+
+    <div>
+        <label asp-for="PurchaseDate"></label>
+        <input asp-for="PurchaseDate" class="form-control" type="datetime-local" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update Purchase History</button>
+</form>
