@@ -67,7 +67,7 @@ namespace BusinessLayer.Tests.services
                 var result = await authorService.CreateAuthor(newAuthorDTO);
 
                 // Assert
-                Assert.True(result);
+                Assert.NotNull(result);
                 var authorInDb = dbContext.Authors.FirstOrDefault(a => a.Name == newAuthorDTO.Name);
                 Assert.NotNull(authorInDb);
                 Assert.Equal(newAuthorDTO.Name, authorInDb.Name);
@@ -94,7 +94,7 @@ namespace BusinessLayer.Tests.services
                 var result = await authorService.UpdateAuthor(authorIdToUpdate, updatedAuthorDTO);
 
                 // Assert
-                Assert.True(result);
+                Assert.NotNull(result);
                 var author = dbContext.Authors.Find(authorIdToUpdate);
                 Assert.NotNull(author);
                 Assert.Equal("Updated Author", author.Name);
