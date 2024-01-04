@@ -12,9 +12,9 @@ namespace BusinessLayer.Services
 
         Task<IEnumerable<AuthorDTO>> SearchAuthor(string authorName);
 
-        Task<bool> CreateAuthor(AuthorCreateUpdateDTO authorDTO);
+        Task<AuthorCreateUpdateDTO> CreateAuthor(AuthorCreateUpdateDTO authorDTO);
 
-        Task<bool> UpdateAuthor(int id, AuthorCreateUpdateDTO authorDTO);
+        Task<AuthorCreateUpdateDTO> UpdateAuthor(int id, AuthorCreateUpdateDTO authorDTO);
 
         Task<bool> DeleteAuthor(int authorId);
 
