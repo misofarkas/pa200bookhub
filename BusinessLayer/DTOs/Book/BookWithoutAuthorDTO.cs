@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.DTOs.Author;
+using BusinessLayer.DTOs.Genre;
 using System;
 using System.Collections.Generic;
 using System.Linq;

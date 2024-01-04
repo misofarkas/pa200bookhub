@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.DTOs;
 using BusinessLayer.DTOs.Author;
 using BusinessLayer.DTOs.Book;
+using BusinessLayer.DTOs.Genre;
 using DataAccessLayer.Models;
 using Mapster;
 using System.Linq;
@@ -41,6 +42,10 @@ namespace BusinessLayer.Mapper
         }
 
         public static Genre MapToGenre(this GenreDTO genreDTO)
+        {
+            return genreDTO.Adapt<Genre>();
+        }
+        public static Genre MapToGenre(this GenreCreateUpdateDTO genreDTO)
         {
             return genreDTO.Adapt<Genre>();
         }

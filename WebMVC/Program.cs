@@ -8,6 +8,7 @@ using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Middleware;
+using BusinessLayer.DTOs.Genre;
 
 var builder = WebApplication.CreateBuilder(args);
 

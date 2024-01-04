@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.DTOs;
 using BusinessLayer.DTOs.Author;
 using BusinessLayer.DTOs.Book;
+using BusinessLayer.DTOs.Genre;
 using DataAccessLayer.Models;
 using Mapster;
 using System.Linq;
@@ -37,6 +38,12 @@ namespace BusinessLayer.Mapper
         {
             return genre.Adapt<GenreDTO>();
         }
+
+        public static GenreCreateUpdateDTO MapToGenreCreateUpdateDTO(this Genre genre)
+        {
+            return genre.Adapt<GenreCreateUpdateDTO>();
+        }
+
 
         public static PublisherDTO MapToPublisherDTO(this Publisher publisher)
         {

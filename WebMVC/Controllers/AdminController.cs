@@ -2,6 +2,7 @@
 using BusinessLayer.Services;
 using BusinessLayer.DTOs.Book;
 using BusinessLayer.DTOs;
+using BusinessLayer.DTOs.Genre;
 
 namespace WebMVC.Controllers
 {
@@ -71,7 +72,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpPost("edit-genre/{id}")]
-        public async Task<IActionResult> EditGenre(int id, GenreDTO genre)
+        public async Task<IActionResult> EditGenre(int id, GenreCreateUpdateDTO genre)
         {
             await _genreService.UpdateGenreAsync(id, genre);
             return RedirectToAction("Index", "Admin");
