@@ -42,5 +42,20 @@ namespace BusinessLayer.Services
             }
             return null;
         }
+
+        public async Task<IEnumerable<GenreDTO>> SearchGenres(string genreName)
+        {
+            IQueryable<Genre> query = _dbContext.Genre
+                .Include(b => b.GenreBooks)
+                .ThenInclude(ab => ab.Book);
+
+
+            query = query.Where(b => b.Name.Contains(genreName));
+
+            var genres = await query
+                .ToListAsync();
+
+            return genres.Select(a => DTOMapper.MapToGenreDTO(a));
+        }
     }
 }
