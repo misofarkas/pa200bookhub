@@ -39,7 +39,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpPost("edit-book/{id}")]
-        public async Task<IActionResult> EditBook(int id, BookUpdateDTO book)
+        public async Task<IActionResult> EditBook(int id, BookCreateUpdateDTO book)
         {
             await _bookService.UpdateBookAsync(id, book);
             return RedirectToAction("Index", "Home");

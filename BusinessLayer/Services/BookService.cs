@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BusinessLayer.Services
 {
@@ -124,34 +125,103 @@ namespace BusinessLayer.Services
             };
         }
 
-        public async Task<BookDTO> CreateBookAsync(BookDTO model)
+        public async Task<BookDTO> CreateBookAsync(BookCreateUpdateDTO model)
         {
-            var book = new Book
+            var publisher = await _dbContext.Publishers.FindAsync(model.PublisherId);
+            if (publisher == null)
             {
-                Title = model.Title,
-                Price = model.Price,
-                Description = model.Description,
-            };
+                throw new Exception("Publisher not found");
+            }
+            var authors = await _dbContext.Authors.Where(a => model.AuthorIds.Contains(a.Id)).ToListAsync();
+            if (authors.Count != model.AuthorIds.Count)
+            {
+                throw new Exception("Author not found");
+            }
+            var genres = await _dbContext.Genre.Where(g => model.GenreIds.Contains(g.Id)).ToListAsync();
+            if (genres.Count != model.GenreIds.Count)
+            {
+                throw new Exception("Genre not found");
+            }
+            var newBook = EntityMapper.MapToBook(model);
+            newBook.Publisher = publisher;
+            newBook.AuthorBooks = authors.Select(a => new AuthorBook { Author = a, Book = newBook }).ToList();
+            newBook.GenreBooks = genres.Select(g => new GenreBook { Genre = g, Book = newBook }).ToList();
 
-            var book2 = EntityMapper.MapToBook(model);
-
-            _dbContext.Books.Add(book2);
+            _dbContext.Books.Add(newBook);
             await SaveAsync(true);
-            return book.MapToBookDTO();
+            return newBook.MapToBookDTO();
         }
 
-        public async Task<BookDTO> UpdateBookAsync(int id, BookUpdateDTO model)
+        public async Task<BookDTO> UpdateBookAsync(int id, BookCreateUpdateDTO model)
         {
-            var book = await _dbContext.Books.FindAsync(id);
+            var book = await _dbContext.Books
+                .Include(b => b.AuthorBooks)
+                .Include(b => b.GenreBooks)
+                .Include(b => b.Publisher)
+                .FirstOrDefaultAsync(b => b.Id == id);
+
             if (book == null)
             {
-                return null;
+                throw new Exception("Book Not found");
             }
 
             book.Title = model.Title;
             book.Price = model.Price;
             book.Description = model.Description;
+            book.PublisherId = model.PublisherId;
+            if (model.AuthorIds is not null)
+            {
+                if (model.AuthorIds.Count == 0)
+                {
+                    throw new Exception("AuthorIds cannot be empty");
+                }
 
+                var authors = await _dbContext.Authors.Include(b => b.AuthorBooks).Where(a => model.AuthorIds.Contains(a.Id)).ToListAsync();
+                if (authors.Count != model.AuthorIds.Count)
+                {
+                    throw new Exception("Author not found");
+                }
+
+                var authorsToRemove = book.AuthorBooks.Where(ab => !authors.Any(a => a.Id == ab.AuthorId)).ToList();
+                var newAuthors = authors.Where(a => !book.AuthorBooks.Any(ab => ab.AuthorId == a.Id)).ToList();
+                foreach (var author in authorsToRemove)
+                {
+                    book.AuthorBooks.Remove(author);
+                }
+                foreach (var author in newAuthors)
+                {
+                    book.AuthorBooks.Add(new AuthorBook { Author = author, Book = book });
+                }
+
+            }
+            if (model.GenreIds is not null)
+            {
+                if (model.GenreIds.Count == 0)
+                {
+                    throw new Exception("GenreIds cannot be empty");
+                }
+
+                var genres = await _dbContext.Genre.Include(b => b.GenreBooks).Where(g => model.GenreIds.Contains(g.Id)).ToListAsync();
+                if (genres.Count != model.GenreIds.Count)
+                {
+                    throw new Exception("Genre not found");
+                }
+
+                var genresToRemove = book.GenreBooks.Where(gb => !genres.Any(g => g.Id == gb.GenreId)).ToList();
+                var newGenres = genres.Where(g => !book.GenreBooks.Any(gb => gb.GenreId == g.Id)).ToList();
+                foreach (var genre in genresToRemove)
+                {
+                    book.GenreBooks.Remove(genre);
+                }
+                foreach (var genre in newGenres)
+                {
+                    book.GenreBooks.Add(new GenreBook { Genre = genre, Book = book });
+                }
+
+
+            }
+
+            _dbContext.Entry(book).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
             return book.MapToBookDTO();
         }

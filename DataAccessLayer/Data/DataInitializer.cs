@@ -85,22 +85,22 @@ namespace DataAccessLayer.Data
         {
             return new List<AuthorBook>()
             {
-                new AuthorBook { Id = 1, AuthorId = 1, BookId = 1},
-                new AuthorBook { Id = 2, AuthorId = 2, BookId = 2},
-                new AuthorBook { Id = 3, AuthorId = 3, BookId = 3},
-                new AuthorBook { Id = 4, AuthorId = 4, BookId = 4},
-                new AuthorBook { Id = 5, AuthorId = 5, BookId = 5},
+                new AuthorBook {AuthorId = 1, BookId = 1},
+                new AuthorBook { AuthorId = 2, BookId = 2},
+                new AuthorBook { AuthorId = 3, BookId = 3},
+                new AuthorBook { AuthorId = 4, BookId = 4},
+                new AuthorBook { AuthorId = 5, BookId = 5},
             };
         }
         private static List<GenreBook> PrepareGenreBooks()
         {
             return new List<GenreBook>()
             {
-                new GenreBook { Id = 1, GenreId = 1, BookId = 1},
-                new GenreBook { Id = 2, GenreId = 2, BookId = 2},
-                new GenreBook { Id = 3, GenreId = 3, BookId = 3},
-                new GenreBook { Id = 4, GenreId = 4, BookId = 4},
-                new GenreBook { Id = 5, GenreId = 5, BookId = 5},
+                new GenreBook { GenreId = 1, BookId = 1},
+                new GenreBook { GenreId = 2, BookId = 2},
+                new GenreBook { GenreId = 3, BookId = 3},
+                new GenreBook { GenreId = 4, BookId = 4},
+                new GenreBook { GenreId = 5, BookId = 5},
             };
         }
 

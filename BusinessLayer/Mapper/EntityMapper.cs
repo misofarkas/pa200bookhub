@@ -30,7 +30,7 @@ namespace BusinessLayer.Mapper
             return bookDTO.Adapt<Book>();
         }
 
-        public static Book MapToBook(this BookWithoutAuthorDTO bookDTO)
+        public static Book MapToBook(this BookCreateUpdateDTO bookDTO)
         {
             return bookDTO.Adapt<Book>();
         }

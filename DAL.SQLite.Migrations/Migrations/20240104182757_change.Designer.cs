@@ -3,6 +3,7 @@ using System;
 using DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.SQLite.Migrations.Migrations
 {
     [DbContext(typeof(BookHubDBContext))]
-    partial class BookHubDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240104182757_change")]
+    partial class change
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.14");
@@ -258,6 +261,10 @@ namespace DAL.SQLite.Migrations.Migrations
                     b.Property<int>("GenreId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("BookId", "GenreId");
 
                     b.HasIndex("GenreId");
@@ -268,27 +275,32 @@ namespace DAL.SQLite.Migrations.Migrations
                         new
                         {
                             BookId = 1,
-                            GenreId = 1
+                            GenreId = 1,
+                            Id = 1
                         },
                         new
                         {
                             BookId = 2,
-                            GenreId = 2
+                            GenreId = 2,
+                            Id = 2
                         },
                         new
                         {
                             BookId = 3,
-                            GenreId = 3
+                            GenreId = 3,
+                            Id = 3
                         },
                         new
                         {
                             BookId = 4,
-                            GenreId = 4
+                            GenreId = 4,
+                            Id = 4
                         },
                         new
                         {
                             BookId = 5,
-                            GenreId = 5
+                            GenreId = 5,
+                            Id = 5
                         });
                 });
 

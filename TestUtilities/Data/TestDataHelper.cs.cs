@@ -81,8 +81,8 @@ namespace TestUtilities.Data
         {
             return new List<AuthorBook>()
             {
-                new AuthorBook {Id = 1, AuthorId = 2, BookId = 1},
-                new AuthorBook {Id = 2, AuthorId = 2, BookId = 2},
+                new AuthorBook {AuthorId = 2, BookId = 1},
+                new AuthorBook {AuthorId = 2, BookId = 2},
             };
         }
 
@@ -90,8 +90,8 @@ namespace TestUtilities.Data
         {
             return new List<GenreBook>()
             {
-                new GenreBook { Id = 1, GenreId = 1, BookId = 1 },
-                new GenreBook { Id = 2, GenreId = 2, BookId = 2 },
+                new GenreBook { GenreId = 1, BookId = 1 },
+                new GenreBook { GenreId = 2, BookId = 2 },
             };
         }
     }
