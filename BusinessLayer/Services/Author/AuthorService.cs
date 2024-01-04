@@ -1,9 +1,15 @@
-﻿using BusinessLayer.DTOs.Author;
+﻿using Azure;
+using BusinessLayer.DTOs;
+using BusinessLayer.DTOs.Author;
+using BusinessLayer.DTOs.Book;
+using BusinessLayer.DTOs.Enums;
 using BusinessLayer.Mapper;
 using DataAccessLayer.Data;
+using DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace BusinessLayer.Services.Author
+namespace BusinessLayer.Services
 {
     public class AuthorService : BaseService , IAuthorService
     {
@@ -84,6 +90,26 @@ namespace BusinessLayer.Services.Author
                 return null;
             }
             return DTOMapper.MapToAuthorDTO(author);
+        }
+
+        public async Task<IEnumerable<AuthorDTO>> SearchAuthor(string authorName)
+        {
+            IQueryable<Author> query = _dbContext.Authors
+                .Include(b => b.AuthorBooks)
+                .ThenInclude(ab => ab.Book)
+                .ThenInclude(book => book.GenreBooks)
+                .ThenInclude(gb => gb.Genre)
+                .Include(b => b.AuthorBooks)
+                .ThenInclude(ab => ab.Book)
+                .ThenInclude(b => b.Publisher);
+
+
+            query = query.Where(b => b.Name.Contains(authorName));
+
+            var authors = await query
+                .ToListAsync();
+
+            return authors.Select(a => DTOMapper.MapToAuthorDTO(a));
         }
 
         public async Task<bool> UpdateAuthor(int id, AuthorCreateUpdateDTO authorDTO)

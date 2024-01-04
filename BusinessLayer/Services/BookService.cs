@@ -1,4 +1,6 @@
-﻿using BusinessLayer.DTOs.Book;
+﻿using BusinessLayer.DTOs;
+using BusinessLayer.DTOs.Book;
+using BusinessLayer.DTOs.Enums;
 using BusinessLayer.Mapper;
 using DataAccessLayer.Data;
 using DataAccessLayer.Models;
@@ -77,6 +79,49 @@ namespace BusinessLayer.Services
             }
 
             return await GetBooksCommonQuery(query);
+        }
+
+        public async Task<PaginatedResult<BookDTO>> SearchBooksWithCriteria(BookSearchCriteriaDTO searchCriteria, int page, int pageSize)
+        {
+            IQueryable<Book> query = _dbContext.Books
+                .Include(b => b.AuthorBooks)
+                .ThenInclude(b => b.Author)
+                .Include(b => b.GenreBooks)
+                .ThenInclude(gb => gb.Genre)
+                .Include(b => b.Publisher)
+                .Include(b => b.Reviews)
+                .ThenInclude(r => r.Customer);
+
+            switch (searchCriteria.SearchIn)
+            {
+                case BookSearchField.Title:
+                    query = query.Where(p => p.Title.Contains(searchCriteria.Query));
+                    break;
+                case BookSearchField.Desciption:
+                    query = query.Where(p => p.Description.Contains(searchCriteria.Query));
+                    break;
+                case BookSearchField.Author:
+                    query = query.Where(b => b.AuthorBooks.Any(ab => ab.Author.Name.Contains(searchCriteria.Query)));
+                    break;
+                case BookSearchField.Genre:
+                    query = query.Where(b => b.GenreBooks.Any(ab => ab.Genre.Name.Contains(searchCriteria.Query)));
+                    break;
+                case BookSearchField.Publisher:
+                    query = query.Where(b => b.Publisher.Name.Contains(searchCriteria.Query));
+                    break;
+            }
+
+            var totalCount = await query.CountAsync();
+            var books = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PaginatedResult<BookDTO>
+            {
+                Items = books.Select(b => b.MapToBookDTO()).ToList(),
+                TotalCount = totalCount
+            };
         }
 
         public async Task<BookDTO> CreateBookAsync(BookDTO model)

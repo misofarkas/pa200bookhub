@@ -2,7 +2,7 @@
 using DataAccessLayer.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using BusinessLayer.Services.Author;
+using BusinessLayer.Services;
 using BusinessLayer.DTOs.Author;
 
 namespace WebApplication1.Controllers

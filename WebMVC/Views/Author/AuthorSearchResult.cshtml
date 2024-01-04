@@ -1,0 +1,18 @@
+﻿@using WebMVC.Models.Author;
+@model AuthorListViewModel
+
+@{
+    await Html.RenderPartialAsync("AuthorSearchBox", new WebMVC.Models.Author.AuthorSearchViewModel());
+}
+
+@if (Model.Authors.Any())
+{
+    @foreach (var item in Model.Authors)
+    {
+        <h1>@item.Name</h1>
+    }
+}
+else
+{
+    <p>No authors found.</p>
+}

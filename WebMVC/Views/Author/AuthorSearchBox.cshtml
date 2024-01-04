@@ -1,0 +1,7 @@
+﻿@using WebMVC.Models.Author;
+@model AuthorSearchViewModel
+
+<form asp-action="Search" asp-controller="Author" method="get">
+    <input type="text" name="query" placeholder="Search authors..." />
+    <button type="submit">Search</button>
+</form>

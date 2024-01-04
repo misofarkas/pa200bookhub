@@ -1,6 +1,6 @@
 ﻿using BusinessLayer.DTOs;
 using BusinessLayer.DTOs.Author;
-using BusinessLayer.Services.Author;
+using BusinessLayer.Services;
 using DataAccessLayer.Data;
 using DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
