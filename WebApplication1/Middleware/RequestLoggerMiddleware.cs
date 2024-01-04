@@ -15,7 +15,10 @@ namespace WebApplication1.Middleware
 
 		public async Task Invoke(HttpContext context)
 		{
-			_logger.LogInformation($"Received request: {context.Request.Method} {context.Request.Path}");
+            var isApiRequest = context.Request.Path.StartsWithSegments("/api");
+            var requestSource = isApiRequest ? "API" : "WebMVC";
+
+            _logger.LogInformation($"Received request from {requestSource}: {context.Request.Method} {context.Request.Path}");
 
 			await _next(context);
 

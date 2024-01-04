@@ -8,6 +8,7 @@ using DataAccessLayer.Models;
 using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using WebApplication1.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +75,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
