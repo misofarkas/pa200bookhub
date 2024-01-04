@@ -38,15 +38,7 @@ namespace WebMVC.Controllers
                 SearchCriteria = searchModel,
             };
 
-            return View("SearchResult", viewModel);
+            return View("BookSearchResult", viewModel);
         }
-        /*
-        [HttpGet("list")]
-        [AllowAnonymous]
-        public async Task<IActionResult> List(int page = 1, int pageSize = 10)
-        {
-            var (books, totalCount) = await _bookService.GetPosts(page, pageSize);
-        }
-        */
     }
 }

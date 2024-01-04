@@ -11,6 +11,29 @@
     {
         <h1>@item.Title</h1>
         <p>@item.Description</p>
+
+        <p>Genres</p>
+        @if (item.Genres != null && item.Genres.Any())
+        {
+            foreach (var genre in item.Genres)
+            {
+                <div class="border-bottom mb-2">
+                    <p>@genre.Name</p>
+                </div>
+            }
+        }
+
+        <p>Authors</p>
+        @if (item.Authors != null && item.Authors.Any())
+        {
+            foreach (var author in item.Authors)
+            {
+                <div class="border-bottom mb-2">
+                    <p>@author.Name</p>
+                </div>
+            }
+        }
+
     }
 
     <!-- Pagination -->

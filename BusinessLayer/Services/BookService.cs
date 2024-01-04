@@ -83,7 +83,14 @@ namespace BusinessLayer.Services
 
         public async Task<PaginatedResult<BookDTO>> SearchBooksWithCriteria(BookSearchCriteriaDTO searchCriteria, int page, int pageSize)
         {
-            var query = GetAllBooksQuery();
+            IQueryable<Book> query = _dbContext.Books
+                .Include(b => b.AuthorBooks)
+                .ThenInclude(b => b.Author)
+                .Include(b => b.GenreBooks)
+                .ThenInclude(gb => gb.Genre)
+                .Include(b => b.Publisher)
+                .Include(b => b.Reviews)
+                .ThenInclude(r => r.Customer);
 
             switch (searchCriteria.SearchIn)
             {
