@@ -5,6 +5,7 @@ using BusinessLayer.Services;
 using System.Threading.Tasks;
 using BusinessLayer.DTOs;
 using BusinessLayer.DTOs.Book;
+using BusinessLayer.DTOs.Enums;
 
 namespace WebApplication1.Controllers
 {
@@ -63,6 +64,20 @@ namespace WebApplication1.Controllers
         {
             var books = await _bookService.SearchBooksAsync(title, description, price, genre, author);
             if (books == null || books.Count == 0)
+            {
+                return NotFound("No books matching the search criteria were found.");
+            }
+
+            return Ok(books);
+        }
+
+        [HttpGet]
+        [Route("searchCriteria")]
+        public async Task<IActionResult> SearchBooksWithCriteria(string query, BookSearchField searchIn, int page, int pageSize, string format = "json")
+        {
+            BookSearchCriteriaDTO searchCriteria = new BookSearchCriteriaDTO { Query = query, SearchIn = searchIn };
+            var books = await _bookService.SearchBooksWithCriteria(searchCriteria, page, pageSize);
+            if (books == null || books.TotalCount == 0)
             {
                 return NotFound("No books matching the search criteria were found.");
             }

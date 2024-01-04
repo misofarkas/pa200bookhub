@@ -1,4 +1,5 @@
-﻿using BusinessLayer.DTOs.Book;
+﻿using BusinessLayer.DTOs;
+using BusinessLayer.DTOs.Book;
 using DataAccessLayer.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +22,7 @@ namespace BusinessLayer.Services
         Task<BookDTO> UpdateBookAsync(int id, BookUpdateDTO model);
 
         Task<bool> DeleteBookAsync(int id);
+
+        Task<PaginatedResult<BookDTO>> SearchBooksWithCriteria(BookSearchCriteriaDTO searchCriteria, int page, int pageSize);
     }
 }

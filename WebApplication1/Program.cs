@@ -46,6 +46,8 @@ builder.Services.AddSwaggerGen(c =>
             new string[] {}
         }
     });
+
+    c.UseInlineDefinitionsForEnums();
 });
 
 // register DBContext:

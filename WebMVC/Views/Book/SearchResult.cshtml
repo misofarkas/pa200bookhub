@@ -1,0 +1,31 @@
+﻿@using WebMVC.Models.Book;
+@model SearchBookListViewModel
+
+@{
+    await Html.RenderPartialAsync("_BookSearchBox", new WebMVC.Models.Book.BookSearchViewModel());
+}
+
+@if (Model.Books.Any())
+{
+    @foreach (var item in Model.Books)
+    {
+        <h1>@item.Title</h1>
+        <p>@item.Description</p>
+    }
+
+    <!-- Pagination -->
+    <div class="pagination">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <a asp-action="Search"
+               asp-route-page="@i"
+               asp-route-query="@Model.SearchCriteria.Query"
+               asp-route-searchIn="@Model.SearchCriteria.SearchIn"
+               class="@(i == Model.CurrentPage ? "active" : "")">@($" {i}, ")</a>
+        }
+    </div>
+}
+else
+{
+    <p>No books found.</p>
+}
