@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace WebMVC.Views.Shared
+namespace WebMVC.Views.Book
 {
-    public class _BookSearchBoxModel : PageModel
+    public class BookSearchBoxModel : PageModel
     {
         public void OnGet()
         {

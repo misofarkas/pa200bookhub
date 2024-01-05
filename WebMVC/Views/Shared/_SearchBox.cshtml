@@ -1,0 +1,7 @@
+﻿@using WebMVC.Models.Book;
+@model GeneralSearchViewModel
+
+<form asp-action="Search" asp-controller="Search" method="get">
+    <input type="text" name="query" placeholder="Search..." />
+    <button type="submit">Search</button>
+</form>
