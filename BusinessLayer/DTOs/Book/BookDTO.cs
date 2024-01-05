@@ -6,6 +6,8 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using BusinessLayer.DTOs.Author;
 using BusinessLayer.DTOs.Genre;
+using BusinessLayer.DTOs.Publisher;
+using BusinessLayer.DTOs.Review;
 
 namespace BusinessLayer.DTOs.Book
 {

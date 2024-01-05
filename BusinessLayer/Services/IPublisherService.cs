@@ -1,4 +1,5 @@
-﻿using BusinessLayer.DTOs;
+﻿using BusinessLayer.DTOs.Publisher;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,6 +9,8 @@ namespace BusinessLayer.Services
     {
         Task<List<PublisherDTO>> GetAllPublishersAsync();
         Task<PublisherDTO> GetPublisherAsync(int id);
-        Task<PublisherDTO> UpdatePublisherAsync(int id, PublisherDTO publisher);
+        Task<PublisherCreateUpdateDTO> UpdatePublisherAsync(int id, PublisherCreateUpdateDTO publisher);
+        Task<PublisherCreateUpdateDTO> CreatePublisherAsync(PublisherCreateUpdateDTO publisher);
+        Task<bool> DeletePublisherAsync(int id);
     }
 }

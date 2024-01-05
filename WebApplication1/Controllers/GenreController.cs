@@ -17,15 +17,19 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetGenres()
+        public async Task<IActionResult> GetGenres(string? format)
         {
             var genres = await _genreService.GetAllGenresAsync();
+            if (genres == null || genres.Count == 0)
+            {
+                return NotFound("No genres were found.");
+            }
             return Ok(genres);
         }
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<IActionResult> GetGenre(int id)
+        public async Task<IActionResult> GetGenre(int id, string? format)
         {
             var genre = await _genreService.GetGenreAsync(id);
             if (genre == null)
@@ -37,7 +41,7 @@ namespace WebApplication1.Controllers
 
         [HttpGet]
         [Route("search")]
-        public async Task<IActionResult> SearchGenres(string name)
+        public async Task<IActionResult> SearchGenres(string name, string? format)
         {
             var genres = await _genreService.SearchGenres(name);
             return Ok(genres);
@@ -46,20 +50,32 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateGenre(GenreCreateUpdateDTO genre)
         {
-            var result = await _genreService.CreateGenreAsync(genre);
-            return Ok(result);
+            try
+            {
+                var result = await _genreService.CreateGenreAsync(genre);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
         }
 
         [HttpPut]
         [Route("{id}")]
         public async Task<IActionResult> UpdateGenre(int id, GenreCreateUpdateDTO genre)
         {
-            var result = await _genreService.UpdateGenreAsync(id, genre);
-            if (result == null)
+            try
             {
-                return NotFound($"No genre with ID {id} was found.");
+                var result = await _genreService.UpdateGenreAsync(id, genre);
+                return Ok(result);
             }
-            return Ok(result);
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
         }
 
         [HttpDelete]

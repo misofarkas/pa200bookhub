@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLayer.DTOs
+namespace BusinessLayer.DTOs.Review
 {
-    public class ReviewDTO
+    public class ReviewDTO : BaseDTO
     {
         public string BookTitle { get; set; }
         public string CustomerUsername { get; set; }

@@ -3,6 +3,7 @@ using BusinessLayer.Services;
 using BusinessLayer.DTOs.Book;
 using BusinessLayer.DTOs;
 using BusinessLayer.DTOs.Genre;
+using BusinessLayer.DTOs.Publisher;
 
 namespace WebMVC.Controllers
 {
@@ -88,7 +89,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpPost("edit-publisher/{id}")]
-        public async Task<IActionResult> EditPublisher(int id, PublisherDTO publisher)
+        public async Task<IActionResult> EditPublisher(int id, PublisherCreateUpdateDTO publisher)
         {
             await _publisherService.UpdatePublisherAsync(id, publisher);
             return RedirectToAction("Index", "Admin"); // or any other admin page

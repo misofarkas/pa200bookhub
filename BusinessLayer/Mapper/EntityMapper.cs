@@ -2,6 +2,9 @@
 using BusinessLayer.DTOs.Author;
 using BusinessLayer.DTOs.Book;
 using BusinessLayer.DTOs.Genre;
+using BusinessLayer.DTOs.Publisher;
+using BusinessLayer.DTOs.PurchaseHistory;
+using BusinessLayer.DTOs.Review;
 using DataAccessLayer.Models;
 using Mapster;
 using System.Linq;
@@ -50,9 +53,34 @@ namespace BusinessLayer.Mapper
             return genreDTO.Adapt<Genre>();
         }
 
+        public static Review MapToReview(this ReviewDTO reviewDTO)
+        {
+            return reviewDTO.Adapt<Review>();
+        }
+
+        public static Review MapToReview(this ReviewCreateUpdateDTO reviewDTO)
+        {
+            return reviewDTO.Adapt<Review>();
+        }
+
         public static Publisher MapToPublisher(this PublisherDTO publisherDTO)
         {
             return publisherDTO.Adapt<Publisher>();
+        }
+
+        public static Publisher MapToPublisher(this PublisherCreateUpdateDTO publisherDTO)
+        {
+            return publisherDTO.Adapt<Publisher>();
+        }
+
+        public static PurchaseHistory MapToPurchaseHistory(this PurchaseHistoryDTO purchaseHistoryDTO)
+        {
+            return purchaseHistoryDTO.Adapt<PurchaseHistory>();
+        }
+
+        public static PurchaseHistory MapToPurchaseHistory(this PurchaseHistoryCreateUpdateDTO purchaseHistoryDTO)
+        {
+            return purchaseHistoryDTO.Adapt<PurchaseHistory>();
         }
     }
 }
