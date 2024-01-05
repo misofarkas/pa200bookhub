@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Middleware;
 using BusinessLayer.DTOs.Genre;
+using WebMVC.Binders;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +51,11 @@ TypeAdapterConfig<Customer, CustomerDTO>.NewConfig().Map(dest => dest.Username, 
 builder.Services.AddIdentity<LocalIdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<BookHubDBContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddControllers(options =>
+{
+    options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
+});
 
 builder.Services.Configure<IdentityOptions>(options =>
 {

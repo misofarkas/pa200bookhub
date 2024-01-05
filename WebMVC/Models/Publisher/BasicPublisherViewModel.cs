@@ -1,6 +1,6 @@
-﻿namespace WebMVC.Models.Genre
+﻿namespace WebMVC.Models.NewFolder
 {
-    public class BasicGenreViewModel
+    public class BasicPublisherViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

@@ -1,0 +1,50 @@
+﻿@model WebMVC.Models.Book.BookCreateUpdateViewModel
+
+@{
+    ViewBag.Title = "Create Book";
+}
+
+<h2>Create New Book</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Title)
+        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Description)
+        @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", required = "required", rows = 4 } })
+        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Price)
+        @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control", type = "number", step = "0.01" } })
+        @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.AuthorIds, "Authors")
+        @Html.ListBoxFor(model => model.AuthorIds, new MultiSelectList(ViewBag.Authors, "Id", "Name"), new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(model => model.AuthorIds, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.GenreIds, "Genres")
+        @Html.ListBoxFor(model => model.GenreIds, new MultiSelectList(ViewBag.Genres, "Id", "Name"), new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(model => model.GenreIds, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.PublisherId, "Publisher")
+        @Html.DropDownListFor(model => model.PublisherId, new SelectList(ViewBag.Publishers, "Id", "Name"), "-- Select Publisher --", new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(model => model.PublisherId, "", new { @class = "text-danger" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+}

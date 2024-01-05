@@ -1,0 +1,88 @@
+﻿@model WebMVC.Models.Book.BookDetailViewModel
+
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+@{
+    ViewBag.Title = "Book Details";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title text-center mb-4">@Model.Title</h3>
+                    <p><strong>Description:</strong> @Model.Description</p>
+                    <p><strong>Price:</strong> @Model.Price.ToString("C")</p>
+
+                    <div class="authors-section mt-4">
+                        <h5 class="section-title">Authors</h5>
+                        <div class="d-flex flex-wrap justify-content-start">
+                            @foreach (var author in Model.Authors)
+                            {
+                                <div class="author-card p-2 m-2">
+                                    <i class="fas fa-user-edit"></i> @author.Name
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="genres-section mt-4">
+                        <h5 class="section-title">Genres</h5>
+                        <div class="genres-list">
+                            @foreach (var genre in Model.Genres)
+                            {
+                                <span class="genre-badge badge badge-secondary m-1">@genre.Name</span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="publisher-section mt-4">
+                        <h5 class="section-title">Publisher</h5>
+                        <p><i class="fas fa-building"></i> @Model.Publisher.Name</p>
+                    </div>
+
+                    <!-- Purchase Button -->
+                    <div class="text-center mt-4">
+                        <a href="@Url.Action("Purchase", "Books", new { id = Model.Id })" class="btn btn-primary">Purchase</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .container {
+        max-width: 800px;
+    }
+
+    .card {
+        background: #f8f9fa;
+        border: none;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .section-title {
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .author-card {
+        background-color: #e9ecef;
+        border-radius: 10px;
+        padding: 8px 15px;
+        font-size: 0.9em;
+    }
+
+    .genre-badge {
+        font-size: 0.85em;
+    }
+
+    .fa-user-edit, .fa-building {
+        margin-right: 5px;
+    }
+</style>
