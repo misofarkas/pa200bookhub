@@ -69,6 +69,17 @@ namespace BusinessLayer.Services
             return customer.FirstOrDefault();
         }
 
+        public async Task<CustomerDTO?> GetCustomerByEmailAsync(string email)
+        {
+            var customer = await GetCustomerCommonQuery(GetAllCustomersQuery().Where(a => a.Username == email));
+            if (customer == null || !customer.Any())
+            {
+                throw new Exception($"No customer with email {email} was found.");
+            }
+
+            return customer.FirstOrDefault();
+        }
+
         
         public async Task<CustomerDTO> CreateCustomerAsync(CustomerDTO customerDTO)
         {

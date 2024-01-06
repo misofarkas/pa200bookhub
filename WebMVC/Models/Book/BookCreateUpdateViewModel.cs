@@ -14,6 +14,9 @@ namespace WebMVC.Models.Book
         public required string Description { get; set; }
 
         [Required]
+        public int PrimaryGenreId { get; set; }
+
+        [Required]
         [Range(0, Double.MaxValue, ErrorMessage = "Please enter a valid price")]
         public required decimal Price { get; set; }
 

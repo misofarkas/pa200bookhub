@@ -117,6 +117,7 @@ namespace WebMVC.Controllers
                 Description = book.Description,
                 Price = book.Price,
                 PublisherId = book.Publisher.Id,
+                PrimaryGenreId = book.PrimaryGenre.Id,
                 AuthorIds = book.Authors.Select(ab => ab.Id).ToList(),
                 GenreIds = book.Genres.Select(g => g.Id).ToList()
             };

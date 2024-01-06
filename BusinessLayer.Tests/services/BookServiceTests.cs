@@ -103,8 +103,9 @@ namespace BusinessLayer.Tests.services
                     Description = "TestDesc",
                     Price = 10,
                     PublisherId = 1,
+                    PrimaryGenreId = 1,
                     AuthorIds = new List<int> { },
-                    GenreIds = new List<int> { }
+                    GenreIds = new List<int> { 1 }
                 };
                 // Act
                 var result = await bookService.CreateBookAsync(newBookDTO);
@@ -132,7 +133,7 @@ namespace BusinessLayer.Tests.services
                 var bookService = scope.ServiceProvider.GetRequiredService<IBookService>();
 
                 var bookIdToUpdate = TestDataHelper.GetFakeBooks().First().Id;
-                var updatedBookDTO = new BookCreateUpdateDTO { Title = "UpdatedTitle" };
+                var updatedBookDTO = new BookCreateUpdateDTO { Title = "UpdatedTitle", PrimaryGenreId = 1, PublisherId = 1 };
                 // Act
                 var result = await bookService.UpdateBookAsync(bookIdToUpdate, updatedBookDTO);
 

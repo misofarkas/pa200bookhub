@@ -18,6 +18,8 @@ namespace BusinessLayer.DTOs.Book
         public string Title { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
+
+        public GenreDTO PrimaryGenre { get; set; }
         public List<AuthorWithoutBooksDTO> Authors { get; set; }
         public List<GenreDTO> Genres { get; set; }
         public PublisherDTO Publisher { get; set; }

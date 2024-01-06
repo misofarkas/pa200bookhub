@@ -9,13 +9,13 @@
 <form asp-action="EditPurchaseHistory" asp-controller="Admin" method="post">
     <input type="hidden" asp-for="Id" />
     <div>
-        <label asp-for="CustomerId"></label>
-        <input asp-for="CustomerId" class="form-control" disabled />
+        <label asp-for="Customer.Username"></label>
+        <input asp-for="Customer.Username" class="form-control" disabled />
     </div>    
     
     <div>
-        <label asp-for="BookId"></label>
-        <input asp-for="BookId" class="form-control" disabled />
+        <label asp-for="Book.Title"></label>
+        <input asp-for="Book.Title" class="form-control" disabled />
     </div>
 
     <div>

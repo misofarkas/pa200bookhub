@@ -36,6 +36,7 @@ namespace BusinessLayer.Services
                 .Include(b => b.GenreBooks)
                 .ThenInclude(gb => gb.Genre)
                 .Include(b => b.Publisher)
+                .Include(b => b.PrimaryGenre)
                 .Include(b => b.Reviews)
                 .ThenInclude(r => r.Customer)
                 .ToListAsync();
@@ -90,6 +91,7 @@ namespace BusinessLayer.Services
                 .Include(b => b.GenreBooks)
                 .ThenInclude(gb => gb.Genre)
                 .Include(b => b.Publisher)
+                .Include(b => b.PrimaryGenre)
                 .Include(b => b.Reviews)
                 .ThenInclude(r => r.Customer);
 
@@ -137,10 +139,19 @@ namespace BusinessLayer.Services
             {
                 throw new Exception("Author not found");
             }
+            if (!model.GenreIds.Contains(model.PrimaryGenreId))
+            {
+                model.GenreIds = model.GenreIds.Append(model.PrimaryGenreId).ToList();
+            }
             var genres = await _dbContext.Genre.Where(g => model.GenreIds.Contains(g.Id)).ToListAsync();
             if (genres.Count != model.GenreIds.Count)
             {
                 throw new Exception("Genre not found");
+            }
+            var primaryGenre = await _dbContext.Genre.Where(g => model.PrimaryGenreId == g.Id).FirstOrDefaultAsync();
+            if (primaryGenre == null)
+            {
+                throw new Exception("Primary Genre not found");
             }
             var newBook = EntityMapper.MapToBook(model);
             newBook.Publisher = publisher;
@@ -168,7 +179,22 @@ namespace BusinessLayer.Services
             book.Title = model.Title;
             book.Price = model.Price;
             book.Description = model.Description;
+            var publisher = await _dbContext.Publishers.FindAsync(model.PublisherId);
+            if (publisher == null)
+            {
+                throw new Exception("Publisher not found");
+            }
             book.PublisherId = model.PublisherId;
+            if (model.GenreIds is not null && !model.GenreIds.Contains(model.PrimaryGenreId))
+            {
+                model.GenreIds = model.GenreIds.Append(model.PrimaryGenreId).ToList();
+            }
+            var primaryGenre = await _dbContext.Genre.Where(g => model.PrimaryGenreId == g.Id).FirstOrDefaultAsync();
+            if (primaryGenre == null)
+            {
+                throw new Exception("Primary Genre not found");
+            }
+            book.PrimaryGenreId = model.PrimaryGenreId;
             if (model.AuthorIds is not null)
             {
                 if (model.AuthorIds.Count == 0)

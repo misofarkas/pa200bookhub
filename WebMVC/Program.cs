@@ -11,6 +11,7 @@ using WebApplication1.Middleware;
 using BusinessLayer.DTOs.Genre;
 using WebMVC.Binders;
 using System.Globalization;
+using BusinessLayer.DTOs.PurchaseHistory;
 
 var builder = WebApplication.CreateBuilder(args);
 

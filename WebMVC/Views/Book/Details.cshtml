@@ -33,7 +33,7 @@
                         <div class="genres-list">
                             @foreach (var genre in Model.Genres)
                             {
-                                <span class="genre-badge badge badge-secondary m-1">@genre.Name</span>
+                                <span class="genre-badge badge @(genre.Id == Model.PrimaryGenre.Id ? "badge-primary" : "badge-secondary") m-1">@genre.Name</span>
                             }
                         </div>
                     </div>
@@ -45,7 +45,14 @@
 
                     <!-- Purchase Button -->
                     <div class="text-center mt-4">
-                        <a href="@Url.Action("Purchase", "Books", new { id = Model.Id })" class="btn btn-primary">Purchase</a>
+                        @using (Html.BeginForm("Create", "PurchaseHistory", FormMethod.Post, new { @class = "d-inline-block" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("bookId", Model.Id)
+
+                            <button type="submit" class="btn btn-primary">Purchase</button>
+                        }
+                        <a href="@Url.Action("Book", "PurchaseHistory", new { bookId = Model.Id })" class="btn btn-info">Purchase History</a>
                     </div>
                 </div>
             </div>
@@ -78,8 +85,13 @@
         font-size: 0.9em;
     }
 
-    .genre-badge {
-        font-size: 0.85em;
+    .badge-primary {
+        background-color: #007bff; /* Bootstrap primary color */
+        font-weight: bold; /* Make primary genre bold */
+    }
+
+    .badge-secondary {
+        background-color: #6c757d; /* Bootstrap secondary color */
     }
 
     .fa-user-edit, .fa-building {

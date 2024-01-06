@@ -1,0 +1,13 @@
+﻿@{
+    ViewBag.Title = "Purchase Successful";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Use your layout file here
+}
+
+<div class="container mt-4">
+    <h2 class="text-center">Purchase Successful</h2>
+    <p class="text-center mt-4">Thank you for your purchase!</p>
+    <div class="text-center mt-4">
+        <a href="@Url.Action("Index", "Book")" class="btn btn-primary">Return to Books</a>
+        <!-- Add other links if necessary -->
+    </div>
+</div>

@@ -20,7 +20,7 @@ namespace BusinessLayer.Services
 
         public async Task<PurchaseHistoryDTO> GetPurchaseHistoryAsync(int id)
         {
-            var purchaseHistory = await _dbContext.PurchaseHistories.FindAsync(id);
+            var purchaseHistory = await _dbContext.PurchaseHistories.Include(b => b.Book).Include(c => c.Customer).FirstOrDefaultAsync();
             if (purchaseHistory == null)
             {
                 return null;
@@ -30,13 +30,13 @@ namespace BusinessLayer.Services
 
         public async Task<List<PurchaseHistoryDTO>> GetPurchaseHistoryByUserIdAsync(int customerId)
         {
-            var purchaseHistory = await _dbContext.PurchaseHistories
+            var purchaseHistory = await _dbContext.PurchaseHistories.Include(b => b.Book).Include(c => c.Customer)
                 .Where(p => p.CustomerId == customerId).ToListAsync();
             return purchaseHistory.Select(a => DTOMapper.MapToPurchaseHistoryDTO(a)).ToList();
         }
         public async Task<List<PurchaseHistoryDTO>> GetPurchaseHistoryByBookIdAsync(int bookId)
         {
-            var purchaseHistory = await _dbContext.PurchaseHistories
+            var purchaseHistory = await _dbContext.PurchaseHistories.Include(b => b.Book).Include(c => c.Customer)
                 .Where(p => p.BookId == bookId).ToListAsync();
             return purchaseHistory.Select(a => DTOMapper.MapToPurchaseHistoryDTO(a)).ToList();
         }

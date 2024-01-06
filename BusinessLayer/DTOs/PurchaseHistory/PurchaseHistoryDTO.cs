@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BusinessLayer.DTOs.Book;
+using DataAccessLayer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +10,8 @@ namespace BusinessLayer.DTOs.PurchaseHistory
 {
     public class PurchaseHistoryDTO : BaseDTO
     {
-        public int BookId { get; set; }
-        public int CustomerId { get; set; }
+        public BookDTO Book { get; set; }
+        public CustomerDTO Customer { get; set; }
         public DateTime PurchaseDate { get; set; }
     }
 

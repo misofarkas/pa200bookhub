@@ -72,11 +72,11 @@ namespace DataAccessLayer.Data
         {
             return new List<Book>()
             {
-                new Book { Id = 1, Title = "1984", PublisherId = 1, Price = 15.99M, Description = "Nineteen Eighty-Four (also published as 1984) is a dystopian novel and cautionary tale by English writer George Orwell. It was published on 8 June 1949" },
-                new Book { Id = 2, Title = "Harry Potter and the Philosopher's Stone", PublisherId = 2, Price = 20.99M, Description = "Harry Potter and the Philosopher's Stone is a fantasy novel written by British author J. K. Rowling." },
-                new Book { Id = 3, Title = "The Hobbit", PublisherId = 3, Price = 25.99M, Description = "The Hobbit, or There and Back Again is a children's fantasy novel by English author J. R. R. Tolkien." },
-                new Book { Id = 4, Title = "Murder on the Orient Express", PublisherId = 4, Price = 18.99M, Description = "Murder on the Orient Express is a detective novel by English writer Agatha Christie." },
-                new Book { Id = 5, Title = "The Shining", PublisherId = 5, Price = 22.99M, Description = "The Shining is a horror novel by American author Stephen King." }
+                new Book { Id = 1, Title = "1984", PrimaryGenreId = 1, PublisherId = 1, Price = 15.99M, Description = "Nineteen Eighty-Four (also published as 1984) is a dystopian novel and cautionary tale by English writer George Orwell. It was published on 8 June 1949" },
+                new Book { Id = 2, Title = "Harry Potter and the Philosopher's Stone", PrimaryGenreId = 2, PublisherId = 2, Price = 20.99M, Description = "Harry Potter and the Philosopher's Stone is a fantasy novel written by British author J. K. Rowling." },
+                new Book { Id = 3, Title = "The Hobbit", PrimaryGenreId = 3, PublisherId = 3, Price = 25.99M, Description = "The Hobbit, or There and Back Again is a children's fantasy novel by English author J. R. R. Tolkien." },
+                new Book { Id = 4, Title = "Murder on the Orient Express", PrimaryGenreId = 4, PublisherId = 4, Price = 18.99M, Description = "Murder on the Orient Express is a detective novel by English writer Agatha Christie." },
+                new Book { Id = 5, Title = "The Shining", PrimaryGenreId = 5, PublisherId = 5, Price = 22.99M, Description = "The Shining is a horror novel by American author Stephen King." }
 
             };
         }

@@ -31,6 +31,12 @@
     </div>
 
     <div class="form-group">
+        @Html.LabelFor(model => model.PrimaryGenreId, "Primary Genre")
+        @Html.DropDownListFor(model => model.PrimaryGenreId, new SelectList(ViewBag.Genres, "Id", "Name"), "-- Select Primary Genre --", new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(model => model.PrimaryGenreId, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
         @Html.LabelFor(model => model.AuthorIds, "Authors")
         @Html.ListBoxFor(model => model.AuthorIds, new SelectList(ViewBag.Authors, "Id", "Name"), new { @class = "form-control" })
     </div>

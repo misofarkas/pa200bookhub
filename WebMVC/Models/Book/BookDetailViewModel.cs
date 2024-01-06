@@ -13,6 +13,8 @@ namespace WebMVC.Models.Book
         public string Description { get; set; }
         public required decimal Price { get; set; }
 
+        public BasicGenreViewModel PrimaryGenre { get; set; }
+
         public IEnumerable<BasicAuthorViewModel> Authors { get; set; }
         public IEnumerable<BasicGenreViewModel> Genres { get; set; }
         public BasicPublisherViewModel Publisher { get; set; }

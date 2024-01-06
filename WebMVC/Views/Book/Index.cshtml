@@ -88,6 +88,30 @@
             opacity: 0.8;
         }
 
+    .primary-genre {
+        background-color: #ffcc00; /* A bright yellow color for the primary genre */
+        color: black;
+        font-weight: bold;
+        border-radius: 10px;
+        padding: 5px 10px;
+        margin: 2px 0; /* Add space between genres */
+        display: inline-block; /* Make the badge a separate block */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Add a subtle shadow for depth */
+    }
+
+        .primary-genre:before {
+            content: "★ "; /* Unicode star character */
+            color: #d4af37; /* Gold color for the star */
+        }
+
+    .secondary-genre {
+        background-color: #e9ecef; /* A lighter grey for non-primary genres */
+        color: #495057; /* Dark grey for the text */
+        padding: 5px 10px;
+        display: inline-block; /* Make the badge a separate block */
+        border-radius: 10px;
+    }
+
     ul.pagination {
         display: flex;
         list-style-type: none;
@@ -147,7 +171,9 @@
                     <ul class="nested-list">
                         @foreach (var genre in book.Genres)
                         {
-                            <li>@genre.Name</li>
+                            <span class="@(genre.Id == book.PrimaryGenre.Id ? "primary-genre" : "secondary-genre")">
+                                @genre.Name
+                            </span>
                         }
                     </ul>
                 </td>

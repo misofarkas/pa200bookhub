@@ -1,0 +1,35 @@
+﻿@model WebMVC.Models.PurchaseHistory.PurchaseHistoryListViewModel
+
+@{
+    ViewBag.Title = "Book Purchase History";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Use your layout file here
+}
+
+<div class="container mt-4">
+    <h2>Purchase Histories for @Model.PurchaseHistories.FirstOrDefault()?.BookTitle</h2>
+
+    @if (Model.PurchaseHistories.Any())
+    {
+        <table class="table table-striped mt-4">
+            <thead>
+                <tr>
+                    <th>Customer Name</th>
+                    <th>Purchase Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var history in Model.PurchaseHistories)
+                {
+                    <tr>
+                        <td>@history.CustomerUsername</td>
+                        <td>@history.PurchaseDate.ToString("dd MMM yyyy")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No purchase history available for this book.</p>
+    }
+</div>
