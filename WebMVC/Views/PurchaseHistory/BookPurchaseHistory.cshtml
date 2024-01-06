@@ -15,6 +15,8 @@
                 <tr>
                     <th>Customer Name</th>
                     <th>Purchase Date</th>
+                    <th>Total Price</th>
+                    <th>Paid</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,6 +25,12 @@
                     <tr>
                         <td>@history.CustomerUsername</td>
                         <td>@history.PurchaseDate.ToString("dd MMM yyyy")</td>
+                        <td>@history.TotalPrice.ToString("C")</td>
+                        <td>
+                            <span class="badge @(history.Paid ? "badge-success" : "badge-secondary")">
+                                @(history.Paid ? "Yes" : "No")
+                            </span>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -33,3 +41,27 @@
         <p>No purchase history available for this book.</p>
     }
 </div>
+
+<style>
+    .badge-success {
+        color: #fff;
+        background-color: #28a745; /* This is Bootstrap 4's success green */
+    }
+
+    .badge-secondary {
+        color: #fff;
+        background-color: #6c757d; /* This is Bootstrap 4's secondary gray */
+    }
+
+    /* Bootstrap 5 equivalent */
+    .bg-success {
+        color: #fff;
+        background-color: #198754; /* This is Bootstrap 5's success green */
+    }
+
+    .bg-secondary {
+        color: #fff;
+        background-color: #6c757d; /* This is Bootstrap 5's secondary gray */
+    }
+
+</style>

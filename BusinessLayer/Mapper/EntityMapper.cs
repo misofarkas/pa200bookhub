@@ -78,7 +78,7 @@ namespace BusinessLayer.Mapper
             return purchaseHistoryDTO.Adapt<PurchaseHistory>();
         }
 
-        public static PurchaseHistory MapToPurchaseHistory(this PurchaseHistoryCreateUpdateDTO purchaseHistoryDTO)
+        public static PurchaseHistory MapToPurchaseHistory(this PurchaseHistoryCreateDTO purchaseHistoryDTO)
         {
             return purchaseHistoryDTO.Adapt<PurchaseHistory>();
         }

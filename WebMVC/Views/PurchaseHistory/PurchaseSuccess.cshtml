@@ -1,13 +1,31 @@
-﻿@{
+﻿@model WebMVC.Models.PurchaseHistory.PurchaseHistoryDetailViewModel
+
+@{
     ViewBag.Title = "Purchase Successful";
     Layout = "~/Views/Shared/_Layout.cshtml"; // Use your layout file here
 }
 
-<div class="container mt-4">
-    <h2 class="text-center">Purchase Successful</h2>
-    <p class="text-center mt-4">Thank you for your purchase!</p>
-    <div class="text-center mt-4">
-        <a href="@Url.Action("Index", "Book")" class="btn btn-primary">Return to Books</a>
-        <!-- Add other links if necessary -->
+<div class="container mt-4 text-center">
+    <h2>Purchase Successful</h2>
+    <p class="mt-4">Thank you for your purchase, @Model.CustomerUsername!</p>
+    <div class="mt-4">
+        <p><strong>Book Title:</strong> @Model.BookTitle</p>
+        <p><strong>Purchase Date:</strong> @Model.PurchaseDate.ToString("dd MMMM yyyy")</p>
+        <p><strong>Total Price:</strong> @Model.TotalPrice.ToString("C")</p>
+        <p><strong>Status:</strong> @(Model.Paid ? "Paid" : "Pending Payment")</p>
+    </div>
+
+    @if (!Model.Paid)
+    {
+        using (Html.BeginForm("Pay", "PurchaseHistory", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => @m.Id)
+            <button type="submit" class="btn btn-success">Pay Now</button>
+        }
+    }
+
+    <div class="mt-4">
+        <a href="@Url.Action("Index", "Books")" class="btn btn-primary">Return to Books</a>
     </div>
 </div>

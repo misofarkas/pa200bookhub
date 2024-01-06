@@ -11,6 +11,7 @@ namespace BusinessLayer.DTOs.Book
 {
     public class BookWithoutAuthorDTO
     {
+        public int Id { get; set; }
         public string Title { get; set; }
         public GenreDTO PrimaryGenre { get; set; }
         public List<GenreDTO> Genres { get; set; }

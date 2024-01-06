@@ -118,10 +118,10 @@ namespace DataAccessLayer.Data
         {
             return new List<PurchaseHistory> 
             { 
-                new PurchaseHistory { Id = 1, BookId = 1, CustomerId = 1, PurchaseDate = new DateTime(2023, 10, 10) },
-                new PurchaseHistory { Id = 2, BookId = 3, CustomerId = 1, PurchaseDate = new DateTime(2023, 8, 15) },
-                new PurchaseHistory { Id = 3, BookId = 4, CustomerId = 2, PurchaseDate = new DateTime(2023, 9, 5) },
-                new PurchaseHistory { Id = 4, BookId = 5, CustomerId = 3, PurchaseDate = new DateTime(2023, 7, 20) }
+                new PurchaseHistory { Id = 1, BookId = 1, CustomerId = 1, PurchaseDate = new DateTime(2023, 10, 10), TotalPrice = 15.99M, Paid = false },
+                new PurchaseHistory { Id = 2, BookId = 3, CustomerId = 1, PurchaseDate = new DateTime(2023, 8, 15), TotalPrice = 25.99M, Paid = true },
+                new PurchaseHistory { Id = 3, BookId = 4, CustomerId = 2, PurchaseDate = new DateTime(2023, 9, 5), TotalPrice = 18.99M, Paid = true },
+                new PurchaseHistory { Id = 4, BookId = 5, CustomerId = 3, PurchaseDate = new DateTime(2023, 7, 20), TotalPrice = 22.99M, Paid = true }
 
             };
         }

@@ -36,14 +36,18 @@ namespace WebMVC.Controllers
             {
                 return NotFound("No customer with this email was found.");
             }
-            var newPurchaseHistory = new PurchaseHistoryCreateUpdateDTO
+            var newPurchaseHistory = new PurchaseHistoryCreateDTO
             {
                 BookId = bookId,
                 CustomerId = customer.Id,
                 PurchaseDate = DateTime.Now,
+                TotalPrice = (await _bookService.GetBookAsync(bookId))!.Price,
+                Paid = false
             };
-            await _purchaseHistoryService.CreatePurchaseHistoryAsync(newPurchaseHistory);
-            return View("PurchaseSuccess");
+            var result = (await _purchaseHistoryService.CreatePurchaseHistoryAsync(newPurchaseHistory)).Adapt<PurchaseHistoryDetailViewModel>();
+            result.BookTitle = (await _bookService.GetBookAsync(bookId))!.Title;
+            result.CustomerUsername = customer.Username;
+            return View("PurchaseSuccess", result);
         }
 
         [HttpGet("book")]
@@ -60,6 +64,54 @@ namespace WebMVC.Controllers
                 PurchaseHistories = result.Adapt<IEnumerable<PurchaseHistoryDetailViewModel>>(),
             };
             return View(viewModel);
+        }
+
+        [HttpGet("CustomerPurchaseHistory")]
+        public async Task<ActionResult> CustomerPurchaseHistory()
+        {
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+            if (userEmail == null)
+            {
+                return NotFound("No user with this email was found.");
+            }
+            var customer = await _customerService.GetCustomerByEmailAsync(userEmail);
+            if (customer == null)
+            {
+                return NotFound("No customer with this email was found.");
+            }
+            var purchaseHistory = await _purchaseHistoryService.GetPurchaseHistoryByUserIdAsync(customer.Id);
+            var result = purchaseHistory.Select(ph => ph.Adapt<PurchaseHistoryDetailViewModel>()).ToList();
+            var viewModel = new PurchaseHistoryListViewModel
+            {
+                PurchaseHistories = result.Adapt<IEnumerable<PurchaseHistoryDetailViewModel>>(),
+            };
+            return View(viewModel);
+        }
+
+        [HttpPost("Pay")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Pay(int id)
+        {
+            var purchaseHistory = await _purchaseHistoryService.GetPurchaseHistoryAsync(id);
+            if (purchaseHistory == null)
+            {
+                return NotFound($"No purchase history with ID {id} was found.");
+            }
+            purchaseHistory.Paid = true;
+            await _purchaseHistoryService.UpdatePurchaseHistoryAsync(id, purchaseHistory.Adapt<PurchaseHistoryUpdateDTO>());
+            return RedirectToAction("CustomerPurchaseHistory");
+        }
+
+        [HttpPost("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var result = await _purchaseHistoryService.DeletePurchaseHistoryAsync(id);
+            if (!result)
+            {
+                return NotFound($"No purchase history with ID {id} was found.");
+            }
+            return RedirectToAction("CustomerPurchaseHistory");
         }
     }
 }

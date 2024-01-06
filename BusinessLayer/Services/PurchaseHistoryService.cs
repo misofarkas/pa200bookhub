@@ -2,6 +2,7 @@
 using BusinessLayer.Mapper;
 using DataAccessLayer.Data;
 using DataAccessLayer.Models;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace BusinessLayer.Services
 
         public async Task<PurchaseHistoryDTO> GetPurchaseHistoryAsync(int id)
         {
-            var purchaseHistory = await _dbContext.PurchaseHistories.Include(b => b.Book).Include(c => c.Customer).FirstOrDefaultAsync();
+            var purchaseHistory = await _dbContext.PurchaseHistories.Include(b => b.Book).Include(c => c.Customer).Where(p => p.Id == id).FirstOrDefaultAsync();
             if (purchaseHistory == null)
             {
                 return null;
@@ -41,16 +42,20 @@ namespace BusinessLayer.Services
             return purchaseHistory.Select(a => DTOMapper.MapToPurchaseHistoryDTO(a)).ToList();
         }
 
-        public async Task<PurchaseHistoryCreateUpdateDTO> CreatePurchaseHistoryAsync(PurchaseHistoryCreateUpdateDTO purchaseHistoryDTO)
+        public async Task<PurchaseHistoryCreateDTO> CreatePurchaseHistoryAsync(PurchaseHistoryCreateDTO purchaseHistoryDTO)
         {
             var purchaseHistory = EntityMapper.MapToPurchaseHistory(purchaseHistoryDTO);
             if (purchaseHistory == null)
             {
                 throw new Exception("There was an error creating PurchaseHistory");
             }
+            purchaseHistory.PurchaseDate = DateTime.Now;
+            var book = await _dbContext.Books.FindAsync(purchaseHistoryDTO.BookId);
+            purchaseHistory.TotalPrice = book.Price;
+            purchaseHistory.Paid = false;
             _dbContext.PurchaseHistories.Add(purchaseHistory);
             await SaveAsync(true);
-            return purchaseHistoryDTO;
+            return purchaseHistory.Adapt<PurchaseHistoryCreateDTO>();
         }
 
         public async Task<bool> DeletePurchaseHistoryAsync(int id)
@@ -65,12 +70,16 @@ namespace BusinessLayer.Services
             return true;
         }
 
-        public async Task<PurchaseHistoryDTO> UpdatePurchaseDateAsync(int id, DateTime newPurchaseDate)
+        public async Task<PurchaseHistoryDTO> UpdatePurchaseHistoryAsync(int id, PurchaseHistoryUpdateDTO model)
         {
-            var purchaseHistory = await _dbContext.PurchaseHistories.FindAsync(id);
+            var purchaseHistory = await _dbContext.PurchaseHistories.Include(b => b.Book).Include(c => c.Customer).Where(p => p.Id == id).FirstOrDefaultAsync();
             if (purchaseHistory != null)
             {
-                purchaseHistory.PurchaseDate = newPurchaseDate;
+                purchaseHistory.PurchaseDate = model.PurchaseDate;
+                purchaseHistory.Paid = model.Paid;
+                purchaseHistory.TotalPrice = model.TotalPrice;
+
+                _dbContext.Entry(purchaseHistory).State = EntityState.Modified;
                 await SaveAsync(true);
                 return DTOMapper.MapToPurchaseHistoryDTO(purchaseHistory);
             }

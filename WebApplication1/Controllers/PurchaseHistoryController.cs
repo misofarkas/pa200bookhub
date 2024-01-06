@@ -53,7 +53,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePurchaseHistory(PurchaseHistoryCreateUpdateDTO purchaseHistory)
+        public async Task<IActionResult> CreatePurchaseHistory(PurchaseHistoryCreateDTO purchaseHistory)
         {
             try
             {
@@ -68,9 +68,9 @@ namespace WebApplication1.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdatePurchaseHistoryDate(int id, DateTime purchaseDate)
+        public async Task<IActionResult> UpdatePurchaseHistory(int id, PurchaseHistoryUpdateDTO model)
         {
-            var result = await _purchaseHistoryService.UpdatePurchaseDateAsync(id, purchaseDate);
+            var result = await _purchaseHistoryService.UpdatePurchaseHistoryAsync(id, model);
             if (result == null)
             {
                 return NotFound($"No purchase history with ID {id} was found.");

@@ -4,6 +4,7 @@ using BusinessLayer.DTOs.Book;
 using BusinessLayer.DTOs;
 using BusinessLayer.DTOs.Genre;
 using BusinessLayer.DTOs.Publisher;
+using BusinessLayer.DTOs.PurchaseHistory;
 
 namespace WebMVC.Controllers
 {
@@ -105,9 +106,9 @@ namespace WebMVC.Controllers
         }
 
         [HttpPost("edit-purchase-history/{id}")]
-        public async Task<IActionResult> EditPurchaseHistory(int id, DateTime PurchaseDate)
+        public async Task<IActionResult> EditPurchaseHistory(int id, PurchaseHistoryUpdateDTO model)
         {
-            await _purchaseHistoryService.UpdatePurchaseDateAsync(id, PurchaseDate);
+            await _purchaseHistoryService.UpdatePurchaseHistoryAsync(id, model);
             return RedirectToAction("Index", "Admin"); // or any other admin page
         }
     }
