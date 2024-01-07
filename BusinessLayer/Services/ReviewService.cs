@@ -42,7 +42,7 @@ namespace BusinessLayer.Services
             return true;
         }
 
-        public async Task<ReviewDTO?> GetReviewByIdAsync(int id)
+        public async Task<ReviewBasicDTO?> GetReviewByIdAsync(int id)
         {
             var review = await _dbContext.Reviews.Include(c => c.Customer).Include(b => b.Book).Where(r => r.Id == id).FirstOrDefaultAsync();
             if (review == null)
@@ -53,7 +53,7 @@ namespace BusinessLayer.Services
 
         }
 
-        public async Task<List<ReviewDTO>> GetAllReviewsAsync()
+        public async Task<List<ReviewBasicDTO>> GetAllReviewsAsync()
         {
             var reviews = await _dbContext.Reviews.Include(c => c.Customer).Include(b => b.Book).ToListAsync();
             return reviews.Select(r => DTOMapper.MapToReviewDTO(r)).ToList();

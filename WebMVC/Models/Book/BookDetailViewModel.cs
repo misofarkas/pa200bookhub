@@ -2,7 +2,8 @@
 using System.Reflection;
 using WebMVC.Models.Author;
 using WebMVC.Models.Genre;
-using WebMVC.Models.NewFolder;
+using WebMVC.Models.Publisher;
+using WebMVC.Models.Review;
 
 namespace WebMVC.Models.Book
 {
@@ -17,6 +18,7 @@ namespace WebMVC.Models.Book
 
         public IEnumerable<BasicAuthorViewModel> Authors { get; set; }
         public IEnumerable<BasicGenreViewModel> Genres { get; set; }
+        public IEnumerable<BasicReviewViewModel> Reviews { get; set; }
         public BasicPublisherViewModel Publisher { get; set; }
     }
 }

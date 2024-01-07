@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using WebMVC.Models.Author;
 using WebMVC.Models.Genre;
-using WebMVC.Models.NewFolder;
+using WebMVC.Models.Publisher;
 
 namespace WebMVC.Models.Book
 {

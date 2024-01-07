@@ -35,14 +35,13 @@ namespace BusinessLayer.Services
             var author = await _dbContext.Authors.FindAsync(authorId);
             if (author == null)
             {
-                return false;
+                throw new Exception($"No author with ID {authorId} has been found");
             }
             var isAuthorOfAnyBook = await _dbContext.AuthorBooks.AnyAsync(ab => ab.AuthorId == authorId);
 
             if (isAuthorOfAnyBook)
             {
-                // Prevent deletion as the author still has books
-                return false;
+                throw new Exception("Author is associated with a book");
             }
 
             _dbContext.Authors.Remove(author);

@@ -1,5 +1,8 @@
 ﻿@model WebMVC.Models.Book.BookListViewModel
 
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
 <h2>Books</h2>
 
 <style>
@@ -43,8 +46,11 @@
 
     .action-buttons {
         display: flex;
-        justify-content: center;
+        justify-content: space-around;
+        align-items: stretch;
         gap: 8px;
+        width: 100%;
+        height: 100%;
     }
 
     .button {
@@ -112,6 +118,10 @@
         border-radius: 10px;
     }
 
+    .fa-star, .fa-star-o {
+        color: #ffc107; /* Gold color for stars */
+    }
+
     ul.pagination {
         display: flex;
         list-style-type: none;
@@ -149,7 +159,8 @@
             <th class="small-border">Authors</th>
             <th class="small-border">Genres</th>
             <th>Publisher</th>
-            <th class="small-border">Actions</th>
+            <th>Reviews</th>
+            <th class="small-border" colspan="3">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -178,6 +189,20 @@
                     </ul>
                 </td>
                 <td>@book.Publisher.Name</td>
+                <td>
+                    @{
+                        var totalReviews = book.Reviews.Count();
+                        var averageRating = totalReviews > 0 ? book.Reviews.Average(r => r.Rating) : 0;
+                    }
+                    <div>@totalReviews Reviews</div>
+                    <div>
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <i class="fa fa-star" style="color: @(i <= averageRating ? "#ffc107" : "#e4e5e9");"></i>
+                        }
+                    </div>
+                </td>
+
                 <td class="small-border action-buttons">
                     <a href="@Url.Action("Edit", "Book", new { id = book.Id })" class="button edit-button">Edit</a>
                     @using (Html.BeginForm("Delete", "Book", new { id = book.Id }, FormMethod.Post))

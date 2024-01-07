@@ -1,0 +1,170 @@
+﻿@model WebMVC.Models.Publisher.PublisherListViewModel
+
+@{
+    ViewBag.Title = "Publishers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Publishers</h2>
+
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .nested-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+        .nested-list li {
+            display: inline-block;
+            margin-right: 5px;
+            padding: 1px 5px;
+            background-color: #e7e7e7;
+            border-radius: 10px;
+        }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .button {
+        display: inline-block;
+        text-decoration: none;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+        font-size: 0.9rem;
+        font-weight: bold;
+    }
+
+    .create-button {
+        background-color: #28a745;
+    }
+
+    .edit-button {
+        background-color: #17a2b8;
+    }
+
+    .delete-button {
+        background-color: #dc3545;
+    }
+
+    .search-button {
+        background-color: #ff9800;
+    }
+
+    .detail-button {
+        background-color: #6c757d;
+    }
+
+        .create-button:hover,
+        .edit-button:hover,
+        .delete-button:hover,
+        .search-button:hover,
+        .detail-button:hover {
+            opacity: 0.8;
+        }
+
+    .primary-genre {
+        background-color: #ffcc00; /* A bright yellow color for the primary genre */
+        color: black;
+        font-weight: bold;
+        border-radius: 10px;
+        padding: 5px 10px;
+        margin: 2px 0; /* Add space between genres */
+        display: inline-block; /* Make the badge a separate block */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Add a subtle shadow for depth */
+    }
+
+        .primary-genre:before {
+            content: "★ "; /* Unicode star character */
+            color: #d4af37; /* Gold color for the star */
+        }
+
+    .secondary-genre {
+        background-color: #e9ecef; /* A lighter grey for non-primary genres */
+        color: #495057; /* Dark grey for the text */
+        padding: 5px 10px;
+        display: inline-block; /* Make the badge a separate block */
+        border-radius: 10px;
+    }
+
+    ul.pagination {
+        display: flex;
+        list-style-type: none;
+        padding: 0;
+    }
+
+        ul.pagination li {
+            margin: 5px;
+        }
+
+            ul.pagination li a {
+                text-decoration: none;
+                padding: 5px 10px;
+                color: #007bff;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+
+                ul.pagination li a:hover {
+                    background-color: #f5f5f5;
+                }
+</style>
+
+<div class="publisher-action-buttons">
+    <a href="@Url.Action("Create", "Publisher")" class="button create-button">Create Publisher</a>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th class="small-border">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var publisher in Model.Publishers)
+        {
+            <tr>
+                <td>@publisher.Name</td>
+                <td class="small-border action-buttons">
+                    <a href="@Url.Action("Edit", "Publisher", new { id = publisher.Id })" class="button edit-button">Edit</a>
+                    @using (Html.BeginForm("Delete", "Publisher", new { id = publisher.Id }, FormMethod.Post))
+                    {
+                        <input type="submit" value="Delete" class="button delete-button" onclick="return confirm('Are you sure?');" />
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

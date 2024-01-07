@@ -1,48 +1,34 @@
 ﻿using BusinessLayer.DTOs.Author;
-using BusinessLayer.DTOs.Book;
+using BusinessLayer.DTOs.Publisher;
 using BusinessLayer.Services;
-using DataAccessLayer.Models;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebMVC.Models;
 using WebMVC.Models.Author;
-using WebMVC.Models.Book;
+using WebMVC.Models.Publisher;
 
 namespace WebMVC.Controllers
 {
-    [Route("authors")]
+    [Route("publishers")]
     [Authorize]
-    public class AuthorController : Controller
+    public class PublisherController : Controller
     {
-        private readonly IAuthorService _authorService;
 
-        public AuthorController(IAuthorService authorService)
+        private readonly IPublisherService _publisherService;
+
+        public PublisherController(IPublisherService publisherService)
         {
-            _authorService = authorService;
-        }
-
-        [HttpGet("search")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Search(AuthorSearchViewModel searchModel)
-        {
-            var result = await _authorService.SearchAuthor(searchModel.Query);
-
-            var viewModel = new AuthorListViewModel
-            {
-                Authors = result.Adapt<IEnumerable<BasicAuthorViewModel>>(),
-            };
-
-            return View("AuthorSearchResult", viewModel);
+            _publisherService = publisherService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var authors = await _authorService.GetAll();
-            var viewModel = new AuthorListViewModel
+            var publishers = await _publisherService.GetAllPublishersAsync();
+            var viewModel = new PublisherListViewModel
             {
-                Authors = authors.Adapt<IEnumerable<BasicAuthorViewModel>>(),
+                Publishers = publishers.Adapt<IEnumerable<BasicPublisherViewModel>>(),
             };
             return View(viewModel);
         }
@@ -55,13 +41,13 @@ namespace WebMVC.Controllers
 
         [HttpPost("create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(BasicAuthorViewModel model)
+        public async Task<IActionResult> Create(BasicPublisherViewModel model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _authorService.CreateAuthor(model.Adapt<AuthorCreateUpdateDTO>());
+                    await _publisherService.CreatePublisherAsync(model.Adapt<PublisherCreateUpdateDTO>());
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception e)
@@ -85,25 +71,33 @@ namespace WebMVC.Controllers
         [HttpGet("edit/{id}")]
         public async Task<IActionResult> Edit(int id)
         {
-            var author = await _authorService.GetByAuthorId(id);
-            if (author == null)
+            var publisher = await _publisherService.GetPublisherAsync(id);
+            if (publisher == null)
             {
-                return NotFound("No Author with this id has been found");
+                var errorModel = new ErrorViewModel
+                {
+                    RequestId = $"No publisher with ID {id} was found.",
+                };
+                return View("Error", errorModel);
             }
-            return View(author.Adapt<BasicAuthorViewModel>());
+            return View(publisher.Adapt<BasicPublisherViewModel>());
         }
 
         [HttpPost("edit/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, BasicAuthorViewModel model)
+        public async Task<IActionResult> Edit(int id, BasicPublisherViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                var errorModel = new ErrorViewModel
+                {
+                    RequestId = "Invalid model state",
+                };
+                return View("Error", errorModel);
             }
             try
             {
-                var result = await _authorService.UpdateAuthor(id, model.Adapt<AuthorCreateUpdateDTO>());
+                var result = await _publisherService.UpdatePublisherAsync(id, model.Adapt<PublisherCreateUpdateDTO>());
                 return RedirectToAction("Index");
             }
             catch (Exception e)
@@ -123,35 +117,17 @@ namespace WebMVC.Controllers
         {
             try
             {
-                var result = await _authorService.DeleteAuthor(id);
+                var result = await _publisherService.DeletePublisherAsync(id);
                 return RedirectToAction("Index");
             }
             catch (Exception e)
             {
-                ModelState.AddModelError("", e.Message);
                 var ErrorModel = new ErrorViewModel
                 {
                     RequestId = e.Message,
                 };
                 return View("Error", ErrorModel);
             }
-        }
-
-        [HttpGet("details/{id}")]
-        public async Task<IActionResult> Details(int id)
-        {
-            var author = await _authorService.GetByAuthorId(id);
-            if (author is null)
-            {
-                var errorModel = new ErrorViewModel
-                {
-                    RequestId = $"No book with ID {id} was found.",
-                };
-                return View("Error", errorModel);
-            }
-
-            var viewModel = author.Adapt<AuthorDetailViewModel>();
-            return View(viewModel);
         }
     }
 }

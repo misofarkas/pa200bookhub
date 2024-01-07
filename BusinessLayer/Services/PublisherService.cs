@@ -77,7 +77,13 @@ namespace BusinessLayer.Services
             var publisher = await _dbContext.Publishers.FindAsync(id);
             if (publisher == null)
             {
-                return false;
+                throw new Exception("There was an error deleting Publisher");
+            }
+            // check if publisher is part of any book
+            var books = await _dbContext.Books.Where(b => b.PublisherId == id).ToListAsync();
+            if (books.Count > 0)
+            {
+                throw new Exception("Publisher is part of a book");
             }
             _dbContext.Publishers.Remove(publisher);
             await SaveAsync(true);

@@ -5,6 +5,8 @@
 
 @{
     ViewBag.Title = "Book Details";
+    var currentUser = User.Identity.Name;
+    var userHasReview = Model.Reviews.Any(r => r.CustomerUsername.Equals(currentUser, StringComparison.OrdinalIgnoreCase));
 }
 
 <div class="container mt-5">
@@ -54,6 +56,45 @@
                         }
                         <a href="@Url.Action("Book", "PurchaseHistory", new { bookId = Model.Id })" class="btn btn-info">Purchase History</a>
                     </div>
+                    <div class="reviews-section mt-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="section-title">Reviews</h5>
+                            @if (!userHasReview)
+                            {
+                                <a href="@Url.Action("Create", "Review", new { bookId = Model.Id })" class="btn btn-success">Add Review</a>
+                            }
+                        </div>
+                        @foreach (var review in Model.Reviews)
+                        {
+                            <div class="review-card card mb-3">
+                                <div class="card-body">
+                                    <div class="review-header d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="user-name">@review.CustomerUsername</h6>
+                                            <small class="text-muted">@review.BookTitle</small>
+                                        </div>
+                                        <div class="review-rating">
+                                            @for (int i = 0; i < 5; i++)
+                                            {
+                                                <i class="fas fa-star @(i < review.Rating ? "text-warning" : "text-secondary")"></i>
+                                            }
+                                        </div>
+                                    </div>
+                                    <p class="review-comment">@review.Comment</p>
+                                    @if (review.CustomerUsername.Equals(currentUser, StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <div class="review-actions mt-2">
+                                            <a href="@Url.Action("Edit", "Review", new { id = review.Id, bookId = Model.Id })" class="btn btn-sm btn-outline-warning">Edit</a>
+                                            @using (Html.BeginForm("Delete", "Review", new { id = review.Id }, FormMethod.Post))
+                                            {
+                                                <button type="submit", action="Delete" class="btn btn-sm btn-outline-danger ml-2">Delete</button>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
@@ -96,5 +137,77 @@
 
     .fa-user-edit, .fa-building {
         margin-right: 5px;
+    }
+
+    .fa-star.checked {
+        color: #ffc107; /* gold color for filled stars */
+    }
+
+    .fa-star.unchecked {
+        color: #e4e5e9; /* light grey color for empty stars */
+    }
+
+    .btn-warning {
+        color: #212529; /* Dark text color for contrast */
+        background-color: #f0ad4e; /* Light orange background */
+        border-color: #eea236; /* Darker orange border */
+    }
+
+    .btn-danger {
+        color: #fff; /* White text color for contrast */
+        background-color: #d9534f; /* Light red background */
+        border-color: #d43f3a; /* Darker red border */
+    }
+
+    .reviews-section .list-group-item {
+        border: none;
+        background-color: #f8f9fa;
+    }
+
+    .reviews-section .rating {
+        display: flex;
+        align-items: center;
+    }
+
+    .reviews-section .review-card {
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .reviews-section .review-header {
+        align-items: center;
+    }
+
+    .reviews-section .user-name {
+        font-weight: bold;
+        margin-right: 10px;
+        color: #333;
+    }
+
+    .reviews-section .review-comment {
+        color: #555;
+        font-size: 0.9rem;
+        margin-top: 10px;
+    }
+
+    .reviews-section .review-actions {
+        text-align: right;
+    }
+
+    .reviews-section .btn-outline-warning, .reviews-section .btn-outline-danger {
+        padding: .375rem .75rem;
+        border: 1px solid;
+        border-radius: .25rem;
+        font-size: .875rem;
+        line-height: 1.5;
+    }
+
+    .reviews-section .btn-outline-warning {
+        color: #856404;
+        border-color: #ffc107;
+    }
+
+    .reviews-section .btn-outline-danger {
+        color: #721c24;
+        border-color: #dc3545;
     }
 </style>

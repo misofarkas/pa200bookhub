@@ -53,7 +53,7 @@ namespace BusinessLayer.Mapper
             return genreDTO.Adapt<Genre>();
         }
 
-        public static Review MapToReview(this ReviewDTO reviewDTO)
+        public static Review MapToReview(this ReviewBasicDTO reviewDTO)
         {
             return reviewDTO.Adapt<Review>();
         }

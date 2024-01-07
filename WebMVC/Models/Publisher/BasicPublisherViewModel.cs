@@ -1,4 +1,4 @@
-﻿namespace WebMVC.Models.NewFolder
+﻿namespace WebMVC.Models.Publisher
 {
     public class BasicPublisherViewModel
     {

@@ -23,7 +23,7 @@ namespace BusinessLayer.DTOs.Book
         public List<AuthorWithoutBooksDTO> Authors { get; set; }
         public List<GenreDTO> Genres { get; set; }
         public PublisherDTO Publisher { get; set; }
-        public List<ReviewDTO> Reviews { get; set; }
+        public List<ReviewBasicDTO> Reviews { get; set; }
     }
 
 }
