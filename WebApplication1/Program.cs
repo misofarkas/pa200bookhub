@@ -2,6 +2,14 @@ using DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using WebApplication1.Middleware;
+using BusinessLayer.Services;
+using BusinessLayer.Services.Author;
+using Mapster;
+using DataAccessLayer.Models;
+using BusinessLayer.DTOs.Author;
+using BusinessLayer.DTOs.Book;
+using Microsoft.EntityFrameworkCore.Sqlite.Storage.Internal;
+using BusinessLayer.DTOs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,7 +49,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // register DBContext:
-var sqliteDbName = "bookhubproject1.db";
+var sqliteDbName = "bookhubproject2.db";
 
 var folder = Environment.SpecialFolder.LocalApplicationData;
 var dbPath = Path.Join(Environment.GetFolderPath(folder), sqliteDbName);
@@ -51,10 +59,22 @@ var sqliteConnectionString = $"Data Source={dbPath}";
 builder.Services.AddDbContextFactory<BookHubDBContext>(options =>
 {
     options
-       .UseSqlite(sqliteConnectionString)
-       ;
-    
+        .UseSqlite(
+            sqliteConnectionString,
+            x => x.MigrationsAssembly("DAL.SQLite.Migrations")
+        );
 });
+
+/* Register Services */
+builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IAuthorService,  AuthorService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+
+TypeAdapterConfig<Author, AuthorDTO>.NewConfig().Map(dest => dest.Books, src => src.AuthorBooks.Select(ab => ab.Book.Adapt<BookDTO>()));
+TypeAdapterConfig<Book, BookDTO>.NewConfig().Map(dest => dest.Authors, src => src.AuthorBooks.Select(ab => ab.Author.Adapt<AuthorWithoutBooksDTO>()))
+                                            .Map(dest => dest.Genres, src => src.GenreBooks.Select(gb => gb.Genre.Adapt<GenreDTO>()));
+TypeAdapterConfig<Customer, CustomerDTO>.NewConfig().Map(dest => dest.Username, src => src.Username);
+
 
 var app = builder.Build();
 
@@ -69,6 +89,8 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<RequestLoggingMiddleware>();
 
 app.UseMiddleware<StaticTokenAuthenticationMiddleware>();
+
+app.UseMiddleware<FormatTransformMiddleware>();
 
 app.UseHttpsRedirection();
 

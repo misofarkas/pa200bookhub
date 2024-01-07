@@ -2,7 +2,8 @@
 using DataAccessLayer.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebApplication1.Models;
+using BusinessLayer.Services.Author;
+using BusinessLayer.DTOs.Author;
 
 namespace WebApplication1.Controllers
 {
@@ -10,141 +11,94 @@ namespace WebApplication1.Controllers
     [Route("api/Authors")]
     public class AuthorController : ControllerBase
     {
-        private readonly BookHubDBContext _dbContext;
+        private readonly IAuthorService _authorService;
 
-        public AuthorController(BookHubDBContext dbContext)
+        public AuthorController(IAuthorService authorService)
         {
-            _dbContext = dbContext;
+            _authorService = authorService;
         }
 
-        private async Task<List<AuthorModel>> GetAuthorCommonQuery(IQueryable<Author> query)
-        {
-            return await query.Include(b => b.Books).Select(b => new AuthorModel
-            {
-                Id = b.Id,
-                Name = b.Name,
-                Books = b.Books.Select(b => new BookModel
-                {
-                    Id = b.Id,
-                    Title = b.Title,
-                    AuthorName = b.Author.Name,
-                    GenreName = b.Genre.Name,
-                    PublisherName = b.Publisher.Name,
-                    Price = b.Price,
-                    Description = b.Description,
-                    Reviews = b.Reviews.Select(w => new ReviewModel
-                    {
-                        Id = w.Id,
-                        CustomerUsername = w.Customer.Username,
-                        BookTitle = w.Book.Title,
-                        Rating = w.Rating,
-                        Comment = w.Comment
-
-                    }).ToList(),
-                    PurchaseHistories = b.PurchaseHistories.Select(w => new PurchaseHistoryModel
-                    {
-                        Id = w.Id,
-                        BookTitle = w.Book.Title,
-                        CustomerUsername = w.Customer.Username,
-                        PurchaseDate = w.PurchaseDate
-
-                    }).ToList(),
-                    Wishlists = b.Wishlists.Select(w => new WishListModel
-                    {
-                        Id = w.Id,
-                        CustomerName = w.Customer.Username
-                    }).ToList()
-                }).ToList(),
-            })
-            .ToListAsync();
-        }
-    
         [HttpGet]
-        public async Task<IActionResult> GetAuthorList()
+        public async Task<IActionResult> GetAuthorList(string? format)
         {
-
-            var authors = await GetAuthorCommonQuery(_dbContext.Authors);
-
-            if (authors == null || !authors.Any())
+            var authors = await _authorService.GetAll();
+            if (authors == null || authors.Count == 0)
             {
-                return BadRequest("No authors were found.");
+                return NotFound("No Authors were found");
             }
-
             return Ok(authors);
+
         }
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<IActionResult> GetAuthor(int id)
+        public async Task<IActionResult> GetAuthor(string? format, int id)
         {
-            var author = await GetAuthorCommonQuery(_dbContext.Authors.Where(b => b.Id == id));
-
-            if (author == null || !author.Any())
+            var author = await _authorService.GetByAuthorId(id);
+            if (author == null)
             {
-                return BadRequest($"No author with ID {id} was found.");
+                return NotFound("No Author with this id has been found");
             }
+            return Ok(author);
 
+        }
+
+        [HttpGet]
+        [Route("search")]
+        public async Task<IActionResult> GetAuthorByName(string? format, string name)
+        {
+            var author = await _authorService.GetByAuthorName(name);
+            if (author == null)
+            {
+                return NotFound("No Author with this name has been found");
+            }
             return Ok(author);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAuthor(AuthorModel model)
+        public async Task<IActionResult> CreateAuthor (AuthorCreateUpdateDTO author)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var author = new Author
+            var success = await _authorService.CreateAuthor(author);
+            if (success)
             {
-                Name = model.Name
-            };
-
-            _dbContext.Authors.Add(author);
-            await _dbContext.SaveChangesAsync();
-
-            return Ok(author);
+                return Ok("Author created");
+            }
+            return BadRequest("An error occured while creating new author");
+            
         }
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateAuthor(int id, AuthorModel model)
+        public async Task<IActionResult> UpdateAuthor(int id, AuthorCreateUpdateDTO model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            var author = await _dbContext.Authors.FindAsync(id);
-
-            if (author == null)
+            var success = await _authorService.UpdateAuthor(id, model);
+            if (success)
             {
-                return BadRequest($"No author with ID {id} was found.");
+                return Ok("Author updated");
             }
+            return BadRequest("An error occured while updating author");
 
-            author.Name = model.Name;
-
-            _dbContext.Authors.Update(author);
-            await _dbContext.SaveChangesAsync();
-
-            return Ok(author);
         }
 
         [HttpDelete]
         [Route("{id}")]
         public async Task<IActionResult> DeleteAuthor(int id)
         {
-            var author = await _dbContext.Authors.FindAsync(id);
-
-            if (author == null)
+            var result = await _authorService.DeleteAuthor(id);
+            if (result)
             {
-                return BadRequest($"No author with ID {id} was found.");
+                return NoContent();
             }
-
-            _dbContext.Authors.Remove(author);
-            await _dbContext.SaveChangesAsync();
-
-            return Ok();
+            return BadRequest("No Author with this ID has been found or the author has still linked books.");
         }
     }
 }

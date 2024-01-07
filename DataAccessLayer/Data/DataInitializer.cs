@@ -15,6 +15,8 @@ namespace DataAccessLayer.Data
             var purchaseHistory = PreparePurchaseHistory();
             var review = PrepareReviews();
             var wishlist = PrepareWishlist();
+            var authorbooks = PrepareAuthorBooks();
+            var genrebooks = PrepareGenreBooks();
 
             modelBuilder.Entity<Author>().HasData(authors);
             modelBuilder.Entity<Genre>().HasData(genres);
@@ -24,6 +26,8 @@ namespace DataAccessLayer.Data
             modelBuilder.Entity<PurchaseHistory>().HasData(purchaseHistory);
             modelBuilder.Entity<Review>().HasData(review);
             modelBuilder.Entity<Wishlist>().HasData(wishlist);
+            modelBuilder.Entity<AuthorBook>().HasData(authorbooks);
+            modelBuilder.Entity<GenreBook>().HasData(genrebooks);
         }
 
         private static List<Author> PrepareAuthors()
@@ -68,12 +72,35 @@ namespace DataAccessLayer.Data
         {
             return new List<Book>()
             {
-                new Book { Id = 1, Title = "1984", AuthorId = 1, GenreId = 1, PublisherId = 1, Price = 15.99M, Description = "Nineteen Eighty-Four (also published as 1984) is a dystopian novel and cautionary tale by English writer George Orwell. It was published on 8 June 1949" },
-                new Book { Id = 2, Title = "Harry Potter and the Philosopher's Stone", AuthorId = 2, GenreId = 2, PublisherId = 2, Price = 20.99M, Description = "Harry Potter and the Philosopher's Stone is a fantasy novel written by British author J. K. Rowling." },
-                new Book { Id = 3, Title = "The Hobbit", AuthorId = 3, GenreId = 3, PublisherId = 3, Price = 25.99M, Description = "The Hobbit, or There and Back Again is a children's fantasy novel by English author J. R. R. Tolkien." },
-                new Book { Id = 4, Title = "Murder on the Orient Express", AuthorId = 4, GenreId = 4, PublisherId = 4, Price = 18.99M, Description = "Murder on the Orient Express is a detective novel by English writer Agatha Christie." },
-                new Book { Id = 5, Title = "The Shining", AuthorId = 5, GenreId = 5, PublisherId = 5, Price = 22.99M, Description = "The Shining is a horror novel by American author Stephen King." }
+                new Book { Id = 1, Title = "1984", PublisherId = 1, Price = 15.99M, Description = "Nineteen Eighty-Four (also published as 1984) is a dystopian novel and cautionary tale by English writer George Orwell. It was published on 8 June 1949" },
+                new Book { Id = 2, Title = "Harry Potter and the Philosopher's Stone", PublisherId = 2, Price = 20.99M, Description = "Harry Potter and the Philosopher's Stone is a fantasy novel written by British author J. K. Rowling." },
+                new Book { Id = 3, Title = "The Hobbit", PublisherId = 3, Price = 25.99M, Description = "The Hobbit, or There and Back Again is a children's fantasy novel by English author J. R. R. Tolkien." },
+                new Book { Id = 4, Title = "Murder on the Orient Express", PublisherId = 4, Price = 18.99M, Description = "Murder on the Orient Express is a detective novel by English writer Agatha Christie." },
+                new Book { Id = 5, Title = "The Shining", PublisherId = 5, Price = 22.99M, Description = "The Shining is a horror novel by American author Stephen King." }
 
+            };
+        }
+
+        private static List<AuthorBook> PrepareAuthorBooks()
+        {
+            return new List<AuthorBook>()
+            {
+                new AuthorBook { Id = 1, AuthorId = 1, BookId = 1},
+                new AuthorBook { Id = 2, AuthorId = 2, BookId = 2},
+                new AuthorBook { Id = 3, AuthorId = 3, BookId = 3},
+                new AuthorBook { Id = 4, AuthorId = 4, BookId = 4},
+                new AuthorBook { Id = 5, AuthorId = 5, BookId = 5},
+            };
+        }
+        private static List<GenreBook> PrepareGenreBooks()
+        {
+            return new List<GenreBook>()
+            {
+                new GenreBook { Id = 1, GenreId = 1, BookId = 1},
+                new GenreBook { Id = 2, GenreId = 2, BookId = 2},
+                new GenreBook { Id = 3, GenreId = 3, BookId = 3},
+                new GenreBook { Id = 4, GenreId = 4, BookId = 4},
+                new GenreBook { Id = 5, GenreId = 5, BookId = 5},
             };
         }
 
@@ -81,9 +108,9 @@ namespace DataAccessLayer.Data
         {
             return new List<Customer>()
             {
-                new Customer { Id = 1, Username = "Janko", Password = "password123" },
-                new Customer { Id = 2, Username = "AnnaB", Password = "annaBsecure456" },
-                new Customer { Id = 3, Username = "MikeW", Password = "mikeWpassword789" }
+                new Customer { Id = 1, Username = "Janko"},
+                new Customer { Id = 2, Username = "AnnaB" },
+                new Customer { Id = 3, Username = "MikeW" }
             };
         }
 
