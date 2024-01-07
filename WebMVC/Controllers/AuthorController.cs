@@ -5,6 +5,7 @@ using DataAccessLayer.Models;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using WebMVC.Models;
 using WebMVC.Models.Author;
 using WebMVC.Models.Book;
@@ -16,10 +17,12 @@ namespace WebMVC.Controllers
     public class AuthorController : Controller
     {
         private readonly IAuthorService _authorService;
+        private readonly IMemoryCache _memoryCache;
 
-        public AuthorController(IAuthorService authorService)
+        public AuthorController(IAuthorService authorService, IMemoryCache memoryCache)
         {
             _authorService = authorService;
+            _memoryCache = memoryCache;
         }
 
         [HttpGet("search")]
@@ -140,17 +143,22 @@ namespace WebMVC.Controllers
         [HttpGet("details/{id}")]
         public async Task<IActionResult> Details(int id)
         {
-            var author = await _authorService.GetByAuthorId(id);
-            if (author is null)
+            string cacheKey = $"author-{id}";
+            if (!_memoryCache.TryGetValue(cacheKey, out AuthorDetailViewModel viewModel))
             {
-                var errorModel = new ErrorViewModel
+                var author = await _authorService.GetByAuthorId(id);
+                if (author is null)
                 {
-                    RequestId = $"No book with ID {id} was found.",
-                };
-                return View("Error", errorModel);
-            }
+                    var errorModel = new ErrorViewModel
+                    {
+                        RequestId = $"No book with ID {id} was found.",
+                    };
+                    return View("Error", errorModel);
+                }
 
-            var viewModel = author.Adapt<AuthorDetailViewModel>();
+                viewModel = author.Adapt<AuthorDetailViewModel>();
+                _memoryCache.Set(cacheKey, viewModel, TimeSpan.FromMinutes(10));
+            }
             return View(viewModel);
         }
     }

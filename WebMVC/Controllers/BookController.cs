@@ -6,6 +6,7 @@ using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using WebMVC.Models;
 using WebMVC.Models.Book;
 
@@ -20,14 +21,16 @@ namespace WebMVC.Controllers
         private readonly IGenreService _genreService;
         private readonly IPublisherService _publisherService;
         private readonly UserManager<LocalIdentityUser> _userManager;
+        private readonly IMemoryCache _memoryCache;
 
-        public BookController(IBookService bookService, IAuthorService authorService, IGenreService genreService, IPublisherService publisherService, UserManager<LocalIdentityUser> userManager)
+        public BookController(IBookService bookService, IAuthorService authorService, IGenreService genreService, IPublisherService publisherService, UserManager<LocalIdentityUser> userManager, IMemoryCache memoryCache)
         {
             _bookService = bookService;
             _authorService = authorService;
             _genreService = genreService;
             _userManager = userManager;
             _publisherService = publisherService;
+            _memoryCache = memoryCache;
         }
 
         [HttpGet("search")]
@@ -173,17 +176,21 @@ namespace WebMVC.Controllers
         [HttpGet("details/{id}")]
         public async Task<IActionResult> Details(int id)
         {
-            var book = await _bookService.GetBookAsync(id);
-            if (book == null)
+            string cacheKey = $"book-{id}";
+            if (!_memoryCache.TryGetValue(cacheKey, out BookDetailViewModel viewModel))
             {
-                var errorModel = new ErrorViewModel
+                var book = await _bookService.GetBookAsync(id);
+                if (book == null)
                 {
-                    RequestId = $"No book with ID {id} was found.",
-                };
-                return View("Error", errorModel);
+                    var errorModel = new ErrorViewModel
+                    {
+                        RequestId = $"No book with ID {id} was found.",
+                    };
+                    return View("Error", errorModel);
+                }
+                viewModel = book.Adapt<BookDetailViewModel>();
+                _memoryCache.Set(cacheKey, viewModel, TimeSpan.FromMinutes(10));
             }
-
-            var viewModel = book.Adapt<BookDetailViewModel>();
             return View(viewModel);
         }
     }
