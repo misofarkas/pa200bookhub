@@ -1,0 +1,79 @@
+﻿@using WebMVC.Models;
+@model SearchListViewModel
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+
+    .section-header {
+        color: #2a6496;
+        margin-bottom: 10px;
+    }
+
+    .item {
+        margin-bottom: 15px;
+        padding: 10px;
+        border-bottom: 1px solid #eaeaea;
+    }
+
+    .item-title {
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 5px;
+    }
+
+    .item-description {
+        color: #666;
+        font-size: 14px;
+    }
+
+    .no-items {
+        color: #888;
+        font-style: italic;
+    }
+</style>
+
+
+@{
+    await Html.RenderPartialAsync("_SearchBox", new WebMVC.Models.GeneralSearchViewModel());
+}
+
+@if (Model.Books.Any())
+{
+    <h1 class="section-header">Books</h1>
+    foreach (var item in Model.Books)
+    {
+        <div class="item">
+            <h2 class="item-title">@item.Title</h2>
+            <p class="item-description">@item.Description</p>
+        </div>
+    }
+}
+
+@if (Model.Genres.Any())
+{
+    <h1 class="section-header">Genres</h1>
+    @foreach (var item in Model.Genres)
+    {
+        <div class="item">
+            <h2 class="item-title">@item.Name</h2>
+        </div>
+    }
+}
+
+@if (Model.Authors.Any())
+{
+    <h1 class="section-header">Authors</h1>
+    @foreach (var item in Model.Authors)
+    {
+        <div class="item">
+            <h2 class="item-title">@item.Name</h2>
+        </div>
+    }
+}
+@if (!Model.Authors.Any() && !Model.Genres.Any() && !Model.Books.Any())
+{
+    <h1 class="no-items">No items found</h1>
+}

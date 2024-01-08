@@ -95,22 +95,24 @@ namespace BusinessLayer.Services
                 .Include(b => b.Reviews)
                 .ThenInclude(r => r.Customer);
 
+            var searchTerm = searchCriteria.Query?.ToLower();
+
             switch (searchCriteria.SearchIn)
             {
                 case BookSearchField.Title:
-                    query = query.Where(p => p.Title.Contains(searchCriteria.Query));
+                    query = query.Where(p => p.Title.ToLower().Contains(searchTerm));
                     break;
                 case BookSearchField.Desciption:
-                    query = query.Where(p => p.Description.Contains(searchCriteria.Query));
+                    query = query.Where(p => p.Description.ToLower().Contains(searchTerm));
                     break;
                 case BookSearchField.Author:
-                    query = query.Where(b => b.AuthorBooks.Any(ab => ab.Author.Name.Contains(searchCriteria.Query)));
+                    query = query.Where(b => b.AuthorBooks.Any(ab => ab.Author.Name.ToLower().Contains(searchTerm)));
                     break;
                 case BookSearchField.Genre:
-                    query = query.Where(b => b.GenreBooks.Any(ab => ab.Genre.Name.Contains(searchCriteria.Query)));
+                    query = query.Where(b => b.GenreBooks.Any(ab => ab.Genre.Name.ToLower().Contains(searchTerm)));
                     break;
                 case BookSearchField.Publisher:
-                    query = query.Where(b => b.Publisher.Name.Contains(searchCriteria.Query));
+                    query = query.Where(b => b.Publisher.Name.ToLower().Contains(searchTerm));
                     break;
             }
 

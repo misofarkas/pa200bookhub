@@ -1,39 +1,75 @@
 ﻿@using WebMVC.Models.Book;
 @model SearchBookListViewModel
 
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    .book-container {
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 5px;
+    }
+
+    .book-title {
+        color: #333;
+        font-size: 24px;
+    }
+
+    .book-description {
+        color: #666;
+    }
+
+    .genre, .author {
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-top: 1px solid #eee;
+    }
+
+    .genre-name, .author-name {
+        font-weight: bold;
+        color: #444;
+    }
+</style>
+
+
+
 @{
-    await Html.RenderPartialAsync("_BookSearchBox", new WebMVC.Models.Book.BookSearchViewModel());
+    await Html.RenderPartialAsync("BookSearchBox", new WebMVC.Models.Book.BookSearchViewModel());
 }
 
 @if (Model.Books.Any())
 {
     @foreach (var item in Model.Books)
     {
-        <h1>@item.Title</h1>
-        <p>@item.Description</p>
+        <div class="book-container">
+            <h1 class="book-title">@item.Title</h1>
+            <p class="book-description">@item.Description</p>
 
-        <p>Genres</p>
-        @if (item.Genres != null && item.Genres.Any())
-        {
-            foreach (var genre in item.Genres)
+            <p>Genres</p>
+            @if (item.Genres != null && item.Genres.Any())
             {
-                <div class="border-bottom mb-2">
-                    <p>@genre.Name</p>
-                </div>
+                foreach (var genre in item.Genres)
+                {
+                    <div class="genre">
+                        <p class="genre-name">@genre.Name</p>
+                    </div>
+                }
             }
-        }
 
-        <p>Authors</p>
-        @if (item.Authors != null && item.Authors.Any())
-        {
-            foreach (var author in item.Authors)
+            <p>Authors</p>
+            @if (item.Authors != null && item.Authors.Any())
             {
-                <div class="border-bottom mb-2">
-                    <p>@author.Name</p>
-                </div>
+                foreach (var author in item.Authors)
+                {
+                    <div class="author">
+                        <p class="author-name">@author.Name</p>
+                    </div>
+                }
             }
-        }
-
+        </div>
     }
 
     <!-- Pagination -->

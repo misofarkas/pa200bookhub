@@ -26,7 +26,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         @{
-                            await Html.RenderPartialAsync("_BookSearchBox", new WebMVC.Models.Book.BookSearchViewModel());
+                            await Html.RenderPartialAsync("_SearchBox", new WebMVC.Models.GeneralSearchViewModel());
                         }
                     </ul>
                 </div>

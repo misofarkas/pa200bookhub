@@ -8,6 +8,7 @@ using DataAccessLayer.Data;
 using DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BusinessLayer.Services
 {
@@ -102,8 +103,9 @@ namespace BusinessLayer.Services
                 .ThenInclude(ab => ab.Book)
                 .ThenInclude(b => b.Publisher);
 
+            var searchTerm = authorName?.ToLower();
 
-            query = query.Where(b => b.Name.Contains(authorName));
+            query = query.Where(b => b.Name.ToLower().Contains(searchTerm));
 
             var authors = await query
                 .ToListAsync();
