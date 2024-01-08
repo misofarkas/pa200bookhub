@@ -32,16 +32,22 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateBook(BookDTO model)
+        public async Task<IActionResult> CreateBook(BookCreateUpdateDTO model)
         {
-            var result = await _bookService.CreateBookAsync(model);
-
-            if (result == null)
+            try
             {
-                return BadRequest();
-            }
+                var result = await _bookService.CreateBookAsync(model);
+                if (result == null)
+                {
+                    return BadRequest();
+                }
 
-            return Ok(result);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         [HttpGet]
@@ -100,16 +106,24 @@ namespace WebApplication1.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateBook(int id, BookUpdateDTO model)
+        public async Task<IActionResult> UpdateBook(int id, BookCreateUpdateDTO model)
         {
-            var result = await _bookService.UpdateBookAsync(id, model);
-
-            if (result == null)
+            try
             {
-                return BadRequest();
+                var result = await _bookService.UpdateBookAsync(id, model);
+
+                if (result == null)
+                {
+                    return BadRequest();
+                }
+
+                return Ok(result);
+            }
+            catch(Exception e)
+            {
+                return NotFound(e.Message);
             }
 
-            return Ok(result);
         }
     }
 }

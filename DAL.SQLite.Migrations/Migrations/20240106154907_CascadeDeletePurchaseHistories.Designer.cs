@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.SQLite.Migrations.Migrations
 {
     [DbContext(typeof(BookHubDBContext))]
-    [Migration("20231125142400_Initial")]
-    partial class Initial
+    [Migration("20240106154907_CascadeDeletePurchaseHistories")]
+    partial class CascadeDeletePurchaseHistories
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,10 +70,6 @@ namespace DAL.SQLite.Migrations.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("AuthorId", "BookId");
 
                     b.HasIndex("BookId");
@@ -84,32 +80,27 @@ namespace DAL.SQLite.Migrations.Migrations
                         new
                         {
                             AuthorId = 1,
-                            BookId = 1,
-                            Id = 1
+                            BookId = 1
                         },
                         new
                         {
                             AuthorId = 2,
-                            BookId = 2,
-                            Id = 2
+                            BookId = 2
                         },
                         new
                         {
                             AuthorId = 3,
-                            BookId = 3,
-                            Id = 3
+                            BookId = 3
                         },
                         new
                         {
                             AuthorId = 4,
-                            BookId = 4,
-                            Id = 4
+                            BookId = 4
                         },
                         new
                         {
                             AuthorId = 5,
-                            BookId = 5,
-                            Id = 5
+                            BookId = 5
                         });
                 });
 
@@ -126,6 +117,9 @@ namespace DAL.SQLite.Migrations.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("PrimaryGenreId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("PublisherId")
                         .HasColumnType("INTEGER");
 
@@ -134,6 +128,8 @@ namespace DAL.SQLite.Migrations.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PrimaryGenreId");
 
                     b.HasIndex("PublisherId");
 
@@ -145,6 +141,7 @@ namespace DAL.SQLite.Migrations.Migrations
                             Id = 1,
                             Description = "Nineteen Eighty-Four (also published as 1984) is a dystopian novel and cautionary tale by English writer George Orwell. It was published on 8 June 1949",
                             Price = 15.99m,
+                            PrimaryGenreId = 1,
                             PublisherId = 1,
                             Title = "1984"
                         },
@@ -153,6 +150,7 @@ namespace DAL.SQLite.Migrations.Migrations
                             Id = 2,
                             Description = "Harry Potter and the Philosopher's Stone is a fantasy novel written by British author J. K. Rowling.",
                             Price = 20.99m,
+                            PrimaryGenreId = 2,
                             PublisherId = 2,
                             Title = "Harry Potter and the Philosopher's Stone"
                         },
@@ -161,6 +159,7 @@ namespace DAL.SQLite.Migrations.Migrations
                             Id = 3,
                             Description = "The Hobbit, or There and Back Again is a children's fantasy novel by English author J. R. R. Tolkien.",
                             Price = 25.99m,
+                            PrimaryGenreId = 3,
                             PublisherId = 3,
                             Title = "The Hobbit"
                         },
@@ -169,6 +168,7 @@ namespace DAL.SQLite.Migrations.Migrations
                             Id = 4,
                             Description = "Murder on the Orient Express is a detective novel by English writer Agatha Christie.",
                             Price = 18.99m,
+                            PrimaryGenreId = 4,
                             PublisherId = 4,
                             Title = "Murder on the Orient Express"
                         },
@@ -177,6 +177,7 @@ namespace DAL.SQLite.Migrations.Migrations
                             Id = 5,
                             Description = "The Shining is a horror novel by American author Stephen King.",
                             Price = 22.99m,
+                            PrimaryGenreId = 5,
                             PublisherId = 5,
                             Title = "The Shining"
                         });
@@ -270,10 +271,6 @@ namespace DAL.SQLite.Migrations.Migrations
                     b.Property<int>("GenreId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("BookId", "GenreId");
 
                     b.HasIndex("GenreId");
@@ -284,32 +281,27 @@ namespace DAL.SQLite.Migrations.Migrations
                         new
                         {
                             BookId = 1,
-                            GenreId = 1,
-                            Id = 1
+                            GenreId = 1
                         },
                         new
                         {
                             BookId = 2,
-                            GenreId = 2,
-                            Id = 2
+                            GenreId = 2
                         },
                         new
                         {
                             BookId = 3,
-                            GenreId = 3,
-                            Id = 3
+                            GenreId = 3
                         },
                         new
                         {
                             BookId = 4,
-                            GenreId = 4,
-                            Id = 4
+                            GenreId = 4
                         },
                         new
                         {
                             BookId = 5,
-                            GenreId = 5,
-                            Id = 5
+                            GenreId = 5
                         });
                 });
 
@@ -371,6 +363,8 @@ namespace DAL.SQLite.Migrations.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BookId");
 
                     b.HasIndex("CustomerId");
 
@@ -741,11 +735,19 @@ namespace DAL.SQLite.Migrations.Migrations
 
             modelBuilder.Entity("DataAccessLayer.Models.Book", b =>
                 {
+                    b.HasOne("DataAccessLayer.Models.Genre", "PrimaryGenre")
+                        .WithMany("Books")
+                        .HasForeignKey("PrimaryGenreId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("DataAccessLayer.Models.Publisher", "Publisher")
                         .WithMany("Books")
                         .HasForeignKey("PublisherId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("PrimaryGenre");
 
                     b.Navigation("Publisher");
                 });
@@ -771,11 +773,19 @@ namespace DAL.SQLite.Migrations.Migrations
 
             modelBuilder.Entity("DataAccessLayer.Models.PurchaseHistory", b =>
                 {
+                    b.HasOne("DataAccessLayer.Models.Book", "Book")
+                        .WithMany("PurchaseHistories")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DataAccessLayer.Models.Customer", "Customer")
                         .WithMany("PurchaseHistories")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Book");
 
                     b.Navigation("Customer");
                 });
@@ -883,6 +893,8 @@ namespace DAL.SQLite.Migrations.Migrations
 
                     b.Navigation("GenreBooks");
 
+                    b.Navigation("PurchaseHistories");
+
                     b.Navigation("Reviews");
                 });
 
@@ -897,6 +909,8 @@ namespace DAL.SQLite.Migrations.Migrations
 
             modelBuilder.Entity("DataAccessLayer.Models.Genre", b =>
                 {
+                    b.Navigation("Books");
+
                     b.Navigation("GenreBooks");
                 });
 

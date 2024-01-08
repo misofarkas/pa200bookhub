@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLayer.DTOs
+namespace BusinessLayer.DTOs.Publisher
 {
-    public class GenreDTO: BaseDTO
+    public class PublisherCreateUpdateDTO
     {
         public string Name { get; set; }
     }

@@ -20,5 +20,7 @@ namespace BusinessLayer.Services
         Task<CustomerDTO?> UpdateCustomerAsync(int id, CustomerDTO customer);
 
         Task<bool> DeleteCustomerAsync(int id);
+
+        Task<CustomerDTO?> GetCustomerByEmailAsync(string email);
     }
 }

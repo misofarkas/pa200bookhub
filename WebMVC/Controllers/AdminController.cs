@@ -2,6 +2,9 @@
 using BusinessLayer.Services;
 using BusinessLayer.DTOs.Book;
 using BusinessLayer.DTOs;
+using BusinessLayer.DTOs.Genre;
+using BusinessLayer.DTOs.Publisher;
+using BusinessLayer.DTOs.PurchaseHistory;
 
 namespace WebMVC.Controllers
 {
@@ -39,7 +42,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpPost("edit-book/{id}")]
-        public async Task<IActionResult> EditBook(int id, BookUpdateDTO book)
+        public async Task<IActionResult> EditBook(int id, BookCreateUpdateDTO book)
         {
             await _bookService.UpdateBookAsync(id, book);
             return RedirectToAction("Index", "Home");
@@ -71,7 +74,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpPost("edit-genre/{id}")]
-        public async Task<IActionResult> EditGenre(int id, GenreDTO genre)
+        public async Task<IActionResult> EditGenre(int id, GenreCreateUpdateDTO genre)
         {
             await _genreService.UpdateGenreAsync(id, genre);
             return RedirectToAction("Index", "Admin");
@@ -87,7 +90,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpPost("edit-publisher/{id}")]
-        public async Task<IActionResult> EditPublisher(int id, PublisherDTO publisher)
+        public async Task<IActionResult> EditPublisher(int id, PublisherCreateUpdateDTO publisher)
         {
             await _publisherService.UpdatePublisherAsync(id, publisher);
             return RedirectToAction("Index", "Admin"); // or any other admin page
@@ -103,9 +106,9 @@ namespace WebMVC.Controllers
         }
 
         [HttpPost("edit-purchase-history/{id}")]
-        public async Task<IActionResult> EditPurchaseHistory(int id, DateTime PurchaseDate)
+        public async Task<IActionResult> EditPurchaseHistory(int id, PurchaseHistoryUpdateDTO model)
         {
-            await _purchaseHistoryService.UpdatePurchaseDateAsync(id, PurchaseDate);
+            await _purchaseHistoryService.UpdatePurchaseHistoryAsync(id, model);
             return RedirectToAction("Index", "Admin"); // or any other admin page
         }
     }

@@ -1,0 +1,16 @@
+﻿@model WebMVC.Models.Genre.BasicGenreViewModel
+
+@using (Html.BeginForm("Edit", "Genre", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.Id)
+
+    <div>
+        @Html.LabelFor(model => model.Name)
+        @Html.EditorFor(model => model.Name)
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+
+    <input type="submit" value="Save Changes" />
+}

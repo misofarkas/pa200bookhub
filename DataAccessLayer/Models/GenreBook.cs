@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Models
 {
-    public class GenreBook : BaseEntity
+    public class GenreBook
     {
         public int GenreId { get; set; }
         public Genre Genre { get; set; }

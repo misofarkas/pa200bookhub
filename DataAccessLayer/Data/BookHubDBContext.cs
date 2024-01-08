@@ -73,6 +73,12 @@ namespace DataAccessLayer.Data
             .HasForeignKey(b => b.PublisherId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        modelBuilder.Entity<Book>()
+            .HasOne(g => g.PrimaryGenre)
+            .WithMany(b => b.Books)
+            .HasForeignKey(g => g.PrimaryGenreId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         modelBuilder.Entity<Review>()
             .HasOne(r => r.Book)
             .WithMany(b => b.Reviews)
@@ -98,6 +104,12 @@ namespace DataAccessLayer.Data
             .WithMany(c => c.PurchaseHistories)
             .HasForeignKey(p => p.CustomerId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<PurchaseHistory>()
+                .HasOne(p => p.Book)
+                .WithMany(b => b.PurchaseHistories)
+                .HasForeignKey(p => p.BookId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             /* run the DB seeding */
             modelBuilder.Seed();

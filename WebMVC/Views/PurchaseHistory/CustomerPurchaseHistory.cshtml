@@ -1,0 +1,85 @@
+﻿@model WebMVC.Models.PurchaseHistory.PurchaseHistoryListViewModel
+
+@{
+    ViewBag.Title = "Customer Purchase History";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Use your layout file here
+}
+
+<div class="container mt-4">
+
+    @if (Model.PurchaseHistories.Any())
+    {
+        <h2>Purchase Histories for @Model.PurchaseHistories.FirstOrDefault()!.CustomerUsername</h2>
+        <table class="table table-striped mt-4">
+            <thead>
+                <tr>
+                    <th>Book Title</th>
+                    <th>Purchase Date</th>
+                    <th>Total Price</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var history in Model.PurchaseHistories)
+                {
+                    <tr>
+                        <td>@history.BookTitle</td>
+                        <td>@history.PurchaseDate.ToString("dd MMM yyyy")</td>
+                        <td>@history.TotalPrice.ToString("C")</td>
+                        <td>
+                            <span class="badge @(history.Paid ? "badge-success" : "badge-secondary")">
+                                @(history.Paid ? "Paid" : "Unpaid")
+                            </span>
+                        </td>
+                        <td>
+                            @if (!history.Paid)
+                            {
+                                <form asp-action="Pay" asp-controller="PurchaseHistory" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="Id" value="@history.Id" />
+                                    <button type="submit" class="btn btn-sm btn-success">Pay Now</button>
+                                </form>
+                            }
+                            @if (history.Paid)
+                            {
+                                <form asp-action="Delete" asp-controller="PurchaseHistory" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="Id" value="@history.Id" />
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this purchase history?');">Delete</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No purchase history available for this customer.</p>
+    }
+</div>
+
+<style>
+    .badge-success {
+        color: #fff;
+        background-color: #28a745; /* Bootstrap 4's success green */
+    }
+
+    .badge-secondary {
+        color: #fff;
+        background-color: #6c757d; /* Bootstrap 4's secondary gray */
+    }
+
+    /* Bootstrap 5 equivalent if you're using Bootstrap 5 */
+    .bg-success {
+        color: #fff;
+        background-color: #198754; /* Bootstrap 5's success green */
+    }
+
+    .bg-secondary {
+        color: #fff;
+        background-color: #6c757d; /* Bootstrap 5's secondary gray */
+    }
+</style>

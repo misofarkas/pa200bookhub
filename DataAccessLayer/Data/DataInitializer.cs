@@ -72,11 +72,11 @@ namespace DataAccessLayer.Data
         {
             return new List<Book>()
             {
-                new Book { Id = 1, Title = "1984", PublisherId = 1, Price = 15.99M, Description = "Nineteen Eighty-Four (also published as 1984) is a dystopian novel and cautionary tale by English writer George Orwell. It was published on 8 June 1949" },
-                new Book { Id = 2, Title = "Harry Potter and the Philosopher's Stone", PublisherId = 2, Price = 20.99M, Description = "Harry Potter and the Philosopher's Stone is a fantasy novel written by British author J. K. Rowling." },
-                new Book { Id = 3, Title = "The Hobbit", PublisherId = 3, Price = 25.99M, Description = "The Hobbit, or There and Back Again is a children's fantasy novel by English author J. R. R. Tolkien." },
-                new Book { Id = 4, Title = "Murder on the Orient Express", PublisherId = 4, Price = 18.99M, Description = "Murder on the Orient Express is a detective novel by English writer Agatha Christie." },
-                new Book { Id = 5, Title = "The Shining", PublisherId = 5, Price = 22.99M, Description = "The Shining is a horror novel by American author Stephen King." }
+                new Book { Id = 1, Title = "1984", PrimaryGenreId = 1, PublisherId = 1, Price = 15.99M, Description = "Nineteen Eighty-Four (also published as 1984) is a dystopian novel and cautionary tale by English writer George Orwell. It was published on 8 June 1949" },
+                new Book { Id = 2, Title = "Harry Potter and the Philosopher's Stone", PrimaryGenreId = 2, PublisherId = 2, Price = 20.99M, Description = "Harry Potter and the Philosopher's Stone is a fantasy novel written by British author J. K. Rowling." },
+                new Book { Id = 3, Title = "The Hobbit", PrimaryGenreId = 3, PublisherId = 3, Price = 25.99M, Description = "The Hobbit, or There and Back Again is a children's fantasy novel by English author J. R. R. Tolkien." },
+                new Book { Id = 4, Title = "Murder on the Orient Express", PrimaryGenreId = 4, PublisherId = 4, Price = 18.99M, Description = "Murder on the Orient Express is a detective novel by English writer Agatha Christie." },
+                new Book { Id = 5, Title = "The Shining", PrimaryGenreId = 5, PublisherId = 5, Price = 22.99M, Description = "The Shining is a horror novel by American author Stephen King." }
 
             };
         }
@@ -85,22 +85,22 @@ namespace DataAccessLayer.Data
         {
             return new List<AuthorBook>()
             {
-                new AuthorBook { Id = 1, AuthorId = 1, BookId = 1},
-                new AuthorBook { Id = 2, AuthorId = 2, BookId = 2},
-                new AuthorBook { Id = 3, AuthorId = 3, BookId = 3},
-                new AuthorBook { Id = 4, AuthorId = 4, BookId = 4},
-                new AuthorBook { Id = 5, AuthorId = 5, BookId = 5},
+                new AuthorBook {AuthorId = 1, BookId = 1},
+                new AuthorBook { AuthorId = 2, BookId = 2},
+                new AuthorBook { AuthorId = 3, BookId = 3},
+                new AuthorBook { AuthorId = 4, BookId = 4},
+                new AuthorBook { AuthorId = 5, BookId = 5},
             };
         }
         private static List<GenreBook> PrepareGenreBooks()
         {
             return new List<GenreBook>()
             {
-                new GenreBook { Id = 1, GenreId = 1, BookId = 1},
-                new GenreBook { Id = 2, GenreId = 2, BookId = 2},
-                new GenreBook { Id = 3, GenreId = 3, BookId = 3},
-                new GenreBook { Id = 4, GenreId = 4, BookId = 4},
-                new GenreBook { Id = 5, GenreId = 5, BookId = 5},
+                new GenreBook { GenreId = 1, BookId = 1},
+                new GenreBook { GenreId = 2, BookId = 2},
+                new GenreBook { GenreId = 3, BookId = 3},
+                new GenreBook { GenreId = 4, BookId = 4},
+                new GenreBook { GenreId = 5, BookId = 5},
             };
         }
 
@@ -118,10 +118,10 @@ namespace DataAccessLayer.Data
         {
             return new List<PurchaseHistory> 
             { 
-                new PurchaseHistory { Id = 1, BookId = 1, CustomerId = 1, PurchaseDate = new DateTime(2023, 10, 10) },
-                new PurchaseHistory { Id = 2, BookId = 3, CustomerId = 1, PurchaseDate = new DateTime(2023, 8, 15) },
-                new PurchaseHistory { Id = 3, BookId = 4, CustomerId = 2, PurchaseDate = new DateTime(2023, 9, 5) },
-                new PurchaseHistory { Id = 4, BookId = 5, CustomerId = 3, PurchaseDate = new DateTime(2023, 7, 20) }
+                new PurchaseHistory { Id = 1, BookId = 1, CustomerId = 1, PurchaseDate = new DateTime(2023, 10, 10), TotalPrice = 15.99M, Paid = false },
+                new PurchaseHistory { Id = 2, BookId = 3, CustomerId = 1, PurchaseDate = new DateTime(2023, 8, 15), TotalPrice = 25.99M, Paid = true },
+                new PurchaseHistory { Id = 3, BookId = 4, CustomerId = 2, PurchaseDate = new DateTime(2023, 9, 5), TotalPrice = 18.99M, Paid = true },
+                new PurchaseHistory { Id = 4, BookId = 5, CustomerId = 3, PurchaseDate = new DateTime(2023, 7, 20), TotalPrice = 22.99M, Paid = true }
 
             };
         }

@@ -8,6 +8,10 @@ using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Middleware;
+using BusinessLayer.DTOs.Genre;
+using WebMVC.Binders;
+using System.Globalization;
+using BusinessLayer.DTOs.PurchaseHistory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +42,7 @@ builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IGenreService, GenreService>();
 builder.Services.AddScoped<IPublisherService, PublisherService>();
 builder.Services.AddScoped<IPurchaseHistoryService, PurchaseHistoryService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
 
 TypeAdapterConfig<Author, AuthorDTO>.NewConfig().Map(dest => dest.Books, src => src.AuthorBooks.Select(ab => ab.Book.Adapt<BookDTO>()));
 TypeAdapterConfig<Book, BookDTO>.NewConfig().Map(dest => dest.Authors, src => src.AuthorBooks.Select(ab => ab.Author.Adapt<AuthorWithoutBooksDTO>()))
@@ -48,6 +53,11 @@ TypeAdapterConfig<Customer, CustomerDTO>.NewConfig().Map(dest => dest.Username, 
 builder.Services.AddIdentity<LocalIdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<BookHubDBContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddControllers(options =>
+{
+    options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
+});
 
 builder.Services.Configure<IdentityOptions>(options =>
 {

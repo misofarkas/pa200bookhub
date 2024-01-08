@@ -19,15 +19,15 @@ namespace BusinessLayer.Services
             _dbContext = dBContext;
         }
 
-        public async Task<bool> CreateAuthor(AuthorCreateUpdateDTO authorDTO)
+        public async Task<AuthorCreateUpdateDTO> CreateAuthor(AuthorCreateUpdateDTO authorDTO)
         {
             var author = EntityMapper.MapToAuthor(authorDTO);
             if (author == null) {
-                return false;
+                throw new Exception("There was an error creating Author");
             }
             _dbContext.Authors.Add(author);
             await SaveAsync(true);
-            return true;
+            return authorDTO;
         }
 
         public async Task<bool> DeleteAuthor(int authorId)
@@ -35,14 +35,13 @@ namespace BusinessLayer.Services
             var author = await _dbContext.Authors.FindAsync(authorId);
             if (author == null)
             {
-                return false;
+                throw new Exception($"No author with ID {authorId} has been found");
             }
             var isAuthorOfAnyBook = await _dbContext.AuthorBooks.AnyAsync(ab => ab.AuthorId == authorId);
 
             if (isAuthorOfAnyBook)
             {
-                // Prevent deletion as the author still has books
-                return false;
+                throw new Exception("Author is associated with a book");
             }
 
             _dbContext.Authors.Remove(author);
@@ -112,18 +111,18 @@ namespace BusinessLayer.Services
             return authors.Select(a => DTOMapper.MapToAuthorDTO(a));
         }
 
-        public async Task<bool> UpdateAuthor(int id, AuthorCreateUpdateDTO authorDTO)
+        public async Task<AuthorCreateUpdateDTO> UpdateAuthor(int id, AuthorCreateUpdateDTO authorDTO)
         {
             var author = await _dbContext.Authors.FindAsync(id);
             if (author == null)
             {
-                return false;
+                throw new Exception("There was an error updating Author");
             }
 
             author.Name = authorDTO.Name;
             _dbContext.Authors.Update(author);
             await SaveAsync(true);
-            return true;
+            return authorDTO;
         }
     }
 }

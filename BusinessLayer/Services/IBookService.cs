@@ -17,9 +17,9 @@ namespace BusinessLayer.Services
 
         Task<List<BookDTO>> SearchBooksAsync(string title, string description, decimal? price, string genre, string author);
 
-        Task<BookDTO> CreateBookAsync(BookDTO model);
+        Task<BookDTO> CreateBookAsync(BookCreateUpdateDTO model);
 
-        Task<BookDTO> UpdateBookAsync(int id, BookUpdateDTO model);
+        Task<BookDTO> UpdateBookAsync(int id, BookCreateUpdateDTO model);
 
         Task<bool> DeleteBookAsync(int id);
 

@@ -1,0 +1,111 @@
+﻿@using WebMVC.Models.Genre
+@model GenreListViewModel
+
+<h2>Genres</h2>
+
+<style>
+    .genre-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .genre-table, .genre-table th, .genre-table td {
+            border: 1px solid #ddd;
+        }
+
+            .genre-table th, .genre-table td {
+                padding: 8px;
+                text-align: left;
+            }
+
+            .genre-table th {
+                background-color: #f2f2f2;
+            }
+
+            .genre-table tr:hover {
+                background-color: #f5f5f5;
+            }
+
+    .action-buttons {
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Space between buttons */
+    }
+
+    .button-link, .button-delete {
+        text-decoration: none;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .button-link {
+        background-color: #007bff;
+    }
+
+        .button-link:hover {
+            background-color: #0056b3;
+            color: white; /* Fix readability issue on hover */
+        }
+
+    .button-delete {
+        background-color: #dc3545;
+    }
+
+        .button-delete:hover {
+            background-color: #c82333;
+        }
+
+    .create-button {
+        margin-top: 15px;
+        display: inline-block;
+        background-color: #28a745;
+        color: white;
+        padding: 5px 15px;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+        .create-button:hover {
+            background-color: #218838;
+        }
+
+    .search-button {
+        margin-top: 15px;
+        display: inline-block;
+        background-color: #ff9800;
+        color: white;
+        padding: 5px 15px;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+        .search-button:hover {
+            background-color: #fb8c00;
+        }
+</style>
+
+<table class="genre-table">
+    <tr>
+        <th>Genre Name</th>
+        <th>Actions</th>
+    </tr>
+    @foreach (var genre in Model.Genres)
+    {
+        <tr>
+            <td>@genre.Name</td>
+            <td class="action-buttons">
+                @using (Html.BeginForm("Delete", "Genre", new { id = genre.Id }, FormMethod.Post))
+                {
+                    <input type="submit" value="Delete" class="button-delete" onclick="return confirm('Are you sure?');" />
+                }
+                <a href="@Url.Action("Edit", "Genre", new { id = genre.Id })" class="button-link">Edit</a>
+            </td>
+        </tr>
+    }
+</table>
+
+<a href="@Url.Action("Create", "Genre")" class="create-button">Create New Genre</a>
+<a href="@Url.Action("Search", "Genres")" class="search-button">Search Genres</a>

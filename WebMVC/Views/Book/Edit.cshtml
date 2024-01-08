@@ -1,0 +1,66 @@
+﻿@model WebMVC.Models.Book.BookCreateUpdateViewModel
+
+@{
+    ViewBag.Title = "Update Book";
+}
+
+<h2>Update Book</h2>
+
+@using (Html.BeginForm("Edit", "Book", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Title)
+        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Description)
+        @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", rows = 4 } })
+        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Price)
+        @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control", step = "0.01", min = "0" } })
+        @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.PrimaryGenreId, "Primary Genre")
+        @Html.DropDownListFor(model => model.PrimaryGenreId, new SelectList(ViewBag.Genres, "Id", "Name"), "-- Select Primary Genre --", new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(model => model.PrimaryGenreId, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.AuthorIds, "Authors")
+        @Html.ListBoxFor(model => model.AuthorIds, new SelectList(ViewBag.Authors, "Id", "Name"), new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.GenreIds, "Genres")
+        @Html.ListBoxFor(model => model.GenreIds, new SelectList(ViewBag.Genres, "Id", "Name"), new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.PublisherId, "Publisher")
+        @Html.DropDownListFor(model => model.PublisherId, new SelectList(ViewBag.Publishers, "Id", "Name"), "-- Select Publisher --", new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('form').submit(function () {
+                var price = $('#Price').val().replace(',', '.');
+                $('#Price').val(price);
+            });
+        });
+    </script>
+}

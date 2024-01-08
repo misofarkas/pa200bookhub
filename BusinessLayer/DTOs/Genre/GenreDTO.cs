@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLayer.DTOs
+namespace BusinessLayer.DTOs.Genre
 {
-    public class PublisherDTO: BaseDTO
+    public class GenreDTO : BaseDTO
     {
         public string Name { get; set; }
     }
-
 }
