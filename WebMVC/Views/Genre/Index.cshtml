@@ -3,6 +3,10 @@
 
 <h2>Genres</h2>
 
+@{
+    await Html.RenderPartialAsync("GenreSearchBox", new WebMVC.Models.Genre.GenreSearchViewModel());
+}
+
 <style>
     .genre-table {
         width: 100%;
@@ -72,19 +76,6 @@
             background-color: #218838;
         }
 
-    .search-button {
-        margin-top: 15px;
-        display: inline-block;
-        background-color: #ff9800;
-        color: white;
-        padding: 5px 15px;
-        text-decoration: none;
-        border-radius: 5px;
-    }
-
-        .search-button:hover {
-            background-color: #fb8c00;
-        }
 </style>
 
 <table class="genre-table">
@@ -108,4 +99,3 @@
 </table>
 
 <a href="@Url.Action("Create", "Genre")" class="create-button">Create New Genre</a>
-<a href="@Url.Action("Search", "Genres")" class="search-button">Search Genres</a>

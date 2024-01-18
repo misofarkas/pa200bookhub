@@ -29,14 +29,14 @@ namespace WebMVC.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Search(AuthorSearchViewModel searchModel)
         {
-            var result = await _authorService.SearchAuthor(searchModel.Query);
+            var result = await _authorService.SearchAuthor(searchModel.Query ?? "");
 
             var viewModel = new AuthorListViewModel
             {
                 Authors = result.Adapt<IEnumerable<BasicAuthorViewModel>>(),
             };
 
-            return View("AuthorSearchResult", viewModel);
+            return View("Index", viewModel);
         }
 
         [HttpGet]

@@ -5,6 +5,11 @@
 
 <h2>Books</h2>
 
+
+@{
+    await Html.RenderPartialAsync("BookSearchBox", new WebMVC.Models.Book.BookSearchViewModel());
+}
+
 <style>
     table {
         width: 100%;
@@ -78,10 +83,6 @@
         background-color: #dc3545;
     }
 
-    .search-button {
-        background-color: #ff9800;
-    }
-
     .detail-button {
         background-color: #6c757d;
     }
@@ -89,7 +90,6 @@
         .create-button:hover,
         .edit-button:hover,
         .delete-button:hover,
-        .search-button:hover,
         .detail-button:hover {
             opacity: 0.8;
         }
@@ -147,7 +147,6 @@
 
 <div class="book-action-buttons">
     <a href="@Url.Action("Create", "Book")" class="button create-button">Create Book</a>
-    <a href="@Url.Action("Search", "Book")" class="button search-button">Search Book</a>
 </div>
 
 <table>
@@ -216,7 +215,7 @@
     </tbody>
 </table>
 
-@if (Model.TotalPages > 1)
+@if (Model.TotalPages >= 1)
 {
     <nav>
         <ul class="pagination">
