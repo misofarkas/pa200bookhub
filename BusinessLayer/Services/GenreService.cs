@@ -54,7 +54,7 @@ namespace BusinessLayer.Services
                 .ThenInclude(ab => ab.Book);
 
             var searchTerm = genreName?.ToLower();
-            query = query.Where(b => b.Name.Contains(searchTerm));
+            query = query.Where(b => b.Name.ToLower().Contains(searchTerm));
 
             var genres = await query
                 .ToListAsync();

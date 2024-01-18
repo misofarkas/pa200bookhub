@@ -7,6 +7,9 @@
 
 <h2>Authors</h2>
 
+@{
+    await Html.RenderPartialAsync("AuthorSearchBox", new WebMVC.Models.Author.AuthorSearchViewModel());
+}
 
 <style>
     table {
@@ -78,10 +81,6 @@
         background-color: #dc3545;
     }
 
-    .search-button {
-        background-color: #ff9800;
-    }
-
     .detail-button {
         background-color: #6c757d;
     }
@@ -89,7 +88,6 @@
         .create-button:hover,
         .edit-button:hover,
         .delete-button:hover,
-        .search-button:hover,
         .detail-button:hover {
             opacity: 0.8;
         }
@@ -143,7 +141,6 @@
 
 <div class="author-action-buttons">
     <a href="@Url.Action("Create", "Author")" class="button create-button">Create Author</a>
-    <a href="@Url.Action("Search", "Author")" class="button search-button">Search Authors</a>
 </div>
 
 <table>

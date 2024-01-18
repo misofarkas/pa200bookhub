@@ -38,6 +38,12 @@ namespace WebMVC.Controllers
         public async Task<IActionResult> Search(BookSearchViewModel searchModel, int page = 1, int pageSize = 10)
         {
             BookSearchCriteriaDTO searchCriteria = searchModel.Adapt<BookSearchCriteriaDTO>();
+
+            if (searchCriteria.Query == null)
+            {
+                searchCriteria.Query = "";
+            }
+
             var result = await _bookService.SearchBooksWithCriteria(searchCriteria, page, pageSize);
 
             var viewModel = new SearchBookListViewModel
@@ -48,7 +54,7 @@ namespace WebMVC.Controllers
                 SearchCriteria = searchModel,
             };
 
-            return View("BookSearchResult", viewModel);
+            return View("Index", viewModel);
         }
 
         [HttpGet]
