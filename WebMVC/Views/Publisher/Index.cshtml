@@ -141,9 +141,13 @@
                 }
 </style>
 
-<div class="publisher-action-buttons">
-    <a href="@Url.Action("Create", "Publisher")" class="button create-button">Create Publisher</a>
-</div>
+@if (User.IsInRole("Admin"))
+{
+    <div class="publisher-action-buttons">
+        <a href="@Url.Action("Create", "Publisher")" class="button create-button">Create Publisher</a>
+    </div>
+}
+
 
 <table>
     <thead>
@@ -158,11 +162,19 @@
             <tr>
                 <td>@publisher.Name</td>
                 <td class="small-border action-buttons">
-                    <a href="@Url.Action("Edit", "Publisher", new { id = publisher.Id })" class="button edit-button">Edit</a>
-                    @using (Html.BeginForm("Delete", "Publisher", new { id = publisher.Id }, FormMethod.Post))
+                    @if (User.IsInRole("Admin"))
                     {
-                        <input type="submit" value="Delete" class="button delete-button" onclick="return confirm('Are you sure?');" />
+                        <a href="@Url.Action("Edit", "Publisher", new { id = publisher.Id })" class="button edit-button">Edit</a>
+                        @using (Html.BeginForm("Delete", "Publisher", new { id = publisher.Id }, FormMethod.Post))
+                        {
+                            <input type="submit" value="Delete" class="button delete-button" onclick="return confirm('Are you sure?');" />
+                        }
                     }
+                    else
+                    {
+                        <p>no actions available</p>
+                    }
+
                 </td>
             </tr>
         }

@@ -18,7 +18,7 @@
     }
 
     .sidebar {
-        flex-basis: 100px;
+        flex-basis: 200px;
         flex-shrink: 0;
         padding: 10px;
         margin-left: 10px;
@@ -78,14 +78,24 @@
             <li><a href="/Books">Browse Books</a></li>
 
             <li class="section-heading">User Account</li>
-            <li><a href="/Account/Register">Register</a></li>
-            <li><a href="/Account/Login">Login</a></li>
-            <li><a href="/Account/Logout">Logout</a></li>
-            <li><a href="/Account/LoginSuccess">Login Success</a></li>
-            <li><a href="/PurchaseHistory/CustomerPurchaseHistory">Orders Overview</a></li>
-
-            <li class="section-heading">Administration</li>
-            <li><a href="/admin">Admin Dashboard</a></li>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li>logged in as @User.Identity.Name</li>
+                <li><a href="/Account/Logout">Logout</a></li>
+                <li><a href="/PurchaseHistory/CustomerPurchaseHistory">Orders Overview</a></li>
+            }
+            else
+            {
+                <li><a href="/Account/Register">Register</a></li>
+                <li><a href="/Account/Login">Login</a></li>
+            }
+            
+            @if (User.IsInRole("Admin"))
+            {
+                <li class="section-heading">Administration</li>
+                <li><a href="/admin">Admin Dashboard</a></li>
+            }
+            
         </ul>
     </div>
 
