@@ -88,14 +88,25 @@
         <tr>
             <td>@genre.Name</td>
             <td class="action-buttons">
-                @using (Html.BeginForm("Delete", "Genre", new { id = genre.Id }, FormMethod.Post))
+                @if (User.IsInRole("Admin"))
                 {
-                    <input type="submit" value="Delete" class="button-delete" onclick="return confirm('Are you sure?');" />
+                    @using (Html.BeginForm("Delete", "Genre", new { id = genre.Id }, FormMethod.Post))
+                    {
+                        <input type="submit" value="Delete" class="button-delete" onclick="return confirm('Are you sure?');" />
+                    }
+                    <a href="@Url.Action("Edit", "Genre", new { id = genre.Id })" class="button-link">Edit</a>
                 }
-                <a href="@Url.Action("Edit", "Genre", new { id = genre.Id })" class="button-link">Edit</a>
+                else
+                {
+                    <p>no actions available</p>
+                }
+               
             </td>
         </tr>
     }
 </table>
+@if (User.IsInRole("Admin"))
+{
+    <a href="@Url.Action("Create", "Genre")" class="create-button">Create New Genre</a>
+}
 
-<a href="@Url.Action("Create", "Genre")" class="create-button">Create New Genre</a>

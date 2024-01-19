@@ -69,6 +69,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpGet("create")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create()
         {
             ViewBag.Authors = await _authorService.GetAll();
@@ -79,6 +80,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpPost("create")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BookCreateUpdateViewModel model)
         {
@@ -108,6 +110,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpGet("edit/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
         {
             var book = await _bookService.GetBookAsync(id);
@@ -135,6 +138,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpPost("edit/{id}")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, BookCreateUpdateViewModel model)
         {
@@ -164,6 +168,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpPost("delete/{id}")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(int id)
         {

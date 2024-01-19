@@ -30,6 +30,11 @@ namespace WebMVC.Controllers
                 var user = new LocalIdentityUser { UserName = model.Email, Email = model.Email, Customer = new() { Username = model.Email } };
                 var result = await _userManager.CreateAsync(user, model.Password);
 
+                if (model.IsAdmin)
+                {
+                    await _userManager.AddToRoleAsync(user, "Admin");
+                }
+
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
@@ -123,5 +128,9 @@ namespace WebMVC.Controllers
             return View();
         }
 
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }

@@ -5,6 +5,7 @@ using BusinessLayer.DTOs;
 using BusinessLayer.DTOs.Genre;
 using BusinessLayer.DTOs.Publisher;
 using BusinessLayer.DTOs.PurchaseHistory;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebMVC.Controllers
 {
@@ -27,12 +28,14 @@ namespace WebMVC.Controllers
         }
 
         [HttpGet("")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             return View();
         }
 
         [HttpGet("edit-book/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditBook(int id)
         {
             var book = await _bookService.GetBookAsync(id);
@@ -42,6 +45,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpPost("edit-book/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditBook(int id, BookCreateUpdateDTO book)
         {
             await _bookService.UpdateBookAsync(id, book);
@@ -49,6 +53,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpGet("edit-customer/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditCustomer(int id)
         {
             var customer = await _customerService.GetCustomerAsync(id);
@@ -58,6 +63,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpPost("edit-customer/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditCustomer(int id, CustomerDTO customer)
         {
             await _customerService.UpdateCustomerAsync(id, customer);
@@ -65,6 +71,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpGet("edit-genre/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditGenre(int id)
         {
             var genre = await _genreService.GetGenreAsync(id);
@@ -74,6 +81,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpPost("edit-genre/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditGenre(int id, GenreCreateUpdateDTO genre)
         {
             await _genreService.UpdateGenreAsync(id, genre);
@@ -81,6 +89,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpGet("edit-publisher/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditPublisher(int id)
         {
             var publisher = await _publisherService.GetPublisherAsync(id);
@@ -90,6 +99,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpPost("edit-publisher/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditPublisher(int id, PublisherCreateUpdateDTO publisher)
         {
             await _publisherService.UpdatePublisherAsync(id, publisher);
@@ -97,6 +107,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpGet("edit-purchase-history/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditPurchaseHistory(int id)
         {
             var purchaseHistory = await _purchaseHistoryService.GetPurchaseHistoryAsync(id);
@@ -106,6 +117,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpPost("edit-purchase-history/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditPurchaseHistory(int id, PurchaseHistoryUpdateDTO model)
         {
             await _purchaseHistoryService.UpdatePurchaseHistoryAsync(id, model);
