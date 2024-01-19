@@ -20,10 +20,7 @@ builder.Services.AddControllersWithViews();
 
 // register DBContext:
 var sqliteDbName = "bookhubproject2.db";
-
-var folder = Environment.SpecialFolder.LocalApplicationData;
-var dbPath = Path.Join(Environment.GetFolderPath(folder), sqliteDbName);
-
+var dbPath = Path.Combine(Environment.CurrentDirectory, sqliteDbName);
 var sqliteConnectionString = $"Data Source={dbPath}";
 
 builder.Services.AddDbContextFactory<BookHubDBContext>(options =>
