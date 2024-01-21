@@ -3,6 +3,7 @@ using BusinessLayer.Services;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using WebMVC.Models;
 using WebMVC.Models.Review;
 
@@ -15,12 +16,14 @@ namespace WebMVC.Controllers
         private readonly IReviewService _reviewService;
         private readonly IBookService _bookService;
         private readonly ICustomerService _customerService;
+        private readonly IMemoryCache _memoryCache;
 
-        public ReviewController(IReviewService reviewService, IBookService bookService, ICustomerService customerService)
+        public ReviewController(IReviewService reviewService, IBookService bookService, ICustomerService customerService, IMemoryCache memoryCache)
         {
             _reviewService = reviewService;
             _bookService = bookService;
             _customerService = customerService;
+            _memoryCache = memoryCache;
         }
 
         [HttpGet("create")]
@@ -35,6 +38,7 @@ namespace WebMVC.Controllers
                     BookId = book.Id,
                     CustomerUsername = User.Identity.Name,
                 };
+                _memoryCache.Remove($"book-{bookId}");
                 return View(viewModel);
             }
             catch (Exception e)
@@ -59,6 +63,7 @@ namespace WebMVC.Controllers
                     var customer = await _customerService.GetCustomerByEmailAsync(User.Identity.Name);
                     model.CustomerId = customer.Id;
                     await _reviewService.CreateReviewAsync(model.Adapt<ReviewCreateUpdateDTO>());
+                    _memoryCache.Remove($"book-{model.BookId}");
                     return RedirectToAction("Index", "Book");
                 }
                 catch (Exception e)
@@ -76,7 +81,7 @@ namespace WebMVC.Controllers
 
         [HttpPost("delete/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(int id, int bookId)
         {
             var result = await _reviewService.DeleteReviewAsync(id);
             if (!result)
@@ -87,6 +92,7 @@ namespace WebMVC.Controllers
                 };
                 return View("Error", errorModel);
             }
+            _memoryCache.Remove($"book-{bookId}");
             return RedirectToAction("Index", "Book");
         }
 
@@ -104,6 +110,7 @@ namespace WebMVC.Controllers
             }
             var result = review.Adapt<BasicReviewViewModel>();
             result.BookId = bookId;
+            _memoryCache.Remove($"book-{bookId}");
             return View(result);
         }
 
@@ -117,6 +124,7 @@ namespace WebMVC.Controllers
                 {
                     model.CustomerId = (await _customerService.GetCustomerByEmailAsync(User.Identity.Name))!.Id;
                     await _reviewService.UpdateReviewAsync(id, model.Adapt<ReviewCreateUpdateDTO>());
+                    _memoryCache.Remove($"book-{model.BookId}");
                     return RedirectToAction("Index", "Book");
                 }
                 catch (Exception e)
