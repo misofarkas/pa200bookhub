@@ -33,9 +33,8 @@ namespace WebMVC.Controllers
             _memoryCache = memoryCache;
         }
 
-        [HttpGet("search")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Search(BookSearchViewModel searchModel, int page = 1, int pageSize = 10)
+        [HttpGet]
+        public async Task<IActionResult> Index(BookSearchViewModel searchModel, int page = 1, int pageSize = 10)
         {
             BookSearchCriteriaDTO searchCriteria = searchModel.Adapt<BookSearchCriteriaDTO>();
 
@@ -55,17 +54,6 @@ namespace WebMVC.Controllers
             };
 
             return View("Index", viewModel);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var books = await _bookService.GetBooksAsync();
-            var viewModel = new BookListViewModel
-            {
-                Books = books.Adapt<IEnumerable<BookDetailViewModel>>(),
-            };
-            return View(viewModel);
         }
 
         [HttpGet("create")]

@@ -29,7 +29,7 @@
     }
 </style>
 
-<form asp-action="Search" asp-controller="Book" method="get">
+<form asp-action="Index" asp-controller="Book" method="get">
     <input type="text" class="input-field" name="query" placeholder="Search books..." />
     <select asp-for="SearchIn" asp-items="Html.GetEnumSelectList<BookSearchField>()"></select>
     <button type="submit" class="button search-button" >Search</button>
