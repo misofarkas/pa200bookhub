@@ -1,4 +1,4 @@
-﻿@model WebMVC.Models.Book.BookListViewModel
+﻿@model WebMVC.Models.Book.SearchBookListViewModel
 
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
@@ -228,7 +228,7 @@
             @for (int i = 1; i <= Model.TotalPages; i++)
             {
                 <li class="@((i == Model.CurrentPage) ? "active" : "")">
-                    <a href="@Url.Action("Index", new { page = i })">@i</a>
+                    <a href="@Url.Action("Index", new { page = i, query = Model.SearchCriteria.Query, searchin = Model.SearchCriteria.SearchIn })">@i</a>
                 </li>
             }
         </ul>
