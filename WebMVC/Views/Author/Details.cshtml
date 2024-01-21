@@ -39,12 +39,20 @@
                         </td>
                         <td>@book.Publisher.Name</td>
                         <td>
-                            <a href="@Url.Action("Edit", "Books", new { id = book.Id })" class="btn btn-outline-primary btn-sm">Edit</a>
-                            <a href="@Url.Action("Details", "Books", new { id = book.Id })" class="btn btn-outline-info btn-sm">Details</a>
-                            @using (Html.BeginForm("Delete", "Books", new { id = book.Id }, FormMethod.Post))
+                            @if (User.IsInRole("Admin"))
                             {
-                                <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure you want to delete this book?');">Delete</button>
+                                <a href="@Url.Action("Edit", "Books", new { id = book.Id })" class="btn btn-outline-primary btn-sm">Edit</a>
+                                <a href="@Url.Action("Details", "Books", new { id = book.Id })" class="btn btn-outline-info btn-sm">Details</a>
+                                @using (Html.BeginForm("Delete", "Books", new { id = book.Id }, FormMethod.Post))
+                                {
+                                    <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure you want to delete this book?');">Delete</button>
+                                }
                             }
+                            else
+                            {
+                                <p>no actions available</p>
+                            }
+                            
                         </td>
                     </tr>
                 }

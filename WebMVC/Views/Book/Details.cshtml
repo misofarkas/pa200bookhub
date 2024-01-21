@@ -85,7 +85,7 @@
                                     {
                                         <div class="review-actions mt-2">
                                             <a href="@Url.Action("Edit", "Review", new { id = review.Id, bookId = Model.Id })" class="btn btn-sm btn-outline-warning">Edit</a>
-                                            @using (Html.BeginForm("Delete", "Review", new { id = review.Id }, FormMethod.Post))
+                                            @using (Html.BeginForm("Delete", "Review", new { id = review.Id, bookId = Model.Id }, FormMethod.Post))
                                             {
                                                 <button type="submit", action="Delete" class="btn btn-sm btn-outline-danger ml-2">Delete</button>
                                             }
