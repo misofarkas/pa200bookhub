@@ -5,6 +5,7 @@ using BusinessLayer.Services;
 using System.Threading.Tasks;
 using BusinessLayer.DTOs;
 using BusinessLayer.DTOs.Book;
+using BusinessLayer.DTOs.Enums;
 
 namespace WebApplication1.Controllers
 {
@@ -31,16 +32,22 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateBook(BookDTO model)
+        public async Task<IActionResult> CreateBook(BookCreateUpdateDTO model)
         {
-            var result = await _bookService.CreateBookAsync(model);
-
-            if (result == null)
+            try
             {
-                return BadRequest();
-            }
+                var result = await _bookService.CreateBookAsync(model);
+                if (result == null)
+                {
+                    return BadRequest();
+                }
 
-            return Ok(result);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
         }
 
         [HttpGet]
@@ -70,6 +77,20 @@ namespace WebApplication1.Controllers
             return Ok(books);
         }
 
+        [HttpGet]
+        [Route("searchCriteria")]
+        public async Task<IActionResult> SearchBooksWithCriteria(string query, BookSearchField searchIn, int page, int pageSize, string format = "json")
+        {
+            BookSearchCriteriaDTO searchCriteria = new BookSearchCriteriaDTO { Query = query, SearchIn = searchIn };
+            var books = await _bookService.SearchBooksWithCriteria(searchCriteria, page, pageSize);
+            if (books == null || books.TotalCount == 0)
+            {
+                return NotFound("No books matching the search criteria were found.");
+            }
+
+            return Ok(books);
+        }
+
         [HttpDelete]
         [Route("{id}")]
         public async Task<IActionResult> DeleteBook(int id)
@@ -85,16 +106,24 @@ namespace WebApplication1.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateBook(int id, BookUpdateDTO model)
+        public async Task<IActionResult> UpdateBook(int id, BookCreateUpdateDTO model)
         {
-            var result = await _bookService.UpdateBookAsync(id, model);
-
-            if (result == null)
+            try
             {
-                return BadRequest();
+                var result = await _bookService.UpdateBookAsync(id, model);
+
+                if (result == null)
+                {
+                    return BadRequest();
+                }
+
+                return Ok(result);
+            }
+            catch(Exception e)
+            {
+                return NotFound(e.Message);
             }
 
-            return Ok(result);
         }
     }
 }

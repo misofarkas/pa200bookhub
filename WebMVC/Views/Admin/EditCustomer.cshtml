@@ -1,0 +1,20 @@
+﻿@model BusinessLayer.DTOs.CustomerDTO
+
+@{
+    ViewData["Title"] = "Edit Customer";
+}
+
+<h2>Edit Customer</h2>
+
+<form asp-action="EditCustomer" asp-controller="Admin" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div>
+        <label asp-for="Username"></label>
+        <input asp-for="Username" class="form-control" />
+    </div>
+
+    <!-- Add other fields as necessary -->
+
+    <button type="submit" class="btn btn-primary">Update Customer</button>
+</form>

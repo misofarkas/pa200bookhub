@@ -11,6 +11,7 @@ namespace DataAccessLayer.Data
     public DbSet<Book> Books { get; set; }
     public DbSet<Author> Authors { get; set; }
     public DbSet<AuthorBook> AuthorBooks { get; set; }
+    public DbSet<Genre> Genre { get; set; }
     public DbSet<GenreBook> GenreBooks { get; set; }
     public DbSet<Publisher> Publishers { get; set; }
     public DbSet<Customer> Customers { get; set; }
@@ -72,6 +73,12 @@ namespace DataAccessLayer.Data
             .HasForeignKey(b => b.PublisherId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        modelBuilder.Entity<Book>()
+            .HasOne(g => g.PrimaryGenre)
+            .WithMany(b => b.Books)
+            .HasForeignKey(g => g.PrimaryGenreId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         modelBuilder.Entity<Review>()
             .HasOne(r => r.Book)
             .WithMany(b => b.Reviews)
@@ -97,6 +104,12 @@ namespace DataAccessLayer.Data
             .WithMany(c => c.PurchaseHistories)
             .HasForeignKey(p => p.CustomerId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<PurchaseHistory>()
+                .HasOne(p => p.Book)
+                .WithMany(b => b.PurchaseHistories)
+                .HasForeignKey(p => p.BookId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             /* run the DB seeding */
             modelBuilder.Seed();

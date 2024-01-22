@@ -1,0 +1,14 @@
+﻿@model WebMVC.Models.Genre.BasicGenreViewModel
+
+@using (Html.BeginForm("Create", "Genre", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div>
+        @Html.LabelFor(model => model.Name)
+        @Html.EditorFor(model => model.Name)
+        @Html.ValidationMessageFor(model => model.Name)
+    </div>
+
+    <input type="submit" value="Create Genre" />
+}

@@ -1,0 +1,9 @@
+﻿﻿@using BusinessLayer.DTOs.Enums;
+@using WebMVC.Models.Book;
+@model BookSearchViewModel
+
+<form asp-action="Search" asp-controller="Book" method="get">
+    <input type="text" name="query" placeholder="Search books..." />
+    <select asp-for="SearchIn" asp-items="Html.GetEnumSelectList<BookSearchField>()"></select>
+    <button type="submit">Search</button>
+</form>

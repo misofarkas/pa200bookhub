@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using WebApplication1.Middleware;
 using BusinessLayer.Services;
-using BusinessLayer.Services.Author;
 using Mapster;
 using DataAccessLayer.Models;
 using BusinessLayer.DTOs.Author;
 using BusinessLayer.DTOs.Book;
 using Microsoft.EntityFrameworkCore.Sqlite.Storage.Internal;
 using BusinessLayer.DTOs;
+using BusinessLayer.DTOs.Genre;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +46,8 @@ builder.Services.AddSwaggerGen(c =>
             new string[] {}
         }
     });
+
+    c.UseInlineDefinitionsForEnums();
 });
 
 // register DBContext:
@@ -69,6 +71,10 @@ builder.Services.AddDbContextFactory<BookHubDBContext>(options =>
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IAuthorService,  AuthorService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IGenreService, GenreService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<IPublisherService, PublisherService>();
+builder.Services.AddScoped<IPurchaseHistoryService, PurchaseHistoryService>();
 
 TypeAdapterConfig<Author, AuthorDTO>.NewConfig().Map(dest => dest.Books, src => src.AuthorBooks.Select(ab => ab.Book.Adapt<BookDTO>()));
 TypeAdapterConfig<Book, BookDTO>.NewConfig().Map(dest => dest.Authors, src => src.AuthorBooks.Select(ab => ab.Author.Adapt<AuthorWithoutBooksDTO>()))

@@ -1,0 +1,231 @@
+﻿@model WebMVC.Models.Book.BookListViewModel
+
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+<h2>Books</h2>
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .nested-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+        .nested-list li {
+            display: inline-block;
+            margin-right: 5px;
+            padding: 1px 5px;
+            background-color: #e7e7e7;
+            border-radius: 10px;
+        }
+
+    .action-buttons {
+        display: flex;
+        justify-content: space-around;
+        align-items: stretch;
+        gap: 8px;
+        width: 100%;
+        height: 100%;
+    }
+
+    .button {
+        display: inline-block;
+        text-decoration: none;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+        font-size: 0.9rem;
+        font-weight: bold;
+    }
+
+    .create-button {
+        background-color: #28a745;
+    }
+
+    .edit-button {
+        background-color: #17a2b8;
+    }
+
+    .delete-button {
+        background-color: #dc3545;
+    }
+
+    .search-button {
+        background-color: #ff9800;
+    }
+
+    .detail-button {
+        background-color: #6c757d;
+    }
+
+        .create-button:hover,
+        .edit-button:hover,
+        .delete-button:hover,
+        .search-button:hover,
+        .detail-button:hover {
+            opacity: 0.8;
+        }
+
+    .primary-genre {
+        background-color: #ffcc00; /* A bright yellow color for the primary genre */
+        color: black;
+        font-weight: bold;
+        border-radius: 10px;
+        padding: 5px 10px;
+        margin: 2px 0; /* Add space between genres */
+        display: inline-block; /* Make the badge a separate block */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Add a subtle shadow for depth */
+    }
+
+        .primary-genre:before {
+            content: "★ "; /* Unicode star character */
+            color: #d4af37; /* Gold color for the star */
+        }
+
+    .secondary-genre {
+        background-color: #e9ecef; /* A lighter grey for non-primary genres */
+        color: #495057; /* Dark grey for the text */
+        padding: 5px 10px;
+        display: inline-block; /* Make the badge a separate block */
+        border-radius: 10px;
+    }
+
+    .fa-star, .fa-star-o {
+        color: #ffc107; /* Gold color for stars */
+    }
+
+    ul.pagination {
+        display: flex;
+        list-style-type: none;
+        padding: 0;
+    }
+
+        ul.pagination li {
+            margin: 5px;
+        }
+
+            ul.pagination li a {
+                text-decoration: none;
+                padding: 5px 10px;
+                color: #007bff;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+
+                ul.pagination li a:hover {
+                    background-color: #f5f5f5;
+                }
+</style>
+
+<div class="book-action-buttons">
+    <a href="@Url.Action("Create", "Book")" class="button create-button">Create Book</a>
+    <a href="@Url.Action("Search", "Book")" class="button search-button">Search Book</a>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th class="small-border">Authors</th>
+            <th class="small-border">Genres</th>
+            <th>Publisher</th>
+            <th>Reviews</th>
+            <th class="small-border" colspan="3">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var book in Model.Books)
+        {
+            <tr>
+                <td>@book.Title</td>
+                <td>@book.Description</td>
+                <td>@book.Price.ToString("C")</td>
+                <td class="small-border">
+                    <ul class="nested-list">
+                        @foreach (var author in book.Authors)
+                        {
+                            <li>@author.Name</li>
+                        }
+                    </ul>
+                </td>
+                <td class="small-border">
+                    <ul class="nested-list">
+                        @foreach (var genre in book.Genres)
+                        {
+                            <span class="@(genre.Id == book.PrimaryGenre.Id ? "primary-genre" : "secondary-genre")">
+                                @genre.Name
+                            </span>
+                        }
+                    </ul>
+                </td>
+                <td>@book.Publisher.Name</td>
+                <td>
+                    @{
+                        var totalReviews = book.Reviews.Count();
+                        var averageRating = totalReviews > 0 ? book.Reviews.Average(r => r.Rating) : 0;
+                    }
+                    <div>@totalReviews Reviews</div>
+                    <div>
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <i class="fa fa-star" style="color: @(i <= averageRating ? "#ffc107" : "#e4e5e9");"></i>
+                        }
+                    </div>
+                </td>
+
+                <td class="small-border action-buttons">
+                    <a href="@Url.Action("Edit", "Book", new { id = book.Id })" class="button edit-button">Edit</a>
+                    @using (Html.BeginForm("Delete", "Book", new { id = book.Id }, FormMethod.Post))
+                    {
+                        <input type="submit" value="Delete" class="button delete-button" , onclick="return confirm('Are you sure?');" />
+                    }
+                    <a href="@Url.Action("Details", "Book", new { id = book.Id })" class="button detail-button">Open Detail</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.TotalPages > 1)
+{
+    <nav>
+        <ul class="pagination">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="@((i == Model.CurrentPage) ? "active" : "")">
+                    <a href="@Url.Action("Index", new { page = i })">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

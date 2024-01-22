@@ -1,0 +1,16 @@
+﻿@model BusinessLayer.DTOs.Publisher.PublisherDTO
+
+@{
+    ViewData["Title"] = "Edit Publisher";
+}
+
+<h2>Edit Publisher</h2>
+
+<form asp-action="EditPublisher" asp-controller="Admin" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Update Publisher</button>
+</form>

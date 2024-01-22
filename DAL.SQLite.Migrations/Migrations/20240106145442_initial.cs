@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DAL.SQLite.Migrations.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -135,27 +135,6 @@ namespace DAL.SQLite.Migrations.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PurchaseHistories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    BookId = table.Column<int>(type: "INTEGER", nullable: false),
-                    CustomerId = table.Column<int>(type: "INTEGER", nullable: false),
-                    PurchaseDate = table.Column<DateTime>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PurchaseHistories", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PurchaseHistories_Customers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "Customers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Wishlists",
                 columns: table => new
                 {
@@ -182,6 +161,7 @@ namespace DAL.SQLite.Migrations.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Title = table.Column<string>(type: "TEXT", nullable: false),
+                    PrimaryGenreId = table.Column<int>(type: "INTEGER", nullable: false),
                     PublisherId = table.Column<int>(type: "INTEGER", nullable: false),
                     Price = table.Column<decimal>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false)
@@ -189,6 +169,12 @@ namespace DAL.SQLite.Migrations.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Books", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Books_Genre_PrimaryGenreId",
+                        column: x => x.PrimaryGenreId,
+                        principalTable: "Genre",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Books_Publishers_PublisherId",
                         column: x => x.PublisherId,
@@ -287,8 +273,7 @@ namespace DAL.SQLite.Migrations.Migrations
                 columns: table => new
                 {
                     AuthorId = table.Column<int>(type: "INTEGER", nullable: false),
-                    BookId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    BookId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -312,8 +297,7 @@ namespace DAL.SQLite.Migrations.Migrations
                 columns: table => new
                 {
                     GenreId = table.Column<int>(type: "INTEGER", nullable: false),
-                    BookId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    BookId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -330,6 +314,33 @@ namespace DAL.SQLite.Migrations.Migrations
                         principalTable: "Genre",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PurchaseHistories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    BookId = table.Column<int>(type: "INTEGER", nullable: false),
+                    CustomerId = table.Column<int>(type: "INTEGER", nullable: false),
+                    PurchaseDate = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PurchaseHistories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PurchaseHistories_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_PurchaseHistories_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -408,25 +419,14 @@ namespace DAL.SQLite.Migrations.Migrations
 
             migrationBuilder.InsertData(
                 table: "Books",
-                columns: new[] { "Id", "Description", "Price", "PublisherId", "Title" },
+                columns: new[] { "Id", "Description", "Price", "PrimaryGenreId", "PublisherId", "Title" },
                 values: new object[,]
                 {
-                    { 1, "Nineteen Eighty-Four (also published as 1984) is a dystopian novel and cautionary tale by English writer George Orwell. It was published on 8 June 1949", 15.99m, 1, "1984" },
-                    { 2, "Harry Potter and the Philosopher's Stone is a fantasy novel written by British author J. K. Rowling.", 20.99m, 2, "Harry Potter and the Philosopher's Stone" },
-                    { 3, "The Hobbit, or There and Back Again is a children's fantasy novel by English author J. R. R. Tolkien.", 25.99m, 3, "The Hobbit" },
-                    { 4, "Murder on the Orient Express is a detective novel by English writer Agatha Christie.", 18.99m, 4, "Murder on the Orient Express" },
-                    { 5, "The Shining is a horror novel by American author Stephen King.", 22.99m, 5, "The Shining" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "PurchaseHistories",
-                columns: new[] { "Id", "BookId", "CustomerId", "PurchaseDate" },
-                values: new object[,]
-                {
-                    { 1, 1, 1, new DateTime(2023, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, 3, 1, new DateTime(2023, 8, 15, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 3, 4, 2, new DateTime(2023, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 4, 5, 3, new DateTime(2023, 7, 20, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 1, "Nineteen Eighty-Four (also published as 1984) is a dystopian novel and cautionary tale by English writer George Orwell. It was published on 8 June 1949", 15.99m, 1, 1, "1984" },
+                    { 2, "Harry Potter and the Philosopher's Stone is a fantasy novel written by British author J. K. Rowling.", 20.99m, 2, 2, "Harry Potter and the Philosopher's Stone" },
+                    { 3, "The Hobbit, or There and Back Again is a children's fantasy novel by English author J. R. R. Tolkien.", 25.99m, 3, 3, "The Hobbit" },
+                    { 4, "Murder on the Orient Express is a detective novel by English writer Agatha Christie.", 18.99m, 4, 4, "Murder on the Orient Express" },
+                    { 5, "The Shining is a horror novel by American author Stephen King.", 22.99m, 5, 5, "The Shining" }
                 });
 
             migrationBuilder.InsertData(
@@ -441,26 +441,37 @@ namespace DAL.SQLite.Migrations.Migrations
 
             migrationBuilder.InsertData(
                 table: "AuthorBooks",
-                columns: new[] { "AuthorId", "BookId", "Id" },
+                columns: new[] { "AuthorId", "BookId" },
                 values: new object[,]
                 {
-                    { 1, 1, 1 },
-                    { 2, 2, 2 },
-                    { 3, 3, 3 },
-                    { 4, 4, 4 },
-                    { 5, 5, 5 }
+                    { 1, 1 },
+                    { 2, 2 },
+                    { 3, 3 },
+                    { 4, 4 },
+                    { 5, 5 }
                 });
 
             migrationBuilder.InsertData(
                 table: "GenreBooks",
-                columns: new[] { "BookId", "GenreId", "Id" },
+                columns: new[] { "BookId", "GenreId" },
                 values: new object[,]
                 {
-                    { 1, 1, 1 },
-                    { 2, 2, 2 },
-                    { 3, 3, 3 },
-                    { 4, 4, 4 },
-                    { 5, 5, 5 }
+                    { 1, 1 },
+                    { 2, 2 },
+                    { 3, 3 },
+                    { 4, 4 },
+                    { 5, 5 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "PurchaseHistories",
+                columns: new[] { "Id", "BookId", "CustomerId", "PurchaseDate" },
+                values: new object[,]
+                {
+                    { 1, 1, 1, new DateTime(2023, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, 3, 1, new DateTime(2023, 8, 15, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, 4, 2, new DateTime(2023, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 4, 5, 3, new DateTime(2023, 7, 20, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -522,6 +533,11 @@ namespace DAL.SQLite.Migrations.Migrations
                 column: "BookId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Books_PrimaryGenreId",
+                table: "Books",
+                column: "PrimaryGenreId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Books_PublisherId",
                 table: "Books",
                 column: "PublisherId");
@@ -530,6 +546,11 @@ namespace DAL.SQLite.Migrations.Migrations
                 name: "IX_GenreBooks_GenreId",
                 table: "GenreBooks",
                 column: "GenreId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PurchaseHistories_BookId",
+                table: "PurchaseHistories",
+                column: "BookId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PurchaseHistories_CustomerId",
@@ -595,13 +616,13 @@ namespace DAL.SQLite.Migrations.Migrations
                 name: "Authors");
 
             migrationBuilder.DropTable(
-                name: "Genre");
-
-            migrationBuilder.DropTable(
                 name: "Books");
 
             migrationBuilder.DropTable(
                 name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "Genre");
 
             migrationBuilder.DropTable(
                 name: "Publishers");

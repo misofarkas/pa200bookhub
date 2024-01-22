@@ -1,13 +1,17 @@
 using BusinessLayer.DTOs.Author;
 using BusinessLayer.DTOs.Book;
 using BusinessLayer.DTOs;
-using BusinessLayer.Services.Author;
 using BusinessLayer.Services;
 using DataAccessLayer.Data;
 using DataAccessLayer.Models;
 using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using WebApplication1.Middleware;
+using BusinessLayer.DTOs.Genre;
+using WebMVC.Binders;
+using System.Globalization;
+using BusinessLayer.DTOs.PurchaseHistory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,28 +19,30 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // register DBContext:
-var mssqlDbName = "Bookhubproject-2-DB-2";
+var sqliteDbName = "bookhubproject2.db";
 
 var folder = Environment.SpecialFolder.LocalApplicationData;
-var dbPath = Path.Join(Environment.GetFolderPath(folder), mssqlDbName);
+var dbPath = Path.Join(Environment.GetFolderPath(folder), sqliteDbName);
 
-var mssqlConnectionString = $"Server=(localdb)\\mssqllocaldb;Integrated Security=True;MultipleActiveResultSets=True;Database={mssqlDbName};Trusted_Connection=True;";
+var sqliteConnectionString = $"Data Source={dbPath}";
 
 builder.Services.AddDbContextFactory<BookHubDBContext>(options =>
 {
     options
-        .UseSqlServer(
-            mssqlConnectionString,
-            x => x.MigrationsAssembly("DAL.MSSQL.Migrations")
-        )
-        ;
-
+        .UseSqlite(
+            sqliteConnectionString,
+            x => x.MigrationsAssembly("DAL.SQLite.Migrations")
+        );
 });
 
 /* Register Services */
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IAuthorService, AuthorService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IGenreService, GenreService>();
+builder.Services.AddScoped<IPublisherService, PublisherService>();
+builder.Services.AddScoped<IPurchaseHistoryService, PurchaseHistoryService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
 
 TypeAdapterConfig<Author, AuthorDTO>.NewConfig().Map(dest => dest.Books, src => src.AuthorBooks.Select(ab => ab.Book.Adapt<BookDTO>()));
 TypeAdapterConfig<Book, BookDTO>.NewConfig().Map(dest => dest.Authors, src => src.AuthorBooks.Select(ab => ab.Author.Adapt<AuthorWithoutBooksDTO>()))
@@ -47,6 +53,11 @@ TypeAdapterConfig<Customer, CustomerDTO>.NewConfig().Map(dest => dest.Username, 
 builder.Services.AddIdentity<LocalIdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<BookHubDBContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddControllers(options =>
+{
+    options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
+});
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -73,6 +84,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

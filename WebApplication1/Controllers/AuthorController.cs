@@ -2,7 +2,7 @@
 using DataAccessLayer.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using BusinessLayer.Services.Author;
+using BusinessLayer.Services;
 using BusinessLayer.DTOs.Author;
 
 namespace WebApplication1.Controllers
@@ -62,14 +62,16 @@ namespace WebApplication1.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            var success = await _authorService.CreateAuthor(author);
-            if (success)
+            try
             {
-                return Ok("Author created");
+                var result = await _authorService.CreateAuthor(author);
+                return Ok(result);
             }
-            return BadRequest("An error occured while creating new author");
-            
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
         }
 
         [HttpPut]
@@ -80,13 +82,15 @@ namespace WebApplication1.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var success = await _authorService.UpdateAuthor(id, model);
-            if (success)
+            try
             {
-                return Ok("Author updated");
+                var result = await _authorService.UpdateAuthor(id, model);
+                return Ok(result);
             }
-            return BadRequest("An error occured while updating author");
-
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpDelete]

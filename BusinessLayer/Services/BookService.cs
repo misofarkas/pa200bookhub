@@ -1,4 +1,6 @@
-﻿using BusinessLayer.DTOs.Book;
+﻿using BusinessLayer.DTOs;
+using BusinessLayer.DTOs.Book;
+using BusinessLayer.DTOs.Enums;
 using BusinessLayer.Mapper;
 using DataAccessLayer.Data;
 using DataAccessLayer.Models;
@@ -8,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BusinessLayer.Services
 {
@@ -33,6 +36,7 @@ namespace BusinessLayer.Services
                 .Include(b => b.GenreBooks)
                 .ThenInclude(gb => gb.Genre)
                 .Include(b => b.Publisher)
+                .Include(b => b.PrimaryGenre)
                 .Include(b => b.Reviews)
                 .ThenInclude(r => r.Customer)
                 .ToListAsync();
@@ -79,34 +83,173 @@ namespace BusinessLayer.Services
             return await GetBooksCommonQuery(query);
         }
 
-        public async Task<BookDTO> CreateBookAsync(BookDTO model)
+        public async Task<PaginatedResult<BookDTO>> SearchBooksWithCriteria(BookSearchCriteriaDTO searchCriteria, int page, int pageSize)
         {
-            var book = new Book
+            IQueryable<Book> query = _dbContext.Books
+                .Include(b => b.AuthorBooks)
+                .ThenInclude(b => b.Author)
+                .Include(b => b.GenreBooks)
+                .ThenInclude(gb => gb.Genre)
+                .Include(b => b.Publisher)
+                .Include(b => b.PrimaryGenre)
+                .Include(b => b.Reviews)
+                .ThenInclude(r => r.Customer);
+
+            var searchTerm = searchCriteria.Query?.ToLower();
+
+            switch (searchCriteria.SearchIn)
             {
-                Title = model.Title,
-                Price = model.Price,
-                Description = model.Description,
+                case BookSearchField.Title:
+                    query = query.Where(p => p.Title.ToLower().Contains(searchTerm));
+                    break;
+                case BookSearchField.Desciption:
+                    query = query.Where(p => p.Description.ToLower().Contains(searchTerm));
+                    break;
+                case BookSearchField.Author:
+                    query = query.Where(b => b.AuthorBooks.Any(ab => ab.Author.Name.ToLower().Contains(searchTerm)));
+                    break;
+                case BookSearchField.Genre:
+                    query = query.Where(b => b.GenreBooks.Any(ab => ab.Genre.Name.ToLower().Contains(searchTerm)));
+                    break;
+                case BookSearchField.Publisher:
+                    query = query.Where(b => b.Publisher.Name.ToLower().Contains(searchTerm));
+                    break;
+            }
+
+            var totalCount = await query.CountAsync();
+            var books = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PaginatedResult<BookDTO>
+            {
+                Items = books.Select(b => b.MapToBookDTO()).ToList(),
+                TotalCount = totalCount
             };
-
-            var book2 = EntityMapper.MapToBook(model);
-
-            _dbContext.Books.Add(book2);
-            await SaveAsync(true);
-            return book.MapToBookDTO();
         }
 
-        public async Task<BookDTO> UpdateBookAsync(int id, BookUpdateDTO model)
+        public async Task<BookDTO> CreateBookAsync(BookCreateUpdateDTO model)
         {
-            var book = await _dbContext.Books.FindAsync(id);
+            var publisher = await _dbContext.Publishers.FindAsync(model.PublisherId);
+            if (publisher == null)
+            {
+                throw new Exception("Publisher not found");
+            }
+            var authors = await _dbContext.Authors.Where(a => model.AuthorIds.Contains(a.Id)).ToListAsync();
+            if (authors.Count != model.AuthorIds.Count)
+            {
+                throw new Exception("Author not found");
+            }
+            if (!model.GenreIds.Contains(model.PrimaryGenreId))
+            {
+                model.GenreIds = model.GenreIds.Append(model.PrimaryGenreId).ToList();
+            }
+            var genres = await _dbContext.Genre.Where(g => model.GenreIds.Contains(g.Id)).ToListAsync();
+            if (genres.Count != model.GenreIds.Count)
+            {
+                throw new Exception("Genre not found");
+            }
+            var primaryGenre = await _dbContext.Genre.Where(g => model.PrimaryGenreId == g.Id).FirstOrDefaultAsync();
+            if (primaryGenre == null)
+            {
+                throw new Exception("Primary Genre not found");
+            }
+            var newBook = EntityMapper.MapToBook(model);
+            newBook.Publisher = publisher;
+            newBook.AuthorBooks = authors.Select(a => new AuthorBook { Author = a, Book = newBook }).ToList();
+            newBook.GenreBooks = genres.Select(g => new GenreBook { Genre = g, Book = newBook }).ToList();
+
+            _dbContext.Books.Add(newBook);
+            await SaveAsync(true);
+            return newBook.MapToBookDTO();
+        }
+
+        public async Task<BookDTO> UpdateBookAsync(int id, BookCreateUpdateDTO model)
+        {
+            var book = await _dbContext.Books
+                .Include(b => b.AuthorBooks)
+                .Include(b => b.GenreBooks)
+                .Include(b => b.Publisher)
+                .FirstOrDefaultAsync(b => b.Id == id);
+
             if (book == null)
             {
-                return null;
+                throw new Exception("Book Not found");
             }
 
             book.Title = model.Title;
             book.Price = model.Price;
             book.Description = model.Description;
+            var publisher = await _dbContext.Publishers.FindAsync(model.PublisherId);
+            if (publisher == null)
+            {
+                throw new Exception("Publisher not found");
+            }
+            book.PublisherId = model.PublisherId;
+            if (model.GenreIds is not null && !model.GenreIds.Contains(model.PrimaryGenreId))
+            {
+                model.GenreIds = model.GenreIds.Append(model.PrimaryGenreId).ToList();
+            }
+            var primaryGenre = await _dbContext.Genre.Where(g => model.PrimaryGenreId == g.Id).FirstOrDefaultAsync();
+            if (primaryGenre == null)
+            {
+                throw new Exception("Primary Genre not found");
+            }
+            book.PrimaryGenreId = model.PrimaryGenreId;
+            if (model.AuthorIds is not null)
+            {
+                if (model.AuthorIds.Count == 0)
+                {
+                    throw new Exception("AuthorIds cannot be empty");
+                }
 
+                var authors = await _dbContext.Authors.Include(b => b.AuthorBooks).Where(a => model.AuthorIds.Contains(a.Id)).ToListAsync();
+                if (authors.Count != model.AuthorIds.Count)
+                {
+                    throw new Exception("Author not found");
+                }
+
+                var authorsToRemove = book.AuthorBooks.Where(ab => !authors.Any(a => a.Id == ab.AuthorId)).ToList();
+                var newAuthors = authors.Where(a => !book.AuthorBooks.Any(ab => ab.AuthorId == a.Id)).ToList();
+                foreach (var author in authorsToRemove)
+                {
+                    book.AuthorBooks.Remove(author);
+                }
+                foreach (var author in newAuthors)
+                {
+                    book.AuthorBooks.Add(new AuthorBook { Author = author, Book = book });
+                }
+
+            }
+            if (model.GenreIds is not null)
+            {
+                if (model.GenreIds.Count == 0)
+                {
+                    throw new Exception("GenreIds cannot be empty");
+                }
+
+                var genres = await _dbContext.Genre.Include(b => b.GenreBooks).Where(g => model.GenreIds.Contains(g.Id)).ToListAsync();
+                if (genres.Count != model.GenreIds.Count)
+                {
+                    throw new Exception("Genre not found");
+                }
+
+                var genresToRemove = book.GenreBooks.Where(gb => !genres.Any(g => g.Id == gb.GenreId)).ToList();
+                var newGenres = genres.Where(g => !book.GenreBooks.Any(gb => gb.GenreId == g.Id)).ToList();
+                foreach (var genre in genresToRemove)
+                {
+                    book.GenreBooks.Remove(genre);
+                }
+                foreach (var genre in newGenres)
+                {
+                    book.GenreBooks.Add(new GenreBook { Genre = genre, Book = book });
+                }
+
+
+            }
+
+            _dbContext.Entry(book).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
             return book.MapToBookDTO();
         }

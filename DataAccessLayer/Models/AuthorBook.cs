@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Models;
 
-   public class AuthorBook : BaseEntity
+   public class AuthorBook
    {
     public int AuthorId { get; set; }
     public Author Author { get; set; }

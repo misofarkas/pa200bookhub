@@ -1,0 +1,23 @@
+﻿@model WebMVC.Models.Publisher.BasicPublisherViewModel
+
+@{
+    ViewBag.Title = "Edit Publisher";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Use your layout file here
+}
+
+<h2>Edit Publisher</h2>
+
+@using (Html.BeginForm("Edit", "Publisher", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name)
+        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+}

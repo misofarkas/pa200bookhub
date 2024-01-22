@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.DTOs
 {
-    public class GenreDTO
+    public class PaginatedResult<T>
     {
-        public string Name { get; set; }
+        public IEnumerable<T> Items { get; set; }
+        public int TotalCount { get; set; }
     }
-
 }
