@@ -4,13 +4,34 @@
 
 <style>
     .centered-text {
+        display: flex; 
+        justify-content: center; 
+        align-items: center;
+        margin-left: 0;
+        padding-left: 0; 
+    }
+
+    .main-body {
+        flex-grow: 1; 
         text-align: center;
-        margin: 0 auto;
-        max-width: 800px;
+        padding: 20px;
+    }
+
+    .sidebar {
+        flex-basis: 200px;
+        flex-shrink: 0;
+        padding: 10px;
+        margin-left: 10px;
     }
 
     .display-4 {
         font-size: 2.5rem;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .title {
+        font-size: 5rem;
         color: #333;
         margin-bottom: 20px;
     }
@@ -45,32 +66,43 @@
     }
 </style>
 
+
 <div class="centered-text">
-    <h1 class="display-4">Welcome to Our Website</h1>
-    <p>Quickly navigate to various sections:</p>
 
-    <ul class="navigation-list">
-        <li class="section-heading">General</li>
-        <li><a href="/">Home</a></li>
-        <li><a href="/Home/Privacy">Privacy Policy</a></li>
+    <div class="sidebar">
+        <ul class="navigation-list">
+            <li class="section-heading">Discover</li>
+            <li><a href="/Genres">Browse Genres</a></li>
+            <li><a href="/Authors">Browse Authors</a></li>
+            <li><a href="/Publishers">Browse Publishers</a></li>
+            <li><a href="/Books">Browse Books</a></li>
 
-        <li class="section-heading">Discover</li>
-        <li><a href="/Books/Search">Search Books</a></li>
-        <li><a href="/Authors/Search">Search Authors</a></li>
-        <li><a href="/Genres/Search">Search Genres</a></li>
-        <li><a href="/Genres">Browse Genres</a></li>
-        <li><a href="/Authors">Browse Authors</a></li>
-        <li><a href="/Publishers">Browse Publishers</a></li>
-        <li><a href="/Books">Browse Books</a></li>
+            <li class="section-heading">User Account</li>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li>logged in as @User.Identity.Name</li>
+                <li><a href="/Account/Logout">Logout</a></li>
+                <li><a href="/PurchaseHistory/CustomerPurchaseHistory">Orders Overview</a></li>
+            }
+            else
+            {
+                <li><a href="/Account/Register">Register</a></li>
+                <li><a href="/Account/Login">Login</a></li>
+            }
+            
+            @if (User.IsInRole("Admin"))
+            {
+                <li class="section-heading">Administration</li>
+                <li><a href="/admin">Admin Dashboard</a></li>
+            }
+            
+        </ul>
+    </div>
 
-        <li class="section-heading">User Account</li>
-        <li><a href="/Account/Register">Register</a></li>
-        <li><a href="/Account/Login">Login</a></li>
-        <li><a href="/Account/Logout">Logout</a></li>
-        <li><a href="/Account/LoginSuccess">Login Success</a></li>
-        <li><a href ="/PurchaseHistory/CustomerPurchaseHistory">Orders Overview</a></li>
-
-        <li class="section-heading">Administration</li>
-        <li><a href="/admin">Admin Dashboard</a></li>
-    </ul>
+    <div class="main-body">
+        <h1 class="display-4">Welcome to Our Website</h1>
+        <h1 class="title">BookHub</h1>
+        <p>Best place to find and purchase your favorite books</p>
+    </div>
+   
 </div>

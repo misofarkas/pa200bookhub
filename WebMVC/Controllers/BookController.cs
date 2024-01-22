@@ -33,11 +33,16 @@ namespace WebMVC.Controllers
             _memoryCache = memoryCache;
         }
 
-        [HttpGet("search")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Search(BookSearchViewModel searchModel, int page = 1, int pageSize = 10)
+        [HttpGet]
+        public async Task<IActionResult> Index(BookSearchViewModel searchModel, int page = 1, int pageSize = 10)
         {
             BookSearchCriteriaDTO searchCriteria = searchModel.Adapt<BookSearchCriteriaDTO>();
+
+            if (searchCriteria.Query == null)
+            {
+                searchCriteria.Query = "";
+            }
+
             var result = await _bookService.SearchBooksWithCriteria(searchCriteria, page, pageSize);
 
             var viewModel = new SearchBookListViewModel
@@ -48,21 +53,11 @@ namespace WebMVC.Controllers
                 SearchCriteria = searchModel,
             };
 
-            return View("BookSearchResult", viewModel);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var books = await _bookService.GetBooksAsync();
-            var viewModel = new BookListViewModel
-            {
-                Books = books.Adapt<IEnumerable<BookDetailViewModel>>(),
-            };
-            return View(viewModel);
+            return View("Index", viewModel);
         }
 
         [HttpGet("create")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create()
         {
             ViewBag.Authors = await _authorService.GetAll();
@@ -73,6 +68,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpPost("create")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BookCreateUpdateViewModel model)
         {
@@ -102,6 +98,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpGet("edit/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
         {
             var book = await _bookService.GetBookAsync(id);
@@ -129,6 +126,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpPost("edit/{id}")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, BookCreateUpdateViewModel model)
         {
@@ -158,6 +156,7 @@ namespace WebMVC.Controllers
         }
 
         [HttpPost("delete/{id}")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(int id)
         {

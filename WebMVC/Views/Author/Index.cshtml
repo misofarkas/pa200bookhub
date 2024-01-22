@@ -7,6 +7,9 @@
 
 <h2>Authors</h2>
 
+@{
+    await Html.RenderPartialAsync("AuthorSearchBox", new WebMVC.Models.Author.AuthorSearchViewModel());
+}
 
 <style>
     table {
@@ -78,10 +81,6 @@
         background-color: #dc3545;
     }
 
-    .search-button {
-        background-color: #ff9800;
-    }
-
     .detail-button {
         background-color: #6c757d;
     }
@@ -89,7 +88,6 @@
         .create-button:hover,
         .edit-button:hover,
         .delete-button:hover,
-        .search-button:hover,
         .detail-button:hover {
             opacity: 0.8;
         }
@@ -140,11 +138,13 @@
                     background-color: #f5f5f5;
                 }
 </style>
+@if (User.IsInRole("Admin"))
+{
+    <div class="author-action-buttons">
+        <a href="@Url.Action("Create", "Author")" class="button create-button">Create Author</a>
+    </div>
+}
 
-<div class="author-action-buttons">
-    <a href="@Url.Action("Create", "Author")" class="button create-button">Create Author</a>
-    <a href="@Url.Action("Search", "Author")" class="button search-button">Search Authors</a>
-</div>
 
 <table>
     <thead>
@@ -159,10 +159,13 @@
             <tr>
                 <td>@author.Name</td>
                 <td class="small-border action-buttons">
-                    <a href="@Url.Action("Edit", "Author", new { id = author.Id })" class="button edit-button">Edit</a>
-                    @using (Html.BeginForm("Delete", "Author", new { id = author.Id }, FormMethod.Post))
+                    @if (User.IsInRole("Admin"))
                     {
-                        <input type="submit" value="Delete" class="button delete-button" onclick="return confirm('Are you sure?');" />
+                        <a href="@Url.Action("Edit", "Author", new { id = author.Id })" class="button edit-button">Edit</a>
+                        @using (Html.BeginForm("Delete", "Author", new { id = author.Id }, FormMethod.Post))
+                        {
+                            <input type="submit" value="Delete" class="button delete-button" onclick="return confirm('Are you sure?');" />
+                        }
                     }
                     <a href="@Url.Action("Details", "Author", new { id = author.Id })" class="button detail-button">Open Detail</a>
                 </td>

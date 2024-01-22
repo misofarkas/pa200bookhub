@@ -1,9 +1,14 @@
-﻿@model WebMVC.Models.Book.BookListViewModel
+﻿@model WebMVC.Models.Book.SearchBookListViewModel
 
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 
 <h2>Books</h2>
+
+
+@{
+    await Html.RenderPartialAsync("BookSearchBox", new WebMVC.Models.Book.BookSearchViewModel());
+}
 
 <style>
     table {
@@ -78,10 +83,6 @@
         background-color: #dc3545;
     }
 
-    .search-button {
-        background-color: #ff9800;
-    }
-
     .detail-button {
         background-color: #6c757d;
     }
@@ -89,7 +90,6 @@
         .create-button:hover,
         .edit-button:hover,
         .delete-button:hover,
-        .search-button:hover,
         .detail-button:hover {
             opacity: 0.8;
         }
@@ -145,10 +145,12 @@
                 }
 </style>
 
-<div class="book-action-buttons">
-    <a href="@Url.Action("Create", "Book")" class="button create-button">Create Book</a>
-    <a href="@Url.Action("Search", "Book")" class="button search-button">Search Book</a>
-</div>
+@if (User.IsInRole("Admin"))
+{
+    <div class="book-action-buttons">
+        <a href="@Url.Action("Create", "Book")" class="button create-button">Create Book</a>
+    </div>
+}
 
 <table>
     <thead>
@@ -204,10 +206,13 @@
                 </td>
 
                 <td class="small-border action-buttons">
-                    <a href="@Url.Action("Edit", "Book", new { id = book.Id })" class="button edit-button">Edit</a>
-                    @using (Html.BeginForm("Delete", "Book", new { id = book.Id }, FormMethod.Post))
+                    @if (User.IsInRole("Admin"))
                     {
-                        <input type="submit" value="Delete" class="button delete-button" , onclick="return confirm('Are you sure?');" />
+                        <a href="@Url.Action("Edit", "Book", new { id = book.Id })" class="button edit-button">Edit</a>
+                        @using (Html.BeginForm("Delete", "Book", new { id = book.Id }, FormMethod.Post))
+                        {
+                            <input type="submit" value="Delete" class="button delete-button" , onclick="return confirm('Are you sure?');" />
+                        }
                     }
                     <a href="@Url.Action("Details", "Book", new { id = book.Id })" class="button detail-button">Open Detail</a>
                 </td>
@@ -216,14 +221,14 @@
     </tbody>
 </table>
 
-@if (Model.TotalPages > 1)
+@if (Model.TotalPages >= 1)
 {
     <nav>
         <ul class="pagination">
             @for (int i = 1; i <= Model.TotalPages; i++)
             {
                 <li class="@((i == Model.CurrentPage) ? "active" : "")">
-                    <a href="@Url.Action("Index", new { page = i })">@i</a>
+                    <a href="@Url.Action("Index", new { page = i, query = Model.SearchCriteria.Query, searchin = Model.SearchCriteria.SearchIn })">@i</a>
                 </li>
             }
         </ul>

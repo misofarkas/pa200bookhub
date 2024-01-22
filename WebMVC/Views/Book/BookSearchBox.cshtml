@@ -2,8 +2,35 @@
 @using WebMVC.Models.Book;
 @model BookSearchViewModel
 
-<form asp-action="Search" asp-controller="Book" method="get">
-    <input type="text" name="query" placeholder="Search books..." />
+<style>
+    .button {
+        display: inline-block;
+        text-decoration: none;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+        font-size: 0.9rem;
+        font-weight: bold;
+    }
+
+    .search-button {
+        background-color: #ff9800;
+    }
+
+    .search-button:hover {
+        opacity: 0.8;
+    }
+
+    .input-field {
+        margin-bottom: 10px;
+    }
+</style>
+
+<form asp-action="Index" asp-controller="Book" method="get">
+    <input type="text" class="input-field" name="query" placeholder="Search books..." />
     <select asp-for="SearchIn" asp-items="Html.GetEnumSelectList<BookSearchField>()"></select>
-    <button type="submit">Search</button>
+    <button type="submit" class="button search-button" >Search</button>
 </form>

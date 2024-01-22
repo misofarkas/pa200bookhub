@@ -20,10 +20,7 @@ builder.Services.AddControllersWithViews();
 
 // register DBContext:
 var sqliteDbName = "bookhubproject2.db";
-
-var folder = Environment.SpecialFolder.LocalApplicationData;
-var dbPath = Path.Join(Environment.GetFolderPath(folder), sqliteDbName);
-
+var dbPath = Path.Combine(Environment.CurrentDirectory, sqliteDbName);
 var sqliteConnectionString = $"Data Source={dbPath}";
 
 builder.Services.AddDbContextFactory<BookHubDBContext>(options =>
@@ -98,4 +95,24 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+using (var scope = app.Services.CreateScope())
+{
+    await SeedRoles(scope.ServiceProvider);
+}
+
 app.Run();
+
+async Task SeedRoles(IServiceProvider serviceProvider)
+{
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    if (!await roleManager.RoleExistsAsync("Admin"))
+    {
+        await roleManager.CreateAsync(new IdentityRole("Admin"));
+    }
+
+    if (!await roleManager.RoleExistsAsync("User"))
+    {
+        await roleManager.CreateAsync(new IdentityRole("User"));
+    }
+}

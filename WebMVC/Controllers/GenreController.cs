@@ -24,14 +24,14 @@ namespace WebMVC.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Search(GenreSearchViewModel searchModel)
         {
-            var result = await _genreService.SearchGenres(searchModel.Query);
+            var result = await _genreService.SearchGenres(searchModel.Query ?? "");
 
             var viewModel = new GenreListViewModel
             {
                 Genres = result.Adapt<IEnumerable<BasicGenreViewModel>>(),
             };
 
-            return View("GenreSearchResult", viewModel);
+            return View("Index", viewModel);
         }
 
         [HttpGet]
