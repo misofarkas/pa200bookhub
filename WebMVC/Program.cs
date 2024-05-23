@@ -7,7 +7,7 @@ using DataAccessLayer.Models;
 using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using WebApplication1.Middleware;
+//using WebApplication1.Middleware;
 using BusinessLayer.DTOs.Genre;
 using WebMVC.Binders;
 using System.Globalization;
@@ -19,16 +19,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // register DBContext:
-var sqliteDbName = "bookhubproject2.db";
-var dbPath = Path.Combine(Environment.CurrentDirectory, sqliteDbName);
-var sqliteConnectionString = $"Data Source={dbPath}";
+var postgreSqlConnectionString = "Host=pa200hw2-psql-database.postgres.database.azure.com;Port=5432;Username=michalfarkas;Password=Kenspa7reD;Database=postgres";
 
 builder.Services.AddDbContextFactory<BookHubDBContext>(options =>
 {
     options
-        .UseSqlite(
-            sqliteConnectionString,
-            x => x.MigrationsAssembly("DAL.SQLite.Migrations")
+        .UseNpgsql(
+            postgreSqlConnectionString,
+            x => x.MigrationsAssembly("DAL.PostgreSQL.Migrations")
         );
 });
 
@@ -82,7 +80,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseMiddleware<RequestLoggingMiddleware>();
+//app.UseMiddleware<RequestLoggingMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

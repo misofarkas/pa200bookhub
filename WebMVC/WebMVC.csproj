@@ -12,14 +12,15 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BusinessLayer\BusinessLayer.csproj" />
     <ProjectReference Include="..\DAL.MSSQL.Migrations\DAL.MSSQL.Migrations.csproj" />
+    <ProjectReference Include="..\DAL.PostgreSQL.Migrations\DAL.PostgreSQL.Migrations.csproj" />
     <ProjectReference Include="..\DAL.SQLite.Migrations\DAL.SQLite.Migrations.csproj" />
     <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj" />
-    <ProjectReference Include="..\WebApplication1\WebApplication1.csproj" />
   </ItemGroup>
 
 </Project>

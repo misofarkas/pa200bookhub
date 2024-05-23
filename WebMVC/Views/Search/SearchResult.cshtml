@@ -1,40 +1,6 @@
 ﻿@using WebMVC.Models;
 @model SearchListViewModel
 
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-    }
-
-    .section-header {
-        color: #2a6496;
-        margin-bottom: 10px;
-    }
-
-    .item {
-        margin-bottom: 15px;
-        padding: 10px;
-        border-bottom: 1px solid #eaeaea;
-    }
-
-    .item-title {
-        font-size: 18px;
-        color: #333;
-        margin-bottom: 5px;
-    }
-
-    .item-description {
-        color: #666;
-        font-size: 14px;
-    }
-
-    .no-items {
-        color: #888;
-        font-style: italic;
-    }
-</style>
-
 
 @{
     await Html.RenderPartialAsync("_SearchBox", new WebMVC.Models.GeneralSearchViewModel());

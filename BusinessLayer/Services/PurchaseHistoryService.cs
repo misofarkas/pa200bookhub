@@ -49,7 +49,7 @@ namespace BusinessLayer.Services
             {
                 throw new Exception("There was an error creating PurchaseHistory");
             }
-            purchaseHistory.PurchaseDate = DateTime.Now;
+            purchaseHistory.PurchaseDate = new DateTimeOffset(2023, 10, 10, 0, 0, 0, TimeSpan.Zero); ;
             var book = await _dbContext.Books.FindAsync(purchaseHistoryDTO.BookId);
             purchaseHistory.TotalPrice = book.Price;
             purchaseHistory.Paid = false;

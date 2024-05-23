@@ -16,7 +16,7 @@ namespace BusinessLayer.DTOs.PurchaseHistory
         public int CustomerId { get; set; }
 
         [JsonIgnore]
-        public DateTime PurchaseDate { get; set; }
+        public DateTimeOffset PurchaseDate { get; set; }
 
         [JsonIgnore]
         public decimal TotalPrice { get; set; }

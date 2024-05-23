@@ -12,7 +12,7 @@ namespace BusinessLayer.DTOs.PurchaseHistory
     {
         public BookDTO Book { get; set; }
         public CustomerDTO Customer { get; set; }
-        public DateTime PurchaseDate { get; set; }
+        public DateTimeOffset PurchaseDate { get; set; }
         public decimal TotalPrice { get; set; }
         public bool Paid { get; set; }
     }

@@ -9,7 +9,7 @@ namespace BusinessLayer.DTOs.PurchaseHistory
 {
     public class PurchaseHistoryUpdateDTO
     {
-        public DateTime PurchaseDate { get; set; }
+        public DateTimeOffset PurchaseDate { get; set; }
         public decimal TotalPrice { get; set; }
         public bool Paid { get; set; }
 
