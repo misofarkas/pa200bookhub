@@ -3,7 +3,7 @@ name: Build and deploy ASP.Net Core app to Azure Web App - pa200hw2bookhub
 on:
   push:
     branches:
-      - main
+      - azureDeployment
   workflow_dispatch:
 
 jobs:
