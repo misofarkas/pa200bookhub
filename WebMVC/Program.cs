@@ -7,7 +7,7 @@ using DataAccessLayer.Models;
 using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using WebApplication1.Middleware;
+//using WebApplication1.Middleware;
 using BusinessLayer.DTOs.Genre;
 using WebMVC.Binders;
 using System.Globalization;
@@ -80,7 +80,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseMiddleware<RequestLoggingMiddleware>();
+//app.UseMiddleware<RequestLoggingMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
