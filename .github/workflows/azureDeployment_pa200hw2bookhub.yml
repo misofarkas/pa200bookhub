@@ -3,7 +3,7 @@ name: Build and deploy ASP.Net Core app to Azure Web App - pa200hw2bookhub
 on:
   push:
     branches:
-      - main
+      - azureDeployment
   workflow_dispatch:
 
 jobs:
@@ -49,9 +49,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_644C90216BB24767AF42D7A24DBE8504 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_D9E715FBCC994ADE99A851240BE7EAF9 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_FC284CF486914FC59F2B4C2909D641E7 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
